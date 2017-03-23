@@ -1,0 +1,43 @@
+{
+  "name": "react-playground",
+  "version": "0.0.1",
+  "description": "Fun, meaningless components",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 9001 -c storybook"
+  },
+  "author": "Kristoffer Gram <kristoffer.gram@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@types/classnames": "0.0.32",
+    "@types/node": "^7.0.0",
+    "@types/react": "^15.0.0",
+    "@types/react-dom": "^0.14.20",
+    "classnames": "^2.2.5",
+    "draft-js": "^0.10.0",
+    "moment": "^2.17.1",
+    "nearley": "^2.8.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-height": "^2.2.0",
+    "react-mathjax": "^0.1.1"
+  },
+  "devDependencies": {
+    "@kadira/storybook": "^2.35.3",
+    "@types/draft-js": "^0.9.1",
+    "awesome-typescript-loader": "^3.0.0-beta.18",
+    "css-loader": "^0.26.1",
+    "nearley-loader": "0.0.2",
+    "node-sass": "^4.3.0",
+    "react-svg-loader": "^1.1.1",
+    "sass-loader": "^4.1.1",
+    "source-map-loader": "^0.1.6",
+    "string-replace-loader": "^1.0.5",
+    "style-loader": "^0.13.1",
+    "tslint": "^4.3.1",
+    "tslint-eslint-rules": "^3.2.3",
+    "typescript": "^2.2.1",
+    "webpack-combine-loaders": "^2.0.3"
+  }
+}

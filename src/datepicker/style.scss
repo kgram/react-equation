@@ -1,0 +1,56 @@
+
+
+.picker {
+    position: absolute;
+
+    .picker-table {
+        table-layout: fixed;
+        border-collapse: collapse;
+        border-spacing: 0;
+
+        th, td {
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            text-align: center;
+            user-select: none;
+        }
+
+        th {
+
+        }
+
+        td {
+            @mixin background($color) {
+                background-color: $color;
+                color: contrast($color);
+                &:hover {
+                    background-color: mix(lighten($color, 4%), white, 90%);
+                }
+            }
+
+            cursor: pointer;
+
+            @include background(#eee);
+            &.selected-day {
+                @include background(#558cd8);
+            }
+            &.other-month {
+                opacity: 0.4;
+            }
+        }
+    }
+
+    .header {
+        display: flex;
+        > span {
+            text-align: center;
+            flex: 1;
+            &:first-child,
+            &:last-child {
+                flex: 0;
+            }
+        }
+    }
+}
+

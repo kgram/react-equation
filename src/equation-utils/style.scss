@@ -1,0 +1,147 @@
+$line-border: 0.08em solid currentColor;
+
+@font-face {
+    font-family: 'MathJax';
+    font-style: italic;
+    font-weight: normal;
+    src: url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/eot/MathJax_Math-Regular.eot');
+    /* IE9 Compat Modes */
+    src:
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/eot/MathJax_Math-Regular.eot?iefix') format('eot'),
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/woff/MathJax_Math-Regular.woff') format('woff'),
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/otf/MathJax_Math-Regular.otf') format('opentype'),
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/svg/MathJax_Math-Regular.svg#MathJax_Math-Regular') format('svg');
+    unicode-range:
+        // A-Z
+        U+0041-005A,
+        // a-z
+        U+0061-007A,
+        // α-ω, only lowercase greek from this font
+        U+03B1-03C9,
+        // Special greek letters
+        U+03D1, U+03D5, U+03D6, U+03F1, U+03F5;
+}
+
+@font-face {
+    font-family: 'MathJax';
+    font-style: italic;
+    font-weight: normal;
+    src: url('https://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/eot/MathJax_Main-Regular.eot');
+    src:
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/eot/MathJax_Main-Regular.eot?iefix') format('eot'),
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff') format('woff'),
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf') format('opentype'),
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/svg/MathJax_Main-Regular.svg#MathJax_Main-Regular') format('svg');
+
+    // Select greek capital letters, to avoid italics
+    unicode-range: U+0393, U+0394, U+0398, U+039B, U+039E, U+03A0, U+03A3, U+03A5, U+03A6, U+03A8, U+03A9;
+}
+
+@font-face {
+    font-family: 'MathJax';
+    font-style: normal;
+    font-weight: normal;
+    src: url('https://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/eot/MathJax_Main-Regular.eot');
+    src:
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/eot/MathJax_Main-Regular.eot?iefix') format('eot'),
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff') format('woff'),
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf') format('opentype'),
+        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/svg/MathJax_Main-Regular.svg#MathJax_Main-Regular') format('svg');
+}
+
+.equation {
+    display: inline-block;
+    line-height: 1.4;
+    font-family: 'MathJax', 'Times New Roman', serif;
+    // * {
+    //     background: rgba(0, 0, 255, 0.05);
+    // }
+}
+
+.fraction-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: top;
+    position: relative;
+    font-size: 90%;
+}
+
+.fraction-bottom,
+.fraction-top {
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: 0 0.4em;
+}
+
+.fraction-separator {
+    position: absolute;
+    display: block;
+    background: currentColor;
+    width: 100%;
+    border-top: $line-border;
+}
+
+.operator {
+    &.operator-minus,
+    &.operator-plus {
+        padding: 0 0.3em;
+    }
+
+    &.operator-multi-dot,
+    &.operator-multi-implied {
+        padding: 0 0.1em;
+    }
+
+    &.operator-division {
+        padding: 0 0.3em;
+    }
+}
+
+.minus-standalone {
+    padding: 0 0.1em;
+}
+
+.power {
+    font-size: 70%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.equals {
+    padding: 0 0.3em;
+}
+
+.variable {
+    font-style: italic;
+}
+
+.function-abs {
+    padding: 0 0.3em;
+    border-left: $line-border;
+    border-right: $line-border;
+    display: inline-block;
+}
+
+.function-sum {
+    position: relative;
+    display: inline-block;
+
+    .function-sum-block {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        vertical-align: top;
+    }
+
+    .function-sum-icon {
+        vertical-align: text-top;
+        height: 1.6em;
+        padding: 0 0.3em;
+    }
+
+    .function-sum-bottom,
+    .function-sum-top {
+        font-size: 80%;
+    }
+}
