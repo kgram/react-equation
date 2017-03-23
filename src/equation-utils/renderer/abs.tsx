@@ -1,31 +1,18 @@
 import * as React from 'react'
 import classes from '../style.scss'
 
-interface IRenderedEquation {
-    elements: JSX.Element[],
-    height: number,
-    aboveMiddle: number,
-    belowMiddle: number,
-}
+import { Rendering, RenderingPart, EquationTreeFunction } from '../types'
 
-interface IEquationPart {
-    type: any,
-    props: any,
-    children?: any,
-    aboveMiddle: number,
-    belowMiddle: number,
-}
+import { render } from '.'
 
-export default function abs([{ elements, aboveMiddle, belowMiddle}]: IRenderedEquation[]) {
+export default function abs({args: [expression]}: EquationTreeFunction): RenderingPart {
+    const content = render(expression)
+
     return {
-        type: Abs,
-        props: { },
-        children: elements,
-        aboveMiddle,
-        belowMiddle,
+        type: 'span',
+        props: { className: classes.functionAbs },
+        aboveMiddle: content.aboveMiddle,
+        belowMiddle: content.belowMiddle,
+        children: content.elements,
     }
-}
-
-function Abs({ children }: { children?: JSX.Element[] }) {
-    return <span className={classes.functionAbs}>{children}</span>
 }

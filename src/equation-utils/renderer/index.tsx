@@ -11,12 +11,15 @@ import Operator from './operator'
 import fraction from './fraction'
 import power from './power'
 
-export function render(tree: EquationTree, skipParentheses = false): Rendering {
+import sum from './sum'
+import abs from './abs'
+
+export function render(tree: EquationTree, skipParentheses = false, ...initial: RenderingPart[]): Rendering {
     let parts
     if (skipParentheses && tree.type === 'block') {
-        parts = pushTree(tree.child, [])
+        parts = pushTree(tree.child, initial)
     } else {
-        parts = pushTree(tree, [])
+        parts = pushTree(tree, initial)
     }
     const aboveMiddle = parts.reduce((current, part) => Math.max(current, part.aboveMiddle), 0)
     const belowMiddle = parts.reduce((current, part) => Math.max(current, part.belowMiddle), 0)
@@ -91,6 +94,12 @@ function simplePart(value: string | number, cls?: string) {
 
 function pushFunction(tree: EquationTreeFunction, current: RenderingPart[]) {
     switch (tree.name) {
+        case 'sum':
+            current.push(sum(tree))
+            break
+        case 'abs':
+            current.push(abs(tree))
+            break
         default:
             current.push(simplePart(tree.name, 'funcName'))
             current.push(simplePart('(', 'funcParens'))

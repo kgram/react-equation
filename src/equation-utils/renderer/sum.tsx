@@ -1,44 +1,65 @@
 import * as React from 'react'
 import classes from '../style.scss'
 
-import SumIcon from './sum.svg'
+import { Rendering, RenderingPart, EquationTree, EquationTreeFunction } from '../types'
 
-interface IRenderedEquation {
-    elements: JSX.Element[],
-    height: number,
-    aboveMiddle: number,
-    belowMiddle: number,
-}
+import { render } from '.'
 
+const iconSize = 1.8
+const fontFactor = 0.8
 
-interface IEquationPart {
-    type: any,
-    props: any,
-    children?: any,
-    aboveMiddle: number,
-    belowMiddle: number,
-}
-
-export default function sum([variable, start, end, expression]: IRenderedEquation[]) {
-    return {
+export default function sum({args: [variable, start, end, expression]}: EquationTreeFunction) {
+    const top = render(end)
+    const bottom = render({
+        type: 'equals',
+        a: variable,
+        b: start,
+    })
+    const block = {
         type: Sum,
-        props: { variable, start, end, expression },
-        aboveMiddle: Math.max(0.8 + end.height * 0.8, expression.aboveMiddle),
-        belowMiddle: Math.max(0.8 + start.height * 0.8, 0.8 + variable.height * 0.8, expression.belowMiddle),
+        props: { top, bottom },
+        aboveMiddle: iconSize / 2 + top.height * fontFactor,
+        belowMiddle: iconSize / 2 + bottom.height * fontFactor,
+    }
+    const rendering = render(wrapParenthesis(expression), false, block)
+    return {
+        type: 'span',
+        props: { className: classes.functionSum },
+        aboveMiddle: rendering.aboveMiddle,
+        belowMiddle: rendering.belowMiddle,
+        children: rendering.elements,
     }
 }
 
-function Sum({ variable, start, end, expression }: { variable: IRenderedEquation, start: IRenderedEquation, end: IRenderedEquation, expression: IRenderedEquation}) {
+function Sum({ top, bottom, style }: { top: Rendering, bottom: Rendering, style: React.CSSProperties}) {
     return (
-        <span className={classes.functionSum}>
-            <span className={classes.functionSumBlock}>
-                <span className={classes.functionSumTop}>{end.elements}</span>
-                <SumIcon className={classes.functionSumIcon} />
-                <span className={classes.functionSumBottom}>
-                    {variable.elements}<span className={classes.equals}>=</span>{start.elements}
-                </span>
-            </span>
-            <span style={{ position: 'relative', top: `${Math.max(0.8 + end.height * 0.8, expression.aboveMiddle) - expression.aboveMiddle}em` }}>{expression.elements}</span>
+        <span style={style} className={classes.functionSumBlock}>
+            <span style={{ height: `${top.height}em` }} className={classes.functionSumTop}>{top.elements}</span>
+            <span className={classes.functionSumIcon}>Σ</span>
+            <span style={{ height: `${bottom.height}em` }} className={classes.functionSumBottom}>{bottom.elements}</span>
         </span>
     )
+}
+
+function wrapParenthesis(tree: EquationTree): EquationTree {
+    if (isStandalone(tree)) {
+        return tree
+    } else {
+        return {
+            type: 'block',
+            child: tree,
+        }
+    }
+}
+
+function isStandalone(tree: EquationTree): boolean {
+    return tree.type === 'variable' ||
+        tree.type === 'number' ||
+        tree.type === 'block' ||
+        tree.type === 'function' ||
+        (tree.type === 'operator' && (
+            tree.operator === '/' ||
+            tree.operator === '^'
+        )) ||
+        (tree.type === 'negative' && isStandalone(tree.value))
 }
