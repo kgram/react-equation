@@ -1,15 +1,12 @@
 import * as React from 'react'
 
-import { Rendering, RenderingPart, EquationTree } from '../types'
+import { Rendering, RenderingPart, EquationTreeOperator } from '../types'
 
 import classes from '../style.scss'
 
 import { render } from '.'
 
-export default function fraction({ a, b }: {
-    a: EquationTree,
-    b: EquationTree,
-}): RenderingPart {
+export default function fraction({ a, b }: EquationTreeOperator): RenderingPart {
     const top = render(a, true)
     const bottom = render(b, true)
     return {

@@ -4,7 +4,7 @@ import classes from '../style.scss'
 import { parse } from '../parser'
 import { resolve } from '../resolver'
 
-import { EquationTree, Rendering, RenderingPart } from '../types'
+import { EquationTree, EquationTreeOperator, EquationTreeFunction, Rendering, RenderingPart } from '../types'
 
 import Operator from './operator'
 
@@ -57,10 +57,10 @@ function pushTree(tree: EquationTree, current: RenderingPart[]) {
             current.push(simplePart(')', 'parens'))
             break
         case 'operator':
-            pushOperator(tree.operator, tree.a, tree.b, current)
+            pushOperator(tree, current)
             break
         case 'function':
-            pushFunction(tree.name, tree.args, current)
+            pushFunction(tree, current)
             break
         case 'equals':
             pushTree(tree.a, current)
@@ -89,43 +89,41 @@ function simplePart(value: string | number, cls?: string) {
     }
 }
 
-function pushFunction(name: string, args: EquationTree[], current: RenderingPart[]) {
-    // if (specials.hasOwnProperty(name)) {
-    //     const mapper = specials[name] as ((args: Rendering[]) => RenderingPart)
-    //     current.push(mapper(args.map((arg) => render(arg))))
-    //     return
-    // }
-
-    current.push(simplePart(name, 'funcName'))
-    current.push(simplePart('(', 'funcParens'))
-    args.forEach((arg, i) => {
-        if (i > 0) {
-            current.push(simplePart(', '))
-        }
-        pushTree(arg, current)
-    })
-    current.push(simplePart(')', 'funcParens'))
+function pushFunction(tree: EquationTreeFunction, current: RenderingPart[]) {
+    switch (tree.name) {
+        default:
+            current.push(simplePart(tree.name, 'funcName'))
+            current.push(simplePart('(', 'funcParens'))
+            tree.args.forEach((arg, i) => {
+                if (i > 0) {
+                    current.push(simplePart(', '))
+                }
+                pushTree(arg, current)
+            })
+            current.push(simplePart(')', 'funcParens'))
+            break
+    }
 }
 
-function pushOperator(operator: any, a: EquationTree, b: EquationTree, current: RenderingPart[]) {
-    switch (operator) {
+function pushOperator(tree: EquationTreeOperator, current: RenderingPart[]) {
+    switch (tree.operator) {
         case '/': {
-            current.push(fraction({ a, b }))
+            current.push(fraction(tree))
             break
         }
         case '^': {
-            current.push(power({ a, b }))
+            current.push(power(tree))
             break
         }
         default:
-            pushTree(a, current)
+            pushTree(tree.a, current)
             current.push({
                 type: Operator,
-                props: { type: operator },
+                props: { type: tree.operator },
                 aboveMiddle: 0.7,
                 belowMiddle: 0.7,
             })
-            pushTree(b, current)
+            pushTree(tree.b, current)
     }
 }
 

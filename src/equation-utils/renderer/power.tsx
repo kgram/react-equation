@@ -1,15 +1,12 @@
 import * as React from 'react'
 
-import { Rendering, RenderingPart, EquationTree } from '../types'
+import { Rendering, RenderingPart, EquationTreeOperator } from '../types'
 
 import classes from '../style.scss'
 
 import { render } from '.'
 
-export default function power({ a, b }: {
-    a: EquationTree,
-    b: EquationTree,
-}): RenderingPart {
+export default function power({ a, b }: EquationTreeOperator): RenderingPart {
     const base = render(a, false)
     const exponent = render(b, true)
     return {

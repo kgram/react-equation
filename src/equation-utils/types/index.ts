@@ -1,6 +1,15 @@
-import EquationTree from './equation-tree'
+export {
+    EquationTree,
+    EquationTreeVariable,
+    EquationTreeNumber,
+    EquationTreeNegative,
+    EquationTreeFunction,
+    EquationTreeBlock,
+    EquationTreeOperator,
+    EquationTreeEquals,
+} from './equation-tree'
 import Operator from './operator'
 import Rendering from './rendering'
 import RenderingPart from './rendering-part'
 
-export { EquationTree, Operator, Rendering, RenderingPart }
+export { Operator, Rendering, RenderingPart }
