@@ -1,10 +1,14 @@
 import { Parser } from 'nearley'
 
+import { EquationTree } from '../types'
+
+import showTree from './showTree'
+import stringify from './stringify'
 import grammar from './math.ne'
 
-import EquationTree, { treeToString } from './equation-tree'
+export { showTree, stringify }
 
-export default function Parse(input: string) {
+export function parse(input: string) {
     const parser = new Parser<EquationTree>(grammar.ParserRules, grammar.ParserStart)
     const result = parser.feed(input)
 
@@ -14,7 +18,7 @@ export default function Parse(input: string) {
         case 0:
             throw new Error('Parse math: invalid input')
         default:
-            result.results.map((tree) => console.log(treeToString(tree), tree))
+            result.results.map((tree) => console.log(showTree(tree), tree))
             throw new Error('Parse math: ambiguous result')
     }
 }

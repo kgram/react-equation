@@ -1,4 +1,4 @@
-import EquationTree, { operator } from './equation-tree'
+import { EquationTree, Operator } from '../types'
 
 interface IVariableLookup {
     [key: string]: number
@@ -64,7 +64,15 @@ function numberFunctionWrapper(func: (...args: number[]) => number) {
     ) => func(...args.map((arg) => resolve(arg, variables, functions)))
 }
 
-export default function resolve(
+export function resolveTree(
+    tree: EquationTree,
+    variables: IVariableLookup = {},
+    functions: IFunctionLookup = {},
+): EquationTree {
+    return numberToTree(resolve(tree, variables, functions))
+}
+
+export function resolve(
     tree: EquationTree,
     variables: IVariableLookup = {},
     functions: IFunctionLookup = {},
@@ -108,7 +116,7 @@ function resolveVariable(name: string, variables: IVariableLookup) {
     }
 }
 
-function resolveOperator(op: operator, a: number, b: number) {
+function resolveOperator(op: Operator, a: number, b: number) {
     switch (op) {
         case '+':
             return a + b
@@ -139,4 +147,21 @@ function resolveFunction(name: string, args: EquationTree[], variables: IVariabl
     }
 
     return result
+}
+
+function numberToTree(x: number): EquationTree {
+    if (x < 0) {
+        return {
+            type: 'negative',
+            value: {
+                type: 'number',
+                value: -x,
+            },
+        }
+    } else {
+        return {
+            type: 'number',
+            value: x,
+        }
+    }
 }

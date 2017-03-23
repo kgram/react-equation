@@ -1,18 +1,18 @@
-import { EditorState } from 'draft-js'
-
+// import { EditorState } from 'draft-js'
+//
 import Equation from './equation'
-import * as fraction from './fraction'
-import Operator from './operator'
-import Power from './power'
-import Equationtree from './equation-tree'
-
+// import * as fraction from './fraction'
+// import Operator from './operator'
+// import Power from './power'
+// import Equationtree from './equation-tree'
+//
 export {
     Equation,
-    Operator,
-    fraction,
-    Power,
-
-    Equationtree,
+//     Operator,
+//     fraction,
+//     Power,
+//
+//     Equationtree,
 }
 
 // export function createEquation(editorState: any) {

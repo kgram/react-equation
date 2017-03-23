@@ -1,15 +1,14 @@
 import * as React from 'react'
 import { storiesOf, action } from '@kadira/storybook'
 
-import classes from './stories.scss'
-import './style.scss'
+import classes from '../stories.scss'
+import '../style.scss'
 
-import parse from './parse'
-import resolve from './resolve'
+import { resolve } from '../resolver'
 
-import EquationWrapper from './equation-wrapper.stories'
+import EquationWrapper from '../equation-wrapper.stories'
 
-import { treeToString, stringify } from './equation-tree'
+import { parse, showTree, stringify } from '.'
 
 function getPersistantState(): string {
     return window.localStorage.persistantEquationState || ''
@@ -49,7 +48,7 @@ function Math({children = ''}: {children?: string}) {
             </div>
             {valueError && <Code>{valueError.message}</Code>}
             {tree
-                ? <Code>{treeToString(tree)}</Code>
+                ? <Code>{showTree(tree)}</Code>
                 : <Code>{error.message}</Code>
             }
             {tree && <Code>{stringify(tree)}</Code>}
