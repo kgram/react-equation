@@ -15,6 +15,11 @@ export type EquationTreeNegative = {
     value: EquationTree,
 }
 
+export type EquationTreePlusMinus = {
+    type: 'plusminus',
+    value: EquationTree,
+}
+
 export type EquationTreeFunction = {
     type: 'function',
     name: string,
@@ -43,6 +48,7 @@ export type EquationTree =
     EquationTreeVariable |
     EquationTreeNumber |
     EquationTreeNegative |
+    EquationTreePlusMinus |
     EquationTreeFunction |
     EquationTreeBlock |
     EquationTreeOperator |

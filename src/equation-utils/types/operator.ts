@@ -1,3 +1,3 @@
-type operator = '+' | '-' | '*' | '**' | '/' | '^'
+type operator = '+' | '-' | '±' | '*' | '**' | '/' | '^'
 
 export default operator

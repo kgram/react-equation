@@ -131,6 +131,8 @@ export function resolve(
             return resolveVariable(tree.name, variables)
         case 'negative':
             return -resolve(tree.value, variables, functions)
+        case 'plusminus':
+            throw new Error('Equation resolve: cannot handle ± operator')
         case 'block':
             return resolve(tree.child, variables, functions)
         case 'operator':
@@ -175,6 +177,8 @@ function resolveOperator(op: Operator, a: number, b: number) {
             return a + b
         case '-':
             return a - b
+        case '±':
+            throw new Error('Equation resolve: cannot handle ± operator')
         case '*':
         case '**':
             return a * b

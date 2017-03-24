@@ -16,6 +16,10 @@ function pushTree(tree: EquationTree, buffer: string[] = [], ownIndent = '', des
             buffer.push(`${ownIndent}-`)
             pushTree(tree.value, buffer, descendantIndent + '└─ ', descendantIndent + '   ')
             break
+        case 'plusminus':
+            buffer.push(`${ownIndent}±`)
+            pushTree(tree.value, buffer, descendantIndent + '└─ ', descendantIndent + '   ')
+            break
         case 'block':
             buffer.push(`${ownIndent}()`)
             pushTree(tree.child, buffer, descendantIndent + '└─ ', descendantIndent + '   ')

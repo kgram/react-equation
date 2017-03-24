@@ -89,6 +89,10 @@ $line-border: 0.08em solid currentColor;
         padding: 0 0.3em;
     }
 
+    &.operator-plusminus {
+        padding: 0 0.3em;
+    }
+
     &.operator-multi-dot {
         padding: 0 0.15em;
     }
@@ -102,6 +106,9 @@ $line-border: 0.08em solid currentColor;
 }
 
 .minus-standalone {
+    padding: 0 0.1em;
+}
+.plusminus-standalone {
     padding: 0 0.1em;
 }
 

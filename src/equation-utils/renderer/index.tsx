@@ -54,6 +54,10 @@ function pushTree(tree: EquationTree, current: RenderingPart[]) {
             current.push(simplePart('−', 'minus-standalone'))
             pushTree(tree.value, current)
             break
+        case 'plusminus':
+            current.push(simplePart('±', 'plusminus-standalone'))
+            pushTree(tree.value, current)
+            break
         case 'block':
             current.push(simplePart('(', 'parens'))
             pushTree(tree.child, current)

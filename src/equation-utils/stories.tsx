@@ -21,6 +21,9 @@ storiesOf('Equations', module)
             <EquationWrapper>34634-4546</EquationWrapper>
             <EquationWrapper>5*x+2*y</EquationWrapper>
             <EquationWrapper>5**x+2**y</EquationWrapper>
+            <EquationWrapper>-10</EquationWrapper>
+            <EquationWrapper>5±10</EquationWrapper>
+            <EquationWrapper>±10 * (±2)</EquationWrapper>
         </div>
     ))
     .add('Fractions', () => (

@@ -29,8 +29,9 @@ multi -> division {% id %}
 
 # Addition and subtraction
 add_sub -> multi {% id %}
-    | add_sub _ [+-] _ multi {% function(d) { return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
+    | add_sub _ [±+-] _ multi {% function(d) { return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
     | "-" _ multi {% function(d) { return {type: 'negative', value: d[2]}} %}
+    | "±" _ multi {% function(d) { return {type: 'plusminus', value: d[2]}} %}
 
 integer -> [0-9]:+        {% function(d) { return parseInt(d[0].join(''))} %}
 

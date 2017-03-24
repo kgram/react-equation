@@ -3,6 +3,7 @@ export {
     EquationTreeVariable,
     EquationTreeNumber,
     EquationTreeNegative,
+    EquationTreePlusMinus,
     EquationTreeFunction,
     EquationTreeBlock,
     EquationTreeOperator,

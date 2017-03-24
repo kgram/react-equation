@@ -16,6 +16,10 @@ function stringifyTree(tree: EquationTree, buffer: string[] = []) {
             buffer.push('-')
             stringifyTree(tree.value, buffer)
             break
+        case 'plusminus':
+            buffer.push('±')
+            stringifyTree(tree.value, buffer)
+            break
         case 'block':
             buffer.push('(')
             stringifyTree(tree.child, buffer)
