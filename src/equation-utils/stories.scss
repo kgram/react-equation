@@ -4,12 +4,14 @@
 }
 
 .equation-wrapper {
+    position: relative;
     margin: 5px 10px 10px;
     border: 3px solid #cceeff;
     display: inline-block;
 }
 
 .equation-wrapper-raw {
+    font-family: monospace;
     display: inline-block;
     margin: 10px 10px 5px;
     border: 1px solid #aaa;

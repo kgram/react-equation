@@ -1,20 +1,22 @@
 import { EquationTree, Operator } from '../types'
 
-interface IVariableLookup {
-    [key: string]: number
+export type VariableLookup = {
+    [key: string]: number,
 }
 
-interface IFunctionLookup {
-    [key: string]: (args: EquationTree[], variables: IVariableLookup, functions: IFunctionLookup) => number
+export type ResolverFunction = (args: EquationTree[], variables: VariableLookup, functions: FunctionLookup) => number
+
+export type FunctionLookup = {
+    [key: string]: ResolverFunction,
 }
 
-const defaultVariables: IVariableLookup = {
+const defaultVariables: VariableLookup = {
     e: Math.E,
     pi: Math.PI,
     π: Math.PI,
 }
 
-const defaultFunctions: IFunctionLookup = {
+const defaultFunctions: FunctionLookup = {
     abs: numberFunctionWrapper(Math.abs),
     acos: numberFunctionWrapper(Math.acos),
     asin: numberFunctionWrapper(Math.asin),
@@ -59,23 +61,23 @@ const defaultFunctions: IFunctionLookup = {
 function numberFunctionWrapper(func: (...args: number[]) => number) {
     return (
         args: EquationTree[],
-        variables: IVariableLookup,
-        functions: IFunctionLookup,
+        variables: VariableLookup,
+        functions: FunctionLookup,
     ) => func(...args.map((arg) => resolve(arg, variables, functions)))
 }
 
 export function resolveTree(
     tree: EquationTree,
-    variables: IVariableLookup = {},
-    functions: IFunctionLookup = {},
+    variables: VariableLookup = {},
+    functions: FunctionLookup = {},
 ): EquationTree {
     return numberToTree(resolve(tree, variables, functions))
 }
 
 export function resolve(
     tree: EquationTree,
-    variables: IVariableLookup = {},
-    functions: IFunctionLookup = {},
+    variables: VariableLookup = {},
+    functions: FunctionLookup = {},
 ): number {
     switch (tree.type) {
         case 'number':
@@ -99,6 +101,12 @@ export function resolve(
                 variables,
                 functions,
             )
+        case 'equals':
+            if (tree.a.type === 'variable') {
+                return resolve(tree.b)
+            } else {
+                throw new Error('Equation resolve: equals left-hand side must be a variable')
+            }
         default:
             // Get around typescripts checks to catch any parsed types we don't handle yet
             const type = (tree as any).type
@@ -106,7 +114,7 @@ export function resolve(
     }
 }
 
-function resolveVariable(name: string, variables: IVariableLookup) {
+function resolveVariable(name: string, variables: VariableLookup) {
     if (variables.hasOwnProperty(name)) {
         return variables[name]
     } else if (defaultVariables.hasOwnProperty(name)) {
@@ -132,7 +140,7 @@ function resolveOperator(op: Operator, a: number, b: number) {
     }
 }
 
-function resolveFunction(name: string, args: EquationTree[], variables: IVariableLookup, functions: IFunctionLookup) {
+function resolveFunction(name: string, args: EquationTree[], variables: VariableLookup, functions: FunctionLookup) {
     let func
     if (functions.hasOwnProperty(name)) {
         func = functions[name]
@@ -163,5 +171,25 @@ function numberToTree(x: number): EquationTree {
             type: 'number',
             value: x,
         }
+    }
+}
+
+export function buildResolver(
+    name: string,
+    argNames: string[],
+    expression: EquationTree,
+): ResolverFunction {
+    return (args, variables, functions) => {
+        if (args.length !== argNames.length) {
+            throw new Error(`Equation resolve: function "${name}" takes ${argNames.length} arguments, not ${args.length}`)
+        }
+
+        const enhancedVariables: VariableLookup = { ...variables }
+
+        argNames.forEach((n, idx) => {
+            enhancedVariables[n] = resolve(args[idx], variables, functions)
+        })
+
+        return resolve(expression, enhancedVariables, functions)
     }
 }
