@@ -18,7 +18,6 @@ export function parse(input: string) {
         case 0:
             throw new Error('Parse math: invalid input')
         default:
-            result.results.map((tree) => console.log(showTree(tree), tree))
             throw new Error('Parse math: ambiguous result')
     }
 }

@@ -28,10 +28,18 @@ function Power({ base, exponent, baseOffset, style = {} }: {
     style: React.CSSProperties,
 }) {
     style.height = `${base.height + baseOffset}em`
+    const baseStyle = {
+        position: 'relative',
+        top: `${baseOffset}em`,
+        height: `${base.height}em`,
+    }
+    const exponentStyle ={
+        height: `${exponent.height}em`,
+    }
     return (
         <span style={style}>
-            <span style={{ position: 'relative', top: `${baseOffset}em`, height: `${base.height}em` }}>{base.elements}</span>
-            <span style={ {height: `${exponent.height}em` }} className={classes.power}>{exponent.elements}</span>
+            <span style={baseStyle}>{base.elements}</span>
+            <span style={exponentStyle} className={classes.power}>{exponent.elements}</span>
         </span>
     )
 }

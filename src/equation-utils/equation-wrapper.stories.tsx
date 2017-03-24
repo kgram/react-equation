@@ -21,6 +21,9 @@ type State = {
 
 export default class EquationWrapper extends React.PureComponent<Props, State> {
     state = { largeSize: false }
+
+    handleChange = (e: React.FormEvent<HTMLInputElement>) => this.setState({largeSize: e.currentTarget.checked})
+
     render() {
         const { children, input = true, evaluate = true, variables, functions } = this.props
         return (
@@ -31,7 +34,7 @@ export default class EquationWrapper extends React.PureComponent<Props, State> {
                         type='checkbox'
                         className={classes.equationWrapperSizeControl}
                         checked={this.state.largeSize}
-                        onChange={(e) => this.setState({largeSize: e.currentTarget.checked})}
+                        onChange={this.handleChange}
                     />
                     <Equation style={{ fontSize: this.state.largeSize ? '300%' : '100%' }} evaluate={evaluate} variables={variables} functions={functions}>{children}</Equation>
                 </div>

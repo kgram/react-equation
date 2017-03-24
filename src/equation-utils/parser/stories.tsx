@@ -72,7 +72,12 @@ function Math({children = []}: {children?: string[]}) {
         <div>
             <div>
                 {equations.map(({ input, variables, functions }, idx) => (
-                    <EquationWrapper key={idx} input={false} variables={variables} functions={functions}>{input}</EquationWrapper>
+                    <EquationWrapper
+                        key={idx}
+                        input={false}
+                        variables={variables}
+                        functions={functions}
+                    >{input}</EquationWrapper>
                 ))}
             </div>
             <div style={{display: 'flex', flexDirection: 'row'}}>
