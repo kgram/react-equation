@@ -127,10 +127,24 @@ $line-border: 0.08em solid currentColor;
 }
 
 .function-abs {
-    padding: 0 0.3em;
-    border-left: $line-border;
-    border-right: $line-border;
     display: inline-block;
+    position: relative;
+    padding: 0 0.3em;
+    &:before,
+    &:after {
+        content: ' ';
+        display: block;
+        position: absolute;
+        border-left: $line-border;
+        top: 0.2em;
+        height: calc(100% - 0.4em);
+    }
+    &:before {
+        left: 0.1em;
+    }
+    &:after {
+        right: 0.1em;
+    }
 }
 
 .function-sum {
