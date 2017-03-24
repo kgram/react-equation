@@ -179,6 +179,9 @@ function resolveOperator(op: Operator, a: number, b: number) {
         case '**':
             return a * b
         case '/':
+            if (b === 0) {
+                throw new Error(`Equation resolve: cannot divide by 0`)
+            }
             return a / b
         case '^':
             return Math.pow(a, b)
