@@ -22,6 +22,12 @@
         content: ' ';
     }
 }
+textarea.equation-wrapper-raw {
+    min-width: 300px;
+    min-height: 160px;
+    resize: none;
+    background: white;
+}
 
 .equation-wrapper-size-control {
     position: absolute;

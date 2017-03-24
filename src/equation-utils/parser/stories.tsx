@@ -104,20 +104,21 @@ class Editor extends React.Component<null, {value: string}> {
         }
     }
 
+    handleChange = (e: React.FormEvent<HTMLTextAreaElement>) => {
+        const value = e.currentTarget.value
+        this.setState({ value })
+        setPersistantState(value)
+    }
+
     render() {
         const equations = this.state.value.split(/\n/g).map((s) => s.trim()).filter((s) => s)
         return (
             <div>
                 <div>
-                    <pre
+                    <textarea
                         className={classes.equationWrapperRaw}
-                        contentEditable
-                        onInput={(e) => {
-                            const value = e.currentTarget.innerText
-                            this.setState({ value })
-                            setPersistantState(value)
-                        }}
-                        dangerouslySetInnerHTML={{__html: this.state.value}}
+                        onInput={this.handleChange}
+                        value={this.state.value}
                     />
                 </div>
                 <Math>{equations}</Math>
