@@ -6,26 +6,31 @@ import classes from '../style.scss'
 
 import { render } from '.'
 
+const fontFactor = 0.7
+const exponentOffset = 0.8
+
 export default function power({ a, b }: EquationTreeOperator): RenderingPart {
     const base = render(a, false)
     const exponent = render(b, true)
+    const baseOffset = exponent.height * fontFactor - exponentOffset
     return {
         type: Power,
-        props: { base, exponent },
-        aboveMiddle: base.height / 2 + exponent.height * 0.7 - 0.8,
+        props: { base, exponent, baseOffset },
+        aboveMiddle: base.height / 2 + baseOffset,
         belowMiddle: base.height / 2,
     }
 }
 
-function Power({ base, exponent, style = {} }: {
+function Power({ base, exponent, baseOffset, style = {} }: {
     base: Rendering,
     exponent: Rendering,
+    baseOffset: number,
     style: React.CSSProperties,
 }) {
-    style.height = `${base.height + exponent.height * 0.6 - 0.7}em`
+    style.height = `${base.height + baseOffset}em`
     return (
         <span style={style}>
-            <span style={{ position: 'relative', top: `${exponent.height * 0.7 - 0.8}em`, height: `${base.height}em` }}>{base.elements}</span>
+            <span style={{ position: 'relative', top: `${baseOffset}em`, height: `${base.height}em` }}>{base.elements}</span>
             <span style={ {height: `${exponent.height}em` }} className={classes.power}>{exponent.elements}</span>
         </span>
     )

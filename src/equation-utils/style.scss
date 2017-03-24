@@ -63,11 +63,11 @@ $line-border: 0.08em solid currentColor;
     flex-direction: column;
     vertical-align: top;
     position: relative;
-    font-size: 90%;
 }
 
 .fraction-bottom,
 .fraction-top {
+    font-size: 90%;
     display: block;
     text-align: center;
     width: 100%;
@@ -75,6 +75,7 @@ $line-border: 0.08em solid currentColor;
 }
 
 .fraction-separator {
+    font-size: 90%;
     position: absolute;
     display: block;
     background: currentColor;
@@ -88,7 +89,9 @@ $line-border: 0.08em solid currentColor;
         padding: 0 0.3em;
     }
 
-    &.operator-multi-dot,
+    &.operator-multi-dot {
+        padding: 0 0.15em;
+    }
     &.operator-multi-implied {
         padding: 0 0.1em;
     }

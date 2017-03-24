@@ -61,7 +61,9 @@ storiesOf('Equations', module)
         <div>
             <EquationWrapper>abs(-32)</EquationWrapper>
             <EquationWrapper>abs(-pi/25^2)</EquationWrapper>
+            <EquationWrapper>2**x+abs(x)/x^2</EquationWrapper>
             <EquationWrapper>sum(n,1,5,n^2)</EquationWrapper>
-            <EquationWrapper>sum(n,4^2,5^2,2**n^2+5**n)</EquationWrapper>
+            <EquationWrapper>sum(n,log(2^2^2/2,2),5^2,2**n^2+5**n)</EquationWrapper>
+            <EquationWrapper>sum(n,1,10,1/2/3/4/5)</EquationWrapper>
         </div>
     ))
