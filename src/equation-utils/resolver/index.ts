@@ -37,7 +37,11 @@ const defaultFunctions: FunctionLookup = {
     min: numberFunctionWrapper(Math.min, 1, Infinity),
 
     pow: numberFunctionWrapper(Math.pow, 2, 2),
-    sqrt: numberFunctionWrapper(Math.sqrt),
+    sqrt: numberFunctionWrapper(Math.sqrt, 1, 1, (name, x) => {
+        if (x < 0) {
+            throw new Error(`Equation resolve: argument of ${name} cannot be negative`)
+        }
+    }),
 
     ln: numberFunctionWrapper(Math.log),
     log: numberFunctionWrapper((x, base = 10) => Math.log(x) / Math.log(base), 1, 2),
@@ -73,7 +77,12 @@ const defaultFunctions: FunctionLookup = {
     },
 }
 
-function numberFunctionWrapper(func: (...args: number[]) => number, minArgs = 1, maxArgs = 1): ResolverFunction {
+function numberFunctionWrapper(
+    func: (...args: number[]) => number,
+    minArgs = 1,
+    maxArgs = 1,
+    validate?: (name: string, ...args: number[]) => void,
+): ResolverFunction {
     return (
         name: string,
         args: EquationTree[],
@@ -82,7 +91,13 @@ function numberFunctionWrapper(func: (...args: number[]) => number, minArgs = 1,
     ) => {
         checkFunctionArgs(name, args, minArgs, maxArgs)
 
-        return func(...args.map((arg) => resolve(arg, variables, functions)))
+        const resolvedArgs = args.map((arg) => resolve(arg, variables, functions))
+
+        if (validate) {
+            validate(name, ...resolvedArgs)
+        }
+
+        return func(...resolvedArgs)
     }
 }
 
