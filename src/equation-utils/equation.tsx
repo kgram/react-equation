@@ -8,12 +8,15 @@ import { EquationTree } from './types'
 
 import { render } from './renderer'
 
-export default function Equation({children = '', evaluate = false, variables, functions}: {
+type Props = {
     children?: string,
     evaluate?: boolean,
     variables?: VariableLookup,
     functions?: FunctionLookup,
-}) {
+    style?: React.CSSProperties,
+}
+
+export default function Equation({children = '', evaluate = false, variables, functions, style = {}}: Props) {
     try {
         let tree = parse(children)
 
@@ -32,7 +35,9 @@ export default function Equation({children = '', evaluate = false, variables, fu
 
         const { elements, height } = render(tree)
 
-        return <span style={{ height: `${height}em` }} className={classes.equation}>{elements}</span>
+        style.height = `${height}em`
+
+        return <span style={style} className={classes.equation}>{elements}</span>
     } catch (e) {
         return <span className={classes.equation} />
     }
