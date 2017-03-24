@@ -13,15 +13,15 @@ function pushTree(tree: EquationTree, buffer: string[] = [], ownIndent = '', des
             buffer.push(`${ownIndent}"${tree.name}"`)
             break
         case 'negative':
-            buffer.push(`${ownIndent}negative`)
+            buffer.push(`${ownIndent}-`)
             pushTree(tree.value, buffer, descendantIndent + '└─ ', descendantIndent + '   ')
             break
         case 'block':
-            buffer.push(ownIndent + 'block')
+            buffer.push(`${ownIndent}()`)
             pushTree(tree.child, buffer, descendantIndent + '└─ ', descendantIndent + '   ')
             break
         case 'operator':
-            buffer.push(`${ownIndent}op ${tree.operator}`)
+            buffer.push(ownIndent + tree.operator)
             pushTree(tree.a, buffer, descendantIndent + '├─ ', descendantIndent + '│  ')
             pushTree(tree.b, buffer, descendantIndent + '└─ ', descendantIndent + '   ')
             break
