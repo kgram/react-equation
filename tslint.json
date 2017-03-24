@@ -1,20 +1,10 @@
 {
     "extends": "tslint:latest",
     "rules": {
-        "quotemark": [
-            true,
-            "single"
-        ],
-        "member-access": [
-            false
-        ],
-        "semicolon": [
-            true,
-            "never"
-        ],
-        "ordered-imports": [
-            false
-        ],
+        "quotemark": [true, "single"],
+        "member-access": [false],
+        "semicolon": [true, "never"],
+        "ordered-imports": [false],
         "object-literal-sort-keys": false,
         "switch-default": false,
         "interface-over-type-literal": false
