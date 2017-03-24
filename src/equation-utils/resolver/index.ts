@@ -4,7 +4,7 @@ export type VariableLookup = {
     [key: string]: number,
 }
 
-export type ResolverFunction = (args: EquationTree[], variables: VariableLookup, functions: FunctionLookup) => number
+export type ResolverFunction = (name: string, args: EquationTree[], variables: VariableLookup, functions: FunctionLookup) => number
 
 export type FunctionLookup = {
     [key: string]: ResolverFunction,
@@ -17,33 +17,48 @@ const defaultVariables: VariableLookup = {
 }
 
 const defaultFunctions: FunctionLookup = {
-    abs: numberFunctionWrapper(Math.abs),
-    acos: numberFunctionWrapper(Math.acos),
-    asin: numberFunctionWrapper(Math.asin),
-    atan: numberFunctionWrapper(Math.atan),
-    atan2: numberFunctionWrapper( Math.atan2),
-    ceil: numberFunctionWrapper(Math.ceil),
-    cos: numberFunctionWrapper(Math.cos),
-    exp: numberFunctionWrapper(Math.exp),
-    floor: numberFunctionWrapper(Math.floor),
-    ln: numberFunctionWrapper(Math.log),
-    max: numberFunctionWrapper(Math.max),
-    min: numberFunctionWrapper(Math.min),
-    pow: numberFunctionWrapper(Math.pow),
-    random: numberFunctionWrapper(Math.random),
-    round: numberFunctionWrapper(Math.round),
     sin: numberFunctionWrapper(Math.sin),
-    sqrt: numberFunctionWrapper(Math.sqrt),
+    cos: numberFunctionWrapper(Math.cos),
     tan: numberFunctionWrapper(Math.tan),
+    asin: numberFunctionWrapper(Math.asin),
+    acos: numberFunctionWrapper(Math.acos),
+    atan: numberFunctionWrapper(Math.atan),
+    atan2: numberFunctionWrapper(Math.atan2),
 
-    log: numberFunctionWrapper((x, base = 10) => Math.log(x) / Math.log(base)),
+    abs: numberFunctionWrapper(Math.abs),
+    ceil: numberFunctionWrapper(Math.ceil),
+    floor: numberFunctionWrapper(Math.floor),
+    round: numberFunctionWrapper((x, precision = 0) => {
+        const factor = Math.pow(10, precision)
+        return Math.round(x * factor) / factor
+    }, 1 , 2),
 
-    sum: ([variable, startTree, endTree, expression], variables, functions) => {
+    max: numberFunctionWrapper(Math.max, 1, Infinity),
+    min: numberFunctionWrapper(Math.min, 1, Infinity),
+
+    pow: numberFunctionWrapper(Math.pow, 2, 2),
+    sqrt: numberFunctionWrapper(Math.sqrt),
+
+    ln: numberFunctionWrapper(Math.log),
+    log: numberFunctionWrapper((x, base = 10) => Math.log(x) / Math.log(base), 1, 2),
+
+    sum: (name, args, variables, functions) => {
+        checkFunctionArgs(name, args, 4, 4)
+
+        const [variable, startTree, endTree, expression] = args
+
         if (variable.type !== 'variable') {
-            throw new Error('Equation resolve: first argument of sum must be a variable')
+            throw new Error(`Equation resolve: first argument of ${name} must be a variable, not ${args[0].type}`)
         }
+
         let start = resolve(startTree, variables, functions)
         let end = resolve(endTree, variables, functions)
+        if (Math.round(start) !== start) {
+            throw new Error(`Equation resolve: second argument of ${name} must be an integer (is ${start})`)
+        }
+        if (Math.round(end) !== end) {
+            throw new Error(`Equation resolve: third argument of ${name} must be an integer (is ${end})`)
+        }
         if (start > end) {
             [start, end] = [end, start]
         }
@@ -58,12 +73,27 @@ const defaultFunctions: FunctionLookup = {
     },
 }
 
-function numberFunctionWrapper(func: (...args: number[]) => number) {
+function numberFunctionWrapper(func: (...args: number[]) => number, minArgs = 1, maxArgs = 1): ResolverFunction {
     return (
+        name: string,
         args: EquationTree[],
         variables: VariableLookup,
         functions: FunctionLookup,
-    ) => func(...args.map((arg) => resolve(arg, variables, functions)))
+    ) => {
+        checkFunctionArgs(name, args, minArgs, maxArgs)
+
+        return func(...args.map((arg) => resolve(arg, variables, functions)))
+    }
+}
+
+function checkFunctionArgs(name: string, args: EquationTree[], minArgs: number, maxArgs: number) {
+    if (args.length < minArgs || args.length > maxArgs) {
+        if (minArgs === maxArgs) {
+            throw new Error(`Equation resolve: function "${name}" takes ${minArgs} arguments, not ${args.length}`)
+        } else {
+            throw new Error(`Equation resolve: function "${name}" takes ${minArgs}-${maxArgs} arguments, not ${args.length}`)
+        }
+    }
 }
 
 export function resolveTree(
@@ -149,7 +179,7 @@ function resolveFunction(name: string, args: EquationTree[], variables: Variable
     } else {
         throw new Error(`Equation resolve: unknown function "${name}"`)
     }
-    const result = func(args, variables, functions)
+    const result = func(name, args, variables, functions)
     if (typeof result !== 'number' || isNaN(result)) {
         throw new Error(`Equation resolve: function "${name}" did not return a number`)
     }
@@ -175,14 +205,11 @@ function numberToTree(x: number): EquationTree {
 }
 
 export function buildResolver(
-    name: string,
     argNames: string[],
     expression: EquationTree,
 ): ResolverFunction {
-    return (args, variables, functions) => {
-        if (args.length !== argNames.length) {
-            throw new Error(`Equation resolve: function "${name}" takes ${argNames.length} arguments, not ${args.length}`)
-        }
+    return (name, args, variables, functions) => {
+        checkFunctionArgs(name, args, argNames.length, argNames.length)
 
         const enhancedVariables: VariableLookup = { ...variables }
 

@@ -48,7 +48,7 @@ function Math({children = []}: {children?: string[]}) {
                     tree.a.args.every((arg) => arg.type === 'variable')
                 ) {
                     const { name, args } = tree.a
-                    functionLookup[tree.a.name] = buildResolver(name, args.map((arg) => (arg as any).name), tree.b)
+                    functionLookup[name] = buildResolver(args.map((arg) => (arg as any).name), tree.b)
                 } else {
                     resolve(tree, variableLookup, functionLookup)
                 }
