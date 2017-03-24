@@ -28,7 +28,7 @@ function Fraction({top, bottom, style}: {
     return (
         <span style={style} className={classes.fractionWrapper}>
             <span style={{ height: `${top.height}em` }} className={classes.fractionTop}>{top.elements}</span>
-            <span style={{ top: `${top.height - separatorSize / 2}em`}} className={classes.fractionSeparator} />
+            <span style={{ top: `${top.height - separatorSize * 3 / 4}em`}} className={classes.fractionSeparator} />
             <span style={{ height: `${bottom.height}em` }} className={classes.fractionBottom}>{bottom.elements}</span>
         </span>
     )
