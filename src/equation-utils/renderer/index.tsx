@@ -37,7 +37,7 @@ export function render(tree: EquationTree, skipParentheses = false, ...initial: 
         aboveMiddle,
         belowMiddle,
         height: aboveMiddle + belowMiddle,
-        elements: parts.map((part) => React.createElement(part.type, part.props, part.children)),
+        elements: parts.map((part, idx) => React.createElement(part.type, { key: idx, ...part.props}, part.children)),
     }
 }
 
