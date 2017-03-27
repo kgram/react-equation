@@ -42,7 +42,7 @@ function Sum({ top, bottom, style }: { top: Rendering, bottom: Rendering, style:
 }
 
 function wrapParenthesis(tree: EquationTree): EquationTree {
-    if (isStandalone(tree)) {
+    if (canStandAlone(tree)) {
         return tree
     } else {
         return {
@@ -52,7 +52,7 @@ function wrapParenthesis(tree: EquationTree): EquationTree {
     }
 }
 
-function isStandalone(tree: EquationTree): boolean {
+function canStandAlone(tree: EquationTree): boolean {
     return tree.type === 'variable' ||
         tree.type === 'number' ||
         tree.type === 'block' ||
@@ -61,5 +61,5 @@ function isStandalone(tree: EquationTree): boolean {
             tree.operator === '/' ||
             tree.operator === '^'
         )) ||
-        (tree.type === 'negative' && isStandalone(tree.value))
+        (tree.type === 'negative' && canStandAlone(tree.value))
 }
