@@ -13,6 +13,7 @@ import power from './power'
 
 import sum from './sum'
 import abs from './abs'
+import sqrt from './sqrt'
 
 export function render(tree: EquationTree, skipParentheses = false, ...initial: RenderingPart[]): Rendering {
     let parts
@@ -103,6 +104,9 @@ function pushFunction(tree: EquationTreeFunction, current: RenderingPart[]) {
             break
         case 'abs':
             current.push(abs(tree))
+            break
+        case 'sqrt':
+            current.push(sqrt(tree))
             break
         default:
             current.push(simplePart(tree.name, 'funcName'))

@@ -124,3 +124,22 @@ $line-border: 0.08em solid currentColor;
         font-size: 80%;
     }
 }
+
+.function-sqrt {
+    display: inline-block;
+    position: relative;
+    padding-top: 0.1em;
+    .function-sqrt-symbol {
+        vertical-align: top;
+        margin-top: 0.1em;
+    }
+    .function-sqrt-line {
+        position: absolute;
+        width: calc(100% - 0.8em);
+        border-top: $line-border;
+        top: 0.2em;
+    }
+    .function-sqrt-content {
+        display: inline-block;
+    }
+}
