@@ -9,6 +9,7 @@ import { EquationTree, EquationTreeOperator, EquationTreeFunction, Rendering, Re
 import Operator from './operator'
 
 import block from './block'
+import func from './func'
 import fraction from './fraction'
 import power from './power'
 
@@ -116,17 +117,8 @@ function pushFunction(tree: EquationTreeFunction, current: RenderingPart[]) {
             current.push(root(tree))
             break
         default:
-            current.push(simplePart(tree.name, 'funcName'))
-            current.push(simplePart('(', 'funcParens'))
-            tree.args.forEach((arg, i) => {
-                if (i > 0) {
-                    current.push(simplePart(', '))
-                }
-                pushTree(arg, current)
-            })
-            current.push(simplePart(')', 'funcParens'))
+            current.push(func(tree))
             break
-
     }
 }
 
