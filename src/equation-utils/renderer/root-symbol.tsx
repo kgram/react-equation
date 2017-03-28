@@ -1,11 +1,11 @@
 import * as React from 'react'
 import classes from '../style.scss'
 
-export default function RootSymbol({ height }: { height: number }) {
+export default function RootSymbol({ height, className }: { height: number, className?: string }) {
     height = Math.max(height, 1.4)
     const offsetHeight = height - 1.4
     return (
-        <svg width='0.8em' className={classes.functionSqrtSymbol} viewBox={`0 0 0.8 ${height - 0.1}`}>
+        <svg width='0.8em' className={className} viewBox={`0 0 0.8 ${height - 0.1}`}>
             <path d={buildPath(morphSvg(pathCommands, height))} />
         </svg>
     )
@@ -51,6 +51,7 @@ function morphSvg(commands: SvgCommand[], height: number) {
             return {
                 c,
                 v: [
+                    // Move along existing line
                     v[0] - elbowFactor * 0.416,
                     v[1] - elbowFactor * 0.909 + offsetHeight,
                 ],

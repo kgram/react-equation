@@ -39,9 +39,22 @@ const defaultFunctions: FunctionLookup = {
     pow: numberFunctionWrapper(Math.pow, 2, 2),
     sqrt: numberFunctionWrapper(Math.sqrt, 1, 1, (name, x) => {
         if (x < 0) {
-            throw new Error(`Equation resolve: argument of ${name} cannot be negative`)
+            throw new Error(`Equation resolve: radicand of ${name} cannot be negative`)
         }
     }),
+
+    root: numberFunctionWrapper(
+        (f, x) => Math.sign(x) * Math.pow(Math.abs(x), 1 / f),
+        2, 2,
+        (name, f, x) => {
+            if (Math.round(f) !== f || f <= 0) {
+                throw new Error(`Equation resolve: index of ${name} must be a positive integer`)
+            }
+            if (f % 2 === 0 && x < 0) {
+                throw new Error(`Equation resolve: radicand of ${name} cannot be negative when index is even`)
+            }
+        },
+    ),
 
     ln: numberFunctionWrapper(Math.log),
     log: numberFunctionWrapper((x, base = 10) => Math.log(x) / Math.log(base), 1, 2),

@@ -7,7 +7,9 @@ import { render } from '.'
 
 import RootSymbol from './root-symbol'
 
-export default function abs({args: [expression]}: EquationTreeFunction): RenderingPart {
+const padding = 0.1
+
+export default function sqrt({args: [expression]}: EquationTreeFunction): RenderingPart {
     const content = render(expression)
 
     return {
@@ -19,13 +21,13 @@ export default function abs({args: [expression]}: EquationTreeFunction): Renderi
     }
 }
 
-function Sqrt({ content, style = {} }: { content: Rendering, style: React.CSSProperties }) {
-    style.height = `${content.height}em`
+export function Sqrt({ content, style = {} }: { content: Rendering, style: React.CSSProperties }) {
+    style.height = `${content.height + padding}em`
     return (
         <span style={style} className={classes.functionSqrt}>
-            <RootSymbol height={content.height} />
+            <RootSymbol className={classes.functionSqrtSymbol} height={content.height + padding} />
             <span className={classes.functionSqrtLine} />
-            <span className={classes.functionSqrtContent}>{content.elements}</span>
+            {content.elements}
         </span>
     )
 }

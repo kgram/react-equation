@@ -69,7 +69,10 @@ storiesOf('Equations', module)
             <EquationWrapper>sum(n,log(2^2^2/2,2),5^2,2**n^2+5**n)</EquationWrapper>
             <EquationWrapper>sum(n,1,10,1/2/3/4/5)</EquationWrapper>
             <EquationWrapper>sqrt(25)</EquationWrapper>
-            <EquationWrapper>sqrt(1/x^2)</EquationWrapper>
-            <EquationWrapper>sqrt(x^2 + y^2)</EquationWrapper>
+            <EquationWrapper>sqrt(1/π^2)</EquationWrapper>
+            <EquationWrapper>sqrt(π^2 + e^2)</EquationWrapper>
+            <EquationWrapper>root(3,8)</EquationWrapper>
+            <EquationWrapper>root(22,1/2/3/4)</EquationWrapper>
+            <EquationWrapper>1/root(12,2) * root(12/3, 50)</EquationWrapper>
         </div>
     ))
