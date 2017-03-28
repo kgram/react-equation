@@ -13,7 +13,7 @@ export default function func({ name, args }: EquationTreeFunction): RenderingPar
     const argParts: RenderingPart[] = []
     args.forEach((arg, i) => {
         if (i > 0) {
-            argParts.push(simplePart(',', 'funcComma'))
+            argParts.push(simplePart(',', 'functionComma'))
         }
         pushTree(arg, argParts)
     })
