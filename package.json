@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "start-storybook -p 9001 -c storybook",
-    "storybook-build": "build-storybook -c storybook -o dist-storybook"
+    "storybook-build": "build-storybook -c storybook -o docs"
   },
   "author": "Kristoffer Gram <kristoffer.gram@gmail.com>",
   "license": "ISC",
