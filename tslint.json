@@ -14,6 +14,7 @@
         "class-name": true,
         "jsx-no-multiline-js": false,
         "jsx-alignment": false,
-        "max-line-length": [false]
+        "max-line-length": [false],
+        "jsx-boolean-value": false
     }
 }
