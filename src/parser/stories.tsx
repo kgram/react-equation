@@ -127,7 +127,7 @@ class Editor extends React.Component<null, {value: string}> {
     }
 }
 
-storiesOf('Equations - Parser', module)
+storiesOf('Parser', module)
     .add('REPL', () => (
         <Editor />
     ))
