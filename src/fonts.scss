@@ -1,12 +1,12 @@
 @mixin mathjax-font($name, $style) {
 
-    src: url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/eot/MathJax_#{$name}-#{$style}.eot');
+    src: url('https://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/eot/MathJax_#{$name}-#{$style}.eot');
     /* IE9 Compat Modes */
     src:
-        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/eot/MathJax_#{$name}-#{$style}.eot?iefix') format('eot'),
-        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/woff/MathJax_#{$name}-#{$style}.woff') format('woff'),
-        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/otf/MathJax_#{$name}-#{$style}.otf') format('opentype'),
-        url('http://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/svg/MathJax_#{$name}-#{$style}.svg#MathJax_#{$name}-#{$style}') format('svg');
+        url('https://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/eot/MathJax_#{$name}-#{$style}.eot?iefix') format('eot'),
+        url('https://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/woff/MathJax_#{$name}-#{$style}.woff') format('woff'),
+        url('https://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/otf/MathJax_#{$name}-#{$style}.otf') format('opentype'),
+        url('https://cdn.mathjax.org/mathjax/2.7-latest/fonts/HTML-CSS/TeX/svg/MathJax_#{$name}-#{$style}.svg#MathJax_#{$name}-#{$style}') format('svg');
 }
 
 @font-face {
