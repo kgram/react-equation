@@ -32,7 +32,7 @@ function Power({ base, exponent, baseOffset, style = {} }: {
         top: `${baseOffset}em`,
         height: `${base.height}em`,
     }
-    const exponentStyle ={
+    const exponentStyle = {
         height: `${exponent.height}em`,
     }
     return (

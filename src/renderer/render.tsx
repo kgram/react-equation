@@ -1,9 +1,6 @@
 import * as React from 'react'
 import classes from '../style.scss'
 
-import { parse } from '../parser'
-import { resolve } from '../resolver'
-
 import { EquationTree, EquationTreeOperator, EquationTreeFunction, Rendering, RenderingPart } from '../types'
 
 import Operator from './operator'

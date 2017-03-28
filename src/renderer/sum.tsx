@@ -1,7 +1,7 @@
 import * as React from 'react'
 import classes from '../style.scss'
 
-import { Rendering, RenderingPart, EquationTree, EquationTreeFunction } from '../types'
+import { Rendering, EquationTree, EquationTreeFunction } from '../types'
 
 import render from './render'
 

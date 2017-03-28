@@ -3,9 +3,7 @@ import classes from './stories.scss'
 
 import { VariableLookup, FunctionLookup } from './resolver'
 
-import {
-    Equation,
-} from '.'
+import Equation from './equation'
 
 type Props = {
     children?: string,

@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { storiesOf, action } from '@kadira/storybook'
+import { storiesOf } from '@kadira/storybook'
 
-
-import classes from './stories.scss'
+import './stories.scss'
 import './style.scss'
 
 import EquationWrapper from './equation-wrapper.stories'

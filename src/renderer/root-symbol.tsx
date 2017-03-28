@@ -1,9 +1,7 @@
 import * as React from 'react'
-import classes from '../style.scss'
 
 export default function RootSymbol({ height, className }: { height: number, className?: string }) {
     height = Math.max(height, 1.4)
-    const offsetHeight = height - 1.4
     return (
         <svg width='0.8em' className={className} viewBox={`0 0 0.8 ${height - 0.1}`}>
             <path d={buildPath(morphSvg(pathCommands, height))} />
