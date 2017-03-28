@@ -34,7 +34,14 @@ export default class EquationWrapper extends React.PureComponent<Props, State> {
                         checked={this.state.largeSize}
                         onChange={this.handleChange}
                     />
-                    <Equation style={{ fontSize: this.state.largeSize ? '300%' : '100%' }} evaluate={evaluate} variables={variables} functions={functions}>{children}</Equation>
+                    <Equation
+                        style={{ fontSize: this.state.largeSize ? '300%' : '100%' }}
+                        evaluate={evaluate}
+                        variables={variables}
+                        functions={functions}
+                    >
+                        {children}
+                    </Equation>
                 </div>
             </div>
         )
