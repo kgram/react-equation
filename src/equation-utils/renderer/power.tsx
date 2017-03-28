@@ -29,7 +29,6 @@ function Power({ base, exponent, baseOffset, style = {} }: {
 }) {
     style.height = `${base.height + baseOffset}em`
     const baseStyle = {
-        position: 'relative',
         top: `${baseOffset}em`,
         height: `${base.height}em`,
     }

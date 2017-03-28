@@ -9,144 +9,140 @@ $line-border: 0.08em solid currentColor;
     // * {
     //     background: rgba(0, 0, 255, 0.05);
     // }
-}
-
-.fraction-wrapper {
-    display: inline-flex;
-    flex-direction: column;
-    vertical-align: top;
-    position: relative;
-}
-
-.fraction-bottom,
-.fraction-top {
-    font-size: 90%;
-    display: block;
-    text-align: center;
-    width: 100%;
-    padding: 0 0.4em;
-}
-
-.fraction-separator {
-    font-size: 90%;
-    position: absolute;
-    display: block;
-    background: currentColor;
-    width: 100%;
-    border-top: $line-border;
-}
-
-.operator {
-    &.operator-minus,
-    &.operator-plus {
-        padding: 0 0.3em;
+    span {
+        position: relative;
     }
 
-    &.operator-plusminus {
-        padding: 0 0.3em;
-    }
-
-    &.operator-multi-dot {
-        padding: 0 0.15em;
-    }
-    &.operator-multi-implied {
-        padding: 0 0.1em;
-    }
-
-    &.operator-division {
-        padding: 0 0.3em;
-    }
-}
-
-.minus-standalone {
-    padding: 0 0.1em;
-}
-.plusminus-standalone {
-    padding: 0 0.1em;
-}
-
-.power {
-    font-size: 70%;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.equals {
-    padding: 0 0.3em;
-}
-
-.variable {
-    font-style: italic;
-}
-
-.function-abs {
-    display: inline-block;
-    position: relative;
-    padding: 0 0.3em;
-    &:before,
-    &:after {
-        content: ' ';
-        display: block;
-        position: absolute;
-        border-left: $line-border;
-        top: 0.2em;
-        height: calc(100% - 0.4em);
-    }
-    &:before {
-        left: 0.1em;
-    }
-    &:after {
-        right: 0.1em;
-    }
-}
-
-.function-sum {
-    position: relative;
-    display: inline-block;
-
-    .function-sum-block {
+    .fraction-wrapper {
         display: inline-flex;
         flex-direction: column;
-        align-items: center;
         vertical-align: top;
     }
 
-    .function-sum-icon {
-        line-height: 0.8;
-        font-size: 2.25em;
-        padding: 0 0.1em;
-        position: relative;
-        top: 1px;
+    .fraction-bottom,
+    .fraction-top {
+        font-size: 90%;
+        display: block;
+        text-align: center;
+        width: 100%;
+        padding: 0 0.4em;
     }
 
-    .function-sum-bottom,
-    .function-sum-top {
-        font-size: 80%;
-    }
-}
-
-.function-sqrt {
-    display: inline-block;
-    position: relative;
-    padding-top: 0.1em;
-    .function-sqrt-symbol {
-        vertical-align: top;
-    }
-    .function-sqrt-line {
+    .fraction-separator {
+        font-size: 90%;
         position: absolute;
-        width: calc(100% - 0.7em);
+        display: block;
+        background: currentColor;
+        width: 100%;
         border-top: $line-border;
-        top: 0.1em;
     }
-}
 
-.function-root {
-    display: inline-block;
-    position: relative;
-    .function-root-index {
+    .operator {
+        &.operator-minus,
+        &.operator-plus {
+            padding: 0 0.3em;
+        }
+
+        &.operator-plusminus {
+            padding: 0 0.3em;
+        }
+
+        &.operator-multi-dot {
+            padding: 0 0.15em;
+        }
+        &.operator-multi-implied {
+            padding: 0 0.1em;
+        }
+
+        &.operator-division {
+            padding: 0 0.3em;
+        }
+    }
+
+    .minus-standalone {
+        padding: 0 0.1em;
+    }
+    .plusminus-standalone {
+        padding: 0 0.1em;
+    }
+
+    .power {
         font-size: 70%;
-        position: relative;
         display: inline-block;
         vertical-align: top;
+    }
+
+    .equals {
+        padding: 0 0.3em;
+    }
+
+    .variable {
+        font-style: italic;
+    }
+
+    .function-abs {
+        display: inline-block;
+        padding: 0 0.3em;
+        &:before,
+        &:after {
+            content: ' ';
+            display: block;
+            position: absolute;
+            border-left: $line-border;
+            top: 0.2em;
+            height: calc(100% - 0.4em);
+        }
+        &:before {
+            left: 0.1em;
+        }
+        &:after {
+            right: 0.1em;
+        }
+    }
+
+    .function-sum {
+        display: inline-block;
+
+        .function-sum-block {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: top;
+        }
+
+        .function-sum-icon {
+            line-height: 0.8;
+            font-size: 2.25em;
+            padding: 0 0.1em;
+            top: 1px;
+        }
+
+        .function-sum-bottom,
+        .function-sum-top {
+            font-size: 80%;
+        }
+    }
+
+    .function-sqrt {
+        display: inline-block;
+        padding-top: 0.1em;
+        .function-sqrt-symbol {
+            vertical-align: top;
+        }
+        .function-sqrt-line {
+            position: absolute;
+            width: calc(100% - 0.7em);
+            border-top: $line-border;
+            top: 0.1em;
+        }
+    }
+
+    .function-root {
+        display: inline-block;
+        .function-root-index {
+            font-size: 70%;
+            display: inline-block;
+            vertical-align: top;
+        }
     }
 }

@@ -29,7 +29,6 @@ export function render(tree: EquationTree, skipParentheses = false, ...initial: 
     for (const part of parts) {
         if (part.aboveMiddle < aboveMiddle) {
             part.props.style = {
-                position: 'relative',
                 top: `${aboveMiddle - part.aboveMiddle}em`,
             }
         }
