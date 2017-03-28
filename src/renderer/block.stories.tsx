@@ -19,3 +19,6 @@ storiesOf('Blocks', module)
     .add('Tall below', () => (
         <EquationWrapper>(1/(2/(3/(4))))</EquationWrapper>
     ))
+    .add('Nested', () => (
+        <EquationWrapper>((((1))/((2))))</EquationWrapper>
+    ))
