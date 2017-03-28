@@ -67,12 +67,6 @@ module.exports = {
                         loader: 'nearley',
                     }
                 ]),
-            }, {
-                test: /\.svg$/,
-                loader: 'react-svg',
-                query: {
-                    es5: true,
-                },
             },
         ],
         preLoaders: [
