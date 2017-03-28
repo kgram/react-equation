@@ -1,17 +1,11 @@
 import * as React from 'react'
 import { storiesOf, action } from '@kadira/storybook'
 
-import { Editor, EditorState, RichUtils } from 'draft-js'
-import * as mathjax from 'react-mathjax'
-
-import 'draft-js/dist/Draft.css'
 
 import classes from './stories.scss'
 import './style.scss'
 
 import EquationWrapper from './equation-wrapper.stories'
-
-import * as moment from 'moment'
 
 storiesOf('Equations', module)
     .add('Operators', () => (

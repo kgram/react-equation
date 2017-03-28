@@ -1,27 +1,9 @@
-// import { EditorState } from 'draft-js'
-//
 import Equation from './equation'
-// import * as fraction from './fraction'
-// import Operator from './operator'
-// import Power from './power'
-// import Equationtree from './equation-tree'
-//
+import { parse } from './parser'
+import { resolve } from './resolver'
+
 export {
     Equation,
-//     Operator,
-//     fraction,
-//     Power,
-//
-//     Equationtree,
+    parse,
+    resolve,
 }
-
-// export function createEquation(editorState: any) {
-//     const currentContent = editorState.getCurrentContent()
-//         .createEntity(
-//             'LINK',
-//             'MUTABLE',
-//             { href: 'http://www.zombo.com' }
-//         )
-
-//     return EditorState.set(editorState, { currentContent })
-// }
