@@ -4,7 +4,7 @@ import { Rendering, RenderingPart, EquationTreeOperator } from '../types'
 
 import classes from '../style.scss'
 
-import { render } from '.'
+import render from './render'
 
 const fontFactor = 0.9
 const separatorSize = 0.08

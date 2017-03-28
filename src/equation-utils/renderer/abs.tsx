@@ -3,7 +3,7 @@ import classes from '../style.scss'
 
 import { Rendering, RenderingPart, EquationTreeFunction } from '../types'
 
-import { render } from '.'
+import render from './render'
 
 export default function abs({args: [expression]}: EquationTreeFunction): RenderingPart {
     const content = render(expression)

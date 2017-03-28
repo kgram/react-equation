@@ -3,7 +3,7 @@ import classes from '../style.scss'
 
 import { Rendering, RenderingPart, EquationTreeFunction } from '../types'
 
-import { render } from '.'
+import render from './render'
 
 import { Sqrt } from './sqrt'
 
@@ -22,7 +22,6 @@ export default function root({args: [rootIndex, expression]}: EquationTreeFuncti
         props: { content, rootIndex: rootIndexContent },
         aboveMiddle: content.aboveMiddle + Math.max(0, rootIndexHeight - content.height - padding),
         belowMiddle: content.belowMiddle,
-        children: content.elements,
     }
 }
 

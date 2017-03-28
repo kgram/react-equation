@@ -3,7 +3,7 @@ import classes from '../style.scss'
 
 import { Rendering, RenderingPart, EquationTree, EquationTreeFunction } from '../types'
 
-import { render } from '.'
+import render from './render'
 
 const iconSize = 1.8
 const fontFactor = 0.8
