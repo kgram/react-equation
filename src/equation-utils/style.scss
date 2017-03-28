@@ -13,6 +13,13 @@ $line-border: 0.08em solid currentColor;
         position: relative;
     }
 
+    .parens {
+        vertical-align: top;
+        &.parens-flip {
+            transform: scale(-1, 1);
+        }
+    }
+
     .fraction-wrapper {
         display: inline-flex;
         flex-direction: column;

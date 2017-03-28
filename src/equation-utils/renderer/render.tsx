@@ -8,6 +8,7 @@ import { EquationTree, EquationTreeOperator, EquationTreeFunction, Rendering, Re
 
 import Operator from './operator'
 
+import block from './block'
 import fraction from './fraction'
 import power from './power'
 
@@ -65,9 +66,7 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
             pushTree(tree.value, current)
             break
         case 'block':
-            current.push(simplePart('(', 'parens'))
-            pushTree(tree.child, current)
-            current.push(simplePart(')', 'parens'))
+            current.push(block(tree))
             break
         case 'operator':
             pushOperator(tree, current)
