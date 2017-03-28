@@ -242,16 +242,19 @@ function numberToTree(x: number): EquationTree {
 export function buildResolver(
     argNames: string[],
     expression: EquationTree,
+    variables: VariableLookup,
+    functions: FunctionLookup,
 ): ResolverFunction {
-    return (name, args, variables, functions) => {
+    variables = { ...variables }
+    functions = { ...functions }
+
+    return (name, args, innerVariables, innerFunctions) => {
         checkFunctionArgs(name, args, argNames.length, argNames.length)
 
-        const enhancedVariables: VariableLookup = { ...variables }
-
         argNames.forEach((n, idx) => {
-            enhancedVariables[n] = resolve(args[idx], variables, functions)
+            variables[n] = resolve(args[idx], innerVariables, innerFunctions)
         })
 
-        return resolve(expression, enhancedVariables, functions)
+        return resolve(expression, variables, functions)
     }
 }
