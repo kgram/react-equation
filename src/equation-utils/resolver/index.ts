@@ -23,7 +23,7 @@ const defaultFunctions: FunctionLookup = {
     asin: numberFunctionWrapper(Math.asin),
     acos: numberFunctionWrapper(Math.acos),
     atan: numberFunctionWrapper(Math.atan),
-    atan2: numberFunctionWrapper(Math.atan2),
+    atan2: numberFunctionWrapper(Math.atan2, 2, 2),
 
     abs: numberFunctionWrapper(Math.abs),
     ceil: numberFunctionWrapper(Math.ceil),
