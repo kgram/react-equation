@@ -4,7 +4,19 @@ export default function showTree(tree: EquationTree) {
     return pushTree(tree).join('\n')
 }
 
-function pushTree(tree: EquationTree, buffer: string[] = [], ownIndent = '', descendantIndent = '') {
+function pushTree(tree: EquationTree, buffer: string[] = [], indent: string = '', indentType: 'initial' | 'regular' | 'last' = 'initial') {
+    let ownIndent = indent
+    let descendantIndent = indent
+    switch (indentType) {
+        case 'regular':
+            ownIndent += '├─ '
+            descendantIndent += '│  '
+            break
+        case 'last':
+            ownIndent += '└─ '
+            descendantIndent += '   '
+            break
+    }
     switch (tree.type) {
         case 'number':
             buffer.push(ownIndent + tree.value)
@@ -14,35 +26,31 @@ function pushTree(tree: EquationTree, buffer: string[] = [], ownIndent = '', des
             break
         case 'negative':
             buffer.push(`${ownIndent}-`)
-            pushTree(tree.value, buffer, descendantIndent + '└─ ', descendantIndent + '   ')
+            pushTree(tree.value, buffer, descendantIndent, 'last')
             break
         case 'plusminus':
             buffer.push(`${ownIndent}±`)
-            pushTree(tree.value, buffer, descendantIndent + '└─ ', descendantIndent + '   ')
+            pushTree(tree.value, buffer, descendantIndent, 'last')
             break
         case 'block':
             buffer.push(`${ownIndent}()`)
-            pushTree(tree.child, buffer, descendantIndent + '└─ ', descendantIndent + '   ')
+            pushTree(tree.child, buffer, descendantIndent, 'last')
             break
         case 'operator':
             buffer.push(ownIndent + tree.operator)
-            pushTree(tree.a, buffer, descendantIndent + '├─ ', descendantIndent + '│  ')
-            pushTree(tree.b, buffer, descendantIndent + '└─ ', descendantIndent + '   ')
+            pushTree(tree.a, buffer, descendantIndent, 'regular')
+            pushTree(tree.b, buffer, descendantIndent, 'last')
             break
         case 'function':
             buffer.push(`${ownIndent}${tree.name}()`)
             tree.args.forEach((arg, idx) => {
-                if (idx < tree.args.length - 1) {
-                    pushTree(arg, buffer, descendantIndent + '├─ ', descendantIndent + '│  ')
-                } else {
-                    pushTree(arg, buffer, descendantIndent + '└─ ', descendantIndent + '   ')
-                }
+                pushTree(arg, buffer, descendantIndent, idx < tree.args.length - 1 ? 'regular' : 'last')
             })
             break
         case 'equals':
             buffer.push(`${ownIndent}=`)
-            pushTree(tree.a, buffer, descendantIndent + '├─ ', descendantIndent + '│  ')
-            pushTree(tree.b, buffer, descendantIndent + '└─ ', descendantIndent + '   ')
+            pushTree(tree.a, buffer, descendantIndent, 'regular')
+            pushTree(tree.b, buffer, descendantIndent, 'last')
             break
         default:
             // Get around typescripts checks to catch any parsed types we don't handle yet
