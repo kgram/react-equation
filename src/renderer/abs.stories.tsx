@@ -11,7 +11,7 @@ storiesOf('Special - absolute', module)
         <EquationWrapper>abs(-32)</EquationWrapper>
     ))
     .add('Tall expression', () => (
-        <EquationWrapper>abs(-pi/25^2)</EquationWrapper>
+        <EquationWrapper>abs(-π/25^2)</EquationWrapper>
     ))
     .add('Complex combinations', () => (
         <EquationWrapper>2**abs(k)+(5*abs(x))/x^2</EquationWrapper>

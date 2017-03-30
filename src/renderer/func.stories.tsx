@@ -11,7 +11,7 @@ storiesOf('Functions', module)
         <EquationWrapper>sin(0.2)</EquationWrapper>
     ))
     .add('Tall argument', () => (
-        <EquationWrapper>sin(2/3**pi)</EquationWrapper>
+        <EquationWrapper>sin(2/3**π)</EquationWrapper>
     ))
     .add('Nested', () => (
         <EquationWrapper>f(g(x))</EquationWrapper>
