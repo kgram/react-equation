@@ -36,7 +36,8 @@ export default function Equation({children = '', evaluate = false, variables, fu
         style.height = `${height}em`
 
         return <span style={style} className={classes.equation}>{elements}</span>
-    } catch (e) {
+    } catch (err) {
+        console.error(err)
         return <span className={classes.equation} />
     }
 }
