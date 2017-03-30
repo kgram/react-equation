@@ -149,8 +149,7 @@ export function resolve(
         case 'block':
             return resolve(tree.child, variables, functions)
         case 'operator':
-            return resolveOperator(
-                tree.operator,
+            return operators[tree.operator](
                 resolve(tree.a, variables, functions),
                 resolve(tree.b, variables, functions),
             )
@@ -184,25 +183,19 @@ function resolveVariable(name: string, variables: VariableLookup) {
     }
 }
 
-function resolveOperator(op: Operator, a: number, b: number) {
-    switch (op) {
-        case '+':
-            return a + b
-        case '-':
-            return a - b
-        case '±':
-            throw new Error('Equation resolve: cannot handle ± operator')
-        case '*':
-        case '**':
-            return a * b
-        case '/':
-            if (b === 0) {
-                throw new Error(`Equation resolve: cannot divide by 0`)
-            }
-            return a / b
-        case '^':
-            return Math.pow(a, b)
-    }
+const operators: { [key in Operator]: (a: number, b: number) => number } = {
+    '+': (a, b) => a + b,
+    '-': (a, b) =>  a - b,
+    '±': (a, b) => { throw new Error('Equation resolve: cannot handle ± operator') },
+    '*': (a, b) => a * b,
+    '**': (a, b) => a * b,
+    '/': (a, b) => {
+        if (b === 0) {
+            throw new Error(`Equation resolve: cannot divide by 0`)
+        }
+        return a / b
+    },
+    '^': (a, b) => Math.pow(a, b),
 }
 
 function resolveFunction(name: string, args: EquationTree[], variables: VariableLookup, functions: FunctionLookup) {
