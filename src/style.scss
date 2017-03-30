@@ -84,6 +84,24 @@ $line-border: 0.08em solid currentColor;
         font-style: italic;
     }
 
+    .matrix {
+        display: inline-block;
+        padding: 0.1em 0;
+        .matrix-table {
+            display: inline-table;
+            vertical-align: top;
+            border-collapse: collapse;
+            font-size: 90%;
+            margin-top: 0.1em;
+            td {
+                padding: 0.2em 0.5em;
+                text-align: center;
+                vertical-align: top;
+                position: relative;
+            }
+        }
+    }
+
     .function-comma {
         padding-right: 0.4em;
     }

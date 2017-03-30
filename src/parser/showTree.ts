@@ -52,6 +52,32 @@ function pushTree(tree: EquationTree, buffer: string[] = [], indent: string = ''
             pushTree(tree.a, buffer, descendantIndent, 'regular')
             pushTree(tree.b, buffer, descendantIndent, 'last')
             break
+        case 'matrix':
+            if (tree.n === 1) {
+                buffer.push(`${ownIndent}v ${tree.m}`)
+
+                tree.values[0].forEach((cell, idx) => {
+                    pushTree(cell, buffer, descendantIndent, idx < tree.m - 1 ? 'regular' : 'last')
+                })
+            } else {
+                buffer.push(`${ownIndent}m ${tree.m}x${tree.n}`)
+
+                tree.values.forEach((row, rowIdx) => {
+                    const rowIndent = descendantIndent + (rowIdx < tree.n - 1 ? '│  ' : '   ')
+                    row.forEach((cell, cellIdx) => {
+                        if (cellIdx === 0) {
+                            if (rowIdx < tree.n - 1) {
+                                pushTree(cell, buffer, descendantIndent + '├──┬─ ', 'initial')
+                            } else {
+                                pushTree(cell, buffer, descendantIndent + '└──┬─ ', 'initial')
+                            }
+                        } else {
+                            pushTree(cell, buffer, rowIndent, cellIdx < tree.m - 1 ? 'regular' : 'last')
+                        }
+                    })
+                })
+            }
+            break
         default:
             // Get around typescripts checks to catch any parsed types we don't handle yet
             const type = (tree as any).type

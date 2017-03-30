@@ -9,6 +9,7 @@ import block from './block'
 import func from './func'
 import fraction from './fraction'
 import power from './power'
+import matrix from './matrix'
 
 import sum from './sum'
 import abs from './abs'
@@ -76,6 +77,9 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
             pushTree(tree.a, current)
             current.push(simplePart('=', 'equals'))
             pushTree(tree.b, current)
+            break
+        case 'matrix':
+            current.push(matrix(tree))
             break
         default:
             // Get around typescripts checks to catch any parsed types we don't handle yet

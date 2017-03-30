@@ -44,6 +44,13 @@ export type EquationTreeEquals = {
     b: EquationTree,
 }
 
+export type EquationTreeMatrix = {
+    type: 'matrix',
+    n: number,
+    m: number,
+    values: EquationTree[][],
+}
+
 export type EquationTree =
     EquationTreeVariable |
     EquationTreeNumber |
@@ -52,4 +59,5 @@ export type EquationTree =
     EquationTreeFunction |
     EquationTreeBlock |
     EquationTreeOperator |
-    EquationTreeEquals
+    EquationTreeEquals |
+    EquationTreeMatrix

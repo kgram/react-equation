@@ -7,6 +7,7 @@ argList -> add_sub {% function(d) { return [d[0]] } %}
     | argList _ "," _ add_sub {% function(d) { return [...d[0], d[4]] } %}
 
 function -> operand {% id %}
+    | matrix {% id %}
     | name "(" _ argList _ ")" {% function(d) {return {type: 'function', name: d[0], args: d[3] }} %}
 
 # Parentheses
@@ -32,6 +33,19 @@ add_sub -> multi {% id %}
     | add_sub _ [±+-] _ multi {% function(d) { return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
     | "-" _ multi {% function(d) { return {type: 'negative', value: d[2]}} %}
     | "±" _ multi {% function(d) { return {type: 'plusminus', value: d[2]}} %}
+
+matrix -> vector {% ([values]) => ({type: 'matrix', n: 1, m: values.length, values: [values]}) %}
+    | "[" _ (vector _ {% id %}):+ "]" {% ([,,values], location, reject) => {
+        const n = values.length
+        const m = values[0].length
+        if (values.some((v) => v.length !== m)) {
+            return reject
+        }
+
+        return {type: 'matrix', n, m, values }
+    }%}
+
+vector -> "[" _ argList _ "]" {% function(d) { return d[2] } %}
 
 integer -> [0-9]:+        {% function(d) { return parseInt(d[0].join(''))} %}
 

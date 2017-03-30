@@ -46,6 +46,26 @@ function stringifyTree(tree: EquationTree, buffer: string[] = []) {
             buffer.push('=')
             stringifyTree(tree.b, buffer)
             break
+        case 'matrix':
+            buffer.push('[')
+            tree.values.forEach((row, rowIdx) => {
+                if (tree.n > 1) {
+                    buffer.push('[')
+                } else if (rowIdx > 0) {
+                    buffer.push(',')
+                }
+                row.forEach((cell, cellIdx) => {
+                    if (cellIdx > 0) {
+                        buffer.push(',')
+                    }
+                    stringifyTree(cell, buffer)
+                })
+                if (tree.n > 1) {
+                    buffer.push(']')
+                }
+            })
+            buffer.push(']')
+            break
         default:
             // Get around typescripts checks to catch any parsed types we don't handle yet
             const type = (tree as any).type
