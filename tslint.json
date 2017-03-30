@@ -16,6 +16,7 @@
         "jsx-alignment": false,
         "max-line-length": [false],
         "jsx-boolean-value": false,
-        "no-unused-variable": [true, "react"]
+        "no-unused-variable": [true, "react"],
+        "no-switch-case-fall-through": true
     }
 }
