@@ -15,8 +15,8 @@ const pathBuilders = {
         return `M0.094 0.681q0 -0.312 0.18 -0.476l0.028 -0.024l0.013 0q0.012 0 0.015 0.003t0.003 0.006q0 0.004 -0.011 0.015q-0.155 0.164 -0.155 0.476l0 ${ offsetHeight }q0 0.321 0.155 0.476q0.011 0.011 0.011 0.015q0 0.009 -0.018 0.009l-0.013 0l-0.028 -0.024q-0.18 -0.164 -0.18 -0.476Z`
     },
     '[]'(height: number) {
-        const offsetHeight = height - 0.475
-        return `M0.134 0.19h0.18v0.06h-0.1v${ offsetHeight }h0.1v0.06h-0.18Z`
+        const offsetHeight = height - 0.55
+        return `M0.134 0.19h0.24v0.08h-0.16v${ offsetHeight }h0.16v0.08h-0.24Z`
     },
     '{}'(height: number) {
         const offsetHeight = height - 1.37
