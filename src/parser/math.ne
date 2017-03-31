@@ -19,25 +19,10 @@ vector -> "[" _ argList[level5NoMatrix] _ "]" {% function(d) { return d[2] } %}
 # Tree
 #------------------------------------------------------------------------------
 
-equals -> level6 _ "=" _ level5 {% function(d) { return { type: 'equals', a: d[0], b: d[4] } } %}
+# level1-----------------------------------------------------------------------
 
-function -> name "(" _ argList[level5] _ ")" {% function(d) {return {type: 'function', name: d[0], args: d[3] }} %}
-
-block -> "(" _ level5 _ ")" {% function(d) {return {type: 'block', child: d[2]}} %}
-
-exponent -> level1 _ "^" _ level2    {% function(d) {return {type: 'operator', operator: d[2], a: d[0], b: d[4]}} %}
-
-# Division separated from multiplication to ensure logical display using fractions. Mathemathically this makes no difference.
-# Ensures "2*3/4" is grouped as "2 * 3/4" instead of "2*3 / 4" (the latter would require "(2*3)/4")
-division -> level3 _ "/" _ level2  {% function(d){ return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
-
-multi -> level4 _ ("*" | "**") _ level3  {% function(d){ return {type: 'operator', operator:d[2][0], a: d[0], b: d[4]}} %}
-
-addSub -> level5 _ [±+-] _ level4 {% function(d) { return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
-
-negative -> "-" _ level4 {% function(d) { return {type: 'negative', value: d[2]}} %}
-
-plusminus -> "±" _ level4 {% function(d) { return {type: 'plusminus', value: d[2]}} %}
+operand -> number {% function(d) { return { type: 'number', value: d[0] } } %}
+    | name {% function(d) { return { type: 'variable', name: d[0] } } %}
 
 matrix -> vector {% ([values]) => ({type: 'matrix', n: 1, m: values.length, values: values.map((v) => [v])}) %}
     | "[" _ (vector _ {% id %}):+ "]" {% ([,,values], location, reject) => {
@@ -50,8 +35,35 @@ matrix -> vector {% ([values]) => ({type: 'matrix', n: 1, m: values.length, valu
         return {type: 'matrix', n, m, values }
     }%}
 
-operand -> number {% function(d) { return { type: 'number', value: d[0] } } %}
-    | name {% function(d) { return { type: 'variable', name: d[0] } } %}
+function -> name "(" _ argList[level5] _ ")" {% function(d) {return {type: 'function', name: d[0], args: d[3] }} %}
+
+block -> "(" _ level5 _ ")" {% function(d) {return {type: 'block', child: d[2]}} %}
+
+# level2-----------------------------------------------------------------------
+
+exponent -> level1 _ "^" _ level2    {% function(d) {return {type: 'operator', operator: d[2], a: d[0], b: d[4]}} %}
+
+# level3-----------------------------------------------------------------------
+
+# Division separated from multiplication to ensure logical display using fractions. Mathemathically this makes no difference.
+# Ensures "2*3/4" is grouped as "2 * 3/4" instead of "2*3 / 4" (the latter would require "(2*3)/4")
+division -> level3 _ "/" _ level2  {% function(d){ return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
+
+# level4-----------------------------------------------------------------------
+
+multi -> level4 _ ("*" | "**") _ level3  {% function(d){ return {type: 'operator', operator:d[2][0], a: d[0], b: d[4]}} %}
+
+# level5-----------------------------------------------------------------------
+
+addSub -> level5 _ [±+-] _ level4 {% function(d) { return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
+
+negative -> "-" _ level4 {% function(d) { return {type: 'negative', value: d[2]}} %}
+
+plusminus -> "±" _ level4 {% function(d) { return {type: 'plusminus', value: d[2]}} %}
+
+# level6-----------------------------------------------------------------------
+
+equals -> level6 _ "=" _ level5 {% function(d) { return { type: 'equals', a: d[0], b: d[4] } } %}
 
 
 #------------------------------------------------------------------------------
