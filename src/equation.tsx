@@ -37,7 +37,6 @@ export default function Equation({children = '', evaluate = false, variables, fu
 
         return <span style={style} className={classes.equation}>{elements}</span>
     } catch (err) {
-        console.error(err)
         return <span className={classes.equation} />
     }
 }
