@@ -1,10 +1,16 @@
+#------------------------------------------------------------------------------
+# Entry
+#------------------------------------------------------------------------------
+
 main -> _ equals _ {% function(d) {return d[1]} %}
+
+
+#------------------------------------------------------------------------------
+# Tree
+#------------------------------------------------------------------------------
 
 equals -> add_sub {% id %}
     | equals _ "=" _ add_sub {% function(d) { return { type: 'equals', a: d[0], b: d[4] } } %}
-
-argList -> add_sub {% function(d) { return [d[0]] } %}
-    | argList _ "," _ add_sub {% function(d) { return [...d[0], d[4]] } %}
 
 function -> operand {% id %}
     | matrix {% id %}
@@ -45,23 +51,35 @@ matrix -> vector {% ([values]) => ({type: 'matrix', n: 1, m: values.length, valu
         return {type: 'matrix', n, m, values }
     }%}
 
+operand -> number {% function(d) { return { type: 'number', value: d[0] } } %}
+    | name {% function(d) { return { type: 'variable', name: d[0] } } %}
+
+
+#------------------------------------------------------------------------------
+# Helpers
+#------------------------------------------------------------------------------
+
+argList -> add_sub {% function(d) { return [d[0]] } %}
+    | argList _ "," _ add_sub {% function(d) { return [...d[0], d[4]] } %}
+
 vector -> "[" _ argList _ "]" {% function(d) { return d[2] } %}
+
+
+#------------------------------------------------------------------------------
+# Base
+#------------------------------------------------------------------------------
+
+# Whitespace
+_ -> [\s]:*     {% function(d) {return null } %}
 
 integer -> [0-9]:+        {% function(d) { return parseInt(d[0].join(''))} %}
 
 number -> integer           {% id %}
     | integer "." integer   {% function(d) { return parseFloat(d.join(''))} %}
 
-name -> letter alphanum:*  {% function(d) {return d[0] + d[1].join('')} %}
-
 letter -> [A-Za-z\u0391-\u03c9] {% id %}
 
 alphanum -> letter {% id %}
     | [0-9] {% id %}
 
-operand -> number {% function(d) { return { type: 'number', value: d[0] } } %}
-    | name {% function(d) { return { type: 'variable', name: d[0] } } %}
-
-# Whitespace. The important thing here is that the postprocessor
-# is a null-returning function. This is a memory efficiency trick.
-_ -> [\s]:*     {% function(d) {return null } %}
+name -> letter alphanum:*  {% function(d) {return d[0] + d[1].join('')} %}
