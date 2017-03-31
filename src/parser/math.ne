@@ -103,7 +103,8 @@ level6 -> (operand | matrix | function | block | exponent | division | multi | a
         {% nested %}
 
 # Used to ensure a matrix cannot be a direct child of a matrix
-level5NoMatrix -> (operand | function | block | exponent | division | multi | addSub | negative | plusminus) {% nested %}
+level5NoMatrix -> (operand | function | block | exponent | division | multi | addSub | negative | plusminus)
+        {% nested %}
 
 
 #------------------------------------------------------------------------------
@@ -122,7 +123,8 @@ number -> integer
     | integer "." integer
         {% ([integer, , fraction]) => parseFloat(`${integer}.${fraction}`) %}
 
-letter -> [A-Za-z\u0391-\u03c9] {% id %}
+letter -> [A-Za-z\u0391-\u03c9]
+        {% id %}
 
 alphanum -> letter
         {% id %}
