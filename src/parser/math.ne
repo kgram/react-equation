@@ -77,6 +77,7 @@ level4 -> (operand | matrix | function | block | exponent | division | multi) {%
 level5 -> (operand | matrix | function | block | exponent | division | multi | addSub | negative | plusminus) {% nested %}
 level6 -> (operand | matrix | function | block | exponent | division | multi | addSub | negative | plusminus | equals) {% nested %}
 
+# Used to ensure a matrix cannot be a direct child of a matrix
 level5NoMatrix -> (operand | function | block | exponent | division | multi | addSub | negative | plusminus) {% nested %}
 
 
