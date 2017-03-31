@@ -2,43 +2,42 @@
 # Entry
 #------------------------------------------------------------------------------
 
-main -> _ equals _ {% function(d) {return d[1]} %}
+main -> _ level7 _ {% function(d) {return d[1]} %}
+
+@{% function nested(d) { return d[0][0] }%}
+
+#------------------------------------------------------------------------------
+# Helpers
+#------------------------------------------------------------------------------
+
+argList[X] -> $X (_ "," _ $X):* {% function(d) { console.log('arglist', d); return [d[0][0], ...d[1].map((a) => a[3][0] )] } %}
+
+vector -> "[" _ argList[level6NoMatrix] _ "]" {% function(d) { return d[2] } %}
 
 
 #------------------------------------------------------------------------------
 # Tree
 #------------------------------------------------------------------------------
 
-equals -> add_sub {% id %}
-    | equals _ "=" _ add_sub {% function(d) { return { type: 'equals', a: d[0], b: d[4] } } %}
+equals -> level7 _ "=" _ level6 {% function(d) { return { type: 'equals', a: d[0], b: d[4] } } %}
 
-function -> operand {% id %}
-    | matrix {% id %}
-    | name "(" _ argList _ ")" {% function(d) {return {type: 'function', name: d[0], args: d[3] }} %}
+function -> name "(" _ argList[level6] _ ")" {% function(d) {return {type: 'function', name: d[0], args: d[3] }} %}
 
-# Parentheses
-block -> function {% id %}
-    | "(" _ add_sub _ ")" {% function(d) {return {type: 'block', child: d[2]}} %}
+block -> "(" _ level6 _ ")" {% function(d) {return {type: 'block', child: d[2]}} %}
 
-# Exponents
-exponent -> block {% id %}
-    | block _ "^" _ exponent    {% function(d) {return {type: 'operator', operator: d[2], a: d[0], b: d[4]}} %}
+exponent -> level2 _ "^" _ level3    {% function(d) {return {type: 'operator', operator: d[2], a: d[0], b: d[4]}} %}
 
-# Division
-# Separated from multiplication to ensure logical display using fractions. Mathemathically this makes no difference.
+# Division separated from multiplication to ensure logical display using fractions. Mathemathically this makes no difference.
 # Ensures "2*3/4" is grouped as "2 * 3/4" instead of "2*3 / 4" (the latter would require "(2*3)/4")
-division -> exponent {% id %}
-    | division _ "/" _ exponent  {% function(d){ return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
+division -> level4 _ "/" _ level3  {% function(d){ return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
 
-# Multiplication and division
-multi -> division {% id %}
-    | multi _ ("*" {% id %} | "**" {% id %}) _ division  {% function(d){ return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
+multi -> level5 _ ("*" | "**") _ level4  {% function(d){ return {type: 'operator', operator:d[2][0], a: d[0], b: d[4]}} %}
 
-# Addition and subtraction
-add_sub -> multi {% id %}
-    | add_sub _ [±+-] _ multi {% function(d) { return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
-    | "-" _ multi {% function(d) { return {type: 'negative', value: d[2]}} %}
-    | "±" _ multi {% function(d) { return {type: 'plusminus', value: d[2]}} %}
+addSub -> level6 _ [±+-] _ level5 {% function(d) { return {type: 'operator', operator:d[2], a: d[0], b: d[4]}} %}
+
+negative -> "-" _ level5 {% function(d) { return {type: 'negative', value: d[2]}} %}
+
+plusminus -> "±" _ level5 {% function(d) { return {type: 'plusminus', value: d[2]}} %}
 
 matrix -> vector {% ([values]) => ({type: 'matrix', n: 1, m: values.length, values: values.map((v) => [v])}) %}
     | "[" _ (vector _ {% id %}):+ "]" {% ([,,values], location, reject) => {
@@ -56,13 +55,18 @@ operand -> number {% function(d) { return { type: 'number', value: d[0] } } %}
 
 
 #------------------------------------------------------------------------------
-# Helpers
+# Groups
 #------------------------------------------------------------------------------
 
-argList -> add_sub {% function(d) { return [d[0]] } %}
-    | argList _ "," _ add_sub {% function(d) { return [...d[0], d[4]] } %}
+level1 -> (operand | matrix | function) {% nested %}
+level2 -> (operand | matrix | function | block) {% nested %}
+level3 -> (operand | matrix | function | block | exponent) {% nested %}
+level4 -> (operand | matrix | function | block | exponent | division) {% nested %}
+level5 -> (operand | matrix | function | block | exponent | division | multi) {% nested %}
+level6 -> (operand | matrix | function | block | exponent | division | multi | addSub | negative | plusminus) {% nested %}
+level7 -> (operand | matrix | function | block | exponent | division | multi | addSub | negative | plusminus | equals) {% nested %}
 
-vector -> "[" _ argList _ "]" {% function(d) { return d[2] } %}
+level6NoMatrix -> (operand | function | block | exponent | division | multi | addSub | negative | plusminus) {% nested %}
 
 
 #------------------------------------------------------------------------------
