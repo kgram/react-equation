@@ -14,10 +14,10 @@ storiesOf('Matrix', module)
         <EquationWrapper>[1/2/3/4,2,3,4^3^2^1]</EquationWrapper>
     ))
     .add('H. vector', () => (
-        <EquationWrapper>[[1][2][3][4]]</EquationWrapper>
+        <EquationWrapper>[[1,2,3,4]]</EquationWrapper>
     ))
     .add('H. vector tall cells', () => (
-        <EquationWrapper>[[1/2/3/4][2][3][4^3^2^1]]</EquationWrapper>
+        <EquationWrapper>[[1/2/3/4, 2, 3, 4^3^2^1]]</EquationWrapper>
     ))
     .add('Matrix', () => (
         <EquationWrapper>[[1,0,0][0,1,0][0,0,1]]</EquationWrapper>

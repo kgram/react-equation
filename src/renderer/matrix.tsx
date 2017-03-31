@@ -12,7 +12,7 @@ const cellPadding = 0.4
 const factor = 0.9
 
 export default function matrix({ values, n, m }: EquationTreeMatrix): RenderingPart {
-    const content = invert(values.map((row) => row.map((value) => render(value))))
+    const content = values.map((row) => row.map((value) => render(value)))
 
     const cellHeight = sumOf(content, (row) => maxOf(row, ({height}) => height))
 
@@ -52,14 +52,10 @@ export function Matrix({ content, height, style = {} }: { content: Rendering[][]
     )
 }
 
-function maxOf<T>(array: T[], get?: (value: T) => number): number {
-    return array.reduce((current, value) => Math.max(current, (get ? get(value) : value as any)), 0)
+function maxOf<T>(array: T[], get: (value: T) => number): number {
+    return array.reduce((current, value) => Math.max(current, get(value)), 0)
 }
 
-function sumOf<T>(array: T[], get?: (value: T) => number): number {
-    return array.reduce((current, value) => current + (get ? get(value) : value as any), 0)
-}
-
-function invert<T>(array: T[][]): T[][] {
-    return array[0].map((val1, idx1) => array.map((val2, idx2) => array[idx2][idx1]))
+function sumOf<T>(array: T[], get: (value: T) => number): number {
+    return array.reduce((current, value) => current + get(value), 0)
 }

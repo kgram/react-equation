@@ -63,16 +63,16 @@ function pushTree(tree: EquationTree, buffer: string[] = [], indent: string = ''
                 buffer.push(`${ownIndent}m ${tree.m}x${tree.n}`)
 
                 tree.values.forEach((row, rowIdx) => {
-                    const rowIndent = descendantIndent + (rowIdx < tree.n - 1 ? '│  ' : '   ')
+                    const rowIndent = descendantIndent + (rowIdx < tree.m - 1 ? '│  ' : '   ')
                     row.forEach((cell, cellIdx) => {
                         if (cellIdx === 0) {
-                            if (rowIdx < tree.n - 1) {
+                            if (rowIdx < tree.m - 1) {
                                 pushTree(cell, buffer, descendantIndent + '├──┬─ ', 'initial')
                             } else {
                                 pushTree(cell, buffer, descendantIndent + '└──┬─ ', 'initial')
                             }
                         } else {
-                            pushTree(cell, buffer, rowIndent, cellIdx < tree.m - 1 ? 'regular' : 'last')
+                            pushTree(cell, buffer, rowIndent, cellIdx < tree.n - 1 ? 'regular' : 'last')
                         }
                     })
                 })

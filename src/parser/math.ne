@@ -34,11 +34,11 @@ add_sub -> multi {% id %}
     | "-" _ multi {% function(d) { return {type: 'negative', value: d[2]}} %}
     | "±" _ multi {% function(d) { return {type: 'plusminus', value: d[2]}} %}
 
-matrix -> vector {% ([values]) => ({type: 'matrix', n: 1, m: values.length, values: [values]}) %}
+matrix -> vector {% ([values]) => ({type: 'matrix', n: 1, m: values.length, values: values.map((v) => [v])}) %}
     | "[" _ (vector _ {% id %}):+ "]" {% ([,,values], location, reject) => {
-        const n = values.length
-        const m = values[0].length
-        if (values.some((v) => v.length !== m)) {
+        const m = values.length
+        const n = values[0].length
+        if (values.some((v) => v.length !== n)) {
             return reject
         }
 
