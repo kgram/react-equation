@@ -1,4 +1,5 @@
-import { EquationTree, ResultTree, ResultTreeNumber, VariableLookup, FunctionLookup } from '../types'
+import { EquationTree, ResultTree, VariableLookup, FunctionLookup, UnitLookup } from '../types'
+import { getUnit, getUnitless, isEmptyUnit, isSameUnit} from './unit-utils'
 import operators from './operators'
 import negate from './negate'
 import defaultVariables from './default-variables'
@@ -39,18 +40,48 @@ export default function resolve(
                 throw new Error('Equation resolve: equals left-hand side must be a variable')
             }
         case 'matrix':
-            const values = tree.values.map((row) => row.map((cell) => resolve(cell, variables, functions)))
+            // Keep track of resolved unit
+            let unit: UnitLookup | null = null
+            const values = tree.values.map((row) => row.map((cell) => {
+                const value = resolve(cell, variables, functions)
+                // Compare units
+                if (unit) {
+                    if (!isSameUnit(unit, getUnit(value))) {
+                        throw new Error(`Equation resolve: all matrix cells must have same unit`)
+                    }
+                } else {
+                    unit = getUnit(value)
+                }
+                // Ensure all children are unitless numbers
+                const unitlessValue = getUnitless(value)
+                if (unitlessValue.type !== 'number') {
+                    throw new Error(`Equation resolve: cannot resolve nested matrices`)
+                }
 
-            if (!values.every((row) => row.every((cell) => cell.type === 'number'))) {
-                throw new Error(`Equation resolve: Cannot resolve nested matrices`)
+                return unitlessValue
+            }))
+
+            // Wrap in unit if necessary
+            if (!unit || isEmptyUnit(unit)) {
+                return {
+                    type: 'matrix',
+                    m: tree.m,
+                    n: tree.n,
+                    values,
+                }
+            } else {
+                return {
+                    type: 'unit',
+                    units: unit,
+                    value: {
+                        type: 'matrix',
+                        m: tree.m,
+                        n: tree.n,
+                        values,
+                    },
+                }
             }
 
-            return {
-                type: 'matrix',
-                m: tree.m,
-                n: tree.n,
-                values: values as ResultTreeNumber[][],
-            }
         default:
             // Get around typescripts checks to catch any parsed types we don't handle yet
             const type = (tree as any).type

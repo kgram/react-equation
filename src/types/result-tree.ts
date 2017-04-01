@@ -1,3 +1,5 @@
+import UnitLookup from './unit-lookup'
+
 export type ResultTreeNumber = {
     type: 'number',
     value: number,
@@ -10,6 +12,13 @@ export type ResultTreeMatrix = {
     values: ResultTreeNumber[][],
 }
 
+export type ResultTreeUnit = {
+    type: 'unit',
+    units: UnitLookup,
+    value: ResultTreeMatrix | ResultTreeNumber,
+}
+
 export type ResultTree =
     ResultTreeNumber |
-    ResultTreeMatrix
+    ResultTreeMatrix |
+    ResultTreeUnit
