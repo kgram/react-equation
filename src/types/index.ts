@@ -10,8 +10,6 @@ export {
     EquationTreeEquals,
     EquationTreeMatrix,
 } from './equation-tree'
-import Operator from './operator'
-import Rendering from './rendering'
-import RenderingPart from './rendering-part'
-
-export { Operator, Rendering, RenderingPart }
+export { default as Operator } from './operator'
+export { default as Rendering } from './rendering'
+export { default as RenderingPart } from './rendering-part'
