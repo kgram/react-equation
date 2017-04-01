@@ -1,7 +1,7 @@
 import * as React from 'react'
 import classes from './stories.scss'
 
-import { VariableLookup, FunctionLookup } from './resolver'
+import { VariableLookup, FunctionLookup } from './types'
 
 import Equation from './equation'
 

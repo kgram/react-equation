@@ -4,7 +4,8 @@ import { storiesOf } from '@kadira/storybook'
 import classes from '../stories.scss'
 import '../style.scss'
 
-import { resolve, buildResolver, VariableLookup, FunctionLookup } from '../resolver'
+import { resolve, buildResolver} from '../resolver'
+import { VariableLookup, FunctionLookup } from '../types'
 
 import { EquationTree } from '../types'
 

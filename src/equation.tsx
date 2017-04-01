@@ -2,7 +2,8 @@ import * as React from 'react'
 import classes from './style.scss'
 
 import { parse } from './parser'
-import { resolveTree, VariableLookup, FunctionLookup } from './resolver'
+import { resolveTree } from './resolver'
+import { VariableLookup, FunctionLookup } from './types'
 
 import { render } from './renderer'
 
