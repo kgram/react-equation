@@ -77,10 +77,10 @@ const defaultFunctions: FunctionLookup = {
 
         let start = resolve(startTree, variables, functions)
         let end = resolve(endTree, variables, functions)
-        if (start.type !== 'number' || Math.round(start.value) !== start.value) {
+        if (!isInteger(start)) {
             throw new Error(`Equation resolve: second argument of ${name} must be an integer (is ${start})`)
         }
-        if (end.type !== 'number' || Math.round(end.value) !== end.value) {
+        if (!isInteger(end)) {
             throw new Error(`Equation resolve: third argument of ${name} must be an integer (is ${end})`)
         }
         if (start > end) {
@@ -95,6 +95,10 @@ const defaultFunctions: FunctionLookup = {
 
         return sum
     },
+}
+
+function isInteger(x: ResultTree) {
+    return x.type === 'number' && Math.round(x.value) === x.value
 }
 
 function numberFunctionWrapper(
