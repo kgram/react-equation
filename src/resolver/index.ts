@@ -1,19 +1,26 @@
-import { EquationTree, Operator } from '../types'
+import { EquationTree, ResultTree, ResultTreeNumber, Operator } from '../types'
 
 export type VariableLookup = {
-    [key: string]: number,
+    [key: string]: ResultTree,
 }
 
-export type ResolverFunction = (name: string, args: EquationTree[], variables: VariableLookup, functions: FunctionLookup) => number
+export type ResolverFunction = (name: string, args: EquationTree[], variables: VariableLookup, functions: FunctionLookup) => ResultTree
 
 export type FunctionLookup = {
     [key: string]: ResolverFunction,
 }
 
 const defaultVariables: VariableLookup = {
-    e: Math.E,
-    pi: Math.PI,
-    π: Math.PI,
+    e: valueWrap(Math.E),
+    pi: valueWrap(Math.PI),
+    π: valueWrap(Math.PI),
+}
+
+function valueWrap(x: number): ResultTreeNumber {
+    return {
+        type: 'number',
+        value: x,
+    }
 }
 
 const defaultFunctions: FunctionLookup = {
@@ -70,20 +77,20 @@ const defaultFunctions: FunctionLookup = {
 
         let start = resolve(startTree, variables, functions)
         let end = resolve(endTree, variables, functions)
-        if (Math.round(start) !== start) {
+        if (start.type !== 'number' || Math.round(start.value) !== start.value) {
             throw new Error(`Equation resolve: second argument of ${name} must be an integer (is ${start})`)
         }
-        if (Math.round(end) !== end) {
+        if (end.type !== 'number' || Math.round(end.value) !== end.value) {
             throw new Error(`Equation resolve: third argument of ${name} must be an integer (is ${end})`)
         }
         if (start > end) {
             [start, end] = [end, start]
         }
         const enhancedVariables = { ...variables }
-        let sum = 0
-        for (let i = start; i <= end; i++) {
-            enhancedVariables[variable.name] = i
-            sum += resolve(expression, enhancedVariables, functions)
+        let sum = valueWrap(0)
+        for (let i = start.value; i <= end.value; i++) {
+            enhancedVariables[variable.name] = valueWrap(i)
+            sum = operators['+'](sum, resolve(expression, enhancedVariables, functions))
         }
 
         return sum
@@ -106,11 +113,17 @@ function numberFunctionWrapper(
 
         const resolvedArgs = args.map((arg) => resolve(arg, variables, functions))
 
-        if (validate) {
-            validate(name, ...resolvedArgs)
+        if (!resolvedArgs.every((arg) => arg.type === 'number')) {
+            throw new Error(`Equation resolve: arguments of ${name} must be numbers`)
         }
 
-        return func(...resolvedArgs)
+        const numberArgs = resolvedArgs.map((arg) => arg.value)
+
+        if (validate) {
+            validate(name, ...numberArgs)
+        }
+
+        return valueWrap(func(...numberArgs))
     }
 }
 
@@ -129,21 +142,21 @@ export function resolveTree(
     variables: VariableLookup = {},
     functions: FunctionLookup = {},
 ): EquationTree {
-    return numberToTree(resolve(tree, variables, functions))
+    return resultToEquation(resolve(tree, variables, functions))
 }
 
 export function resolve(
     tree: EquationTree,
     variables: VariableLookup = {},
     functions: FunctionLookup = {},
-): number {
+): ResultTree {
     switch (tree.type) {
         case 'number':
-            return tree.value
+            return tree
         case 'variable':
             return resolveVariable(tree.name, variables)
         case 'negative':
-            return -resolve(tree.value, variables, functions)
+            return negate(resolve(tree.value, variables, functions))
         case 'plusminus':
             throw new Error('Equation resolve: cannot handle ± operator')
         case 'block':
@@ -173,7 +186,7 @@ export function resolve(
     }
 }
 
-function resolveVariable(name: string, variables: VariableLookup) {
+function resolveVariable(name: string, variables: VariableLookup): ResultTree {
     if (variables.hasOwnProperty(name)) {
         return variables[name]
     } else if (defaultVariables.hasOwnProperty(name)) {
@@ -183,19 +196,63 @@ function resolveVariable(name: string, variables: VariableLookup) {
     }
 }
 
-const operators: { [key in Operator]: (a: number, b: number) => number } = {
-    '+': (a, b) => a + b,
-    '-': (a, b) =>  a - b,
+const operators: { [key in Operator]: (a: ResultTree, b: ResultTree) => ResultTree } = {
+    '+': (a, b) => {
+        switch (a.type) {
+            case 'number':
+                switch (b.type) {
+                    case 'number':
+                        return valueWrap(a.value + b.value)
+                }
+        }
+        throw new Error(`Equation resolve: cannot handle operator`)
+    },
+    '-': (a, b) =>  operators['+'](a, negate(b)),
     '±': (a, b) => { throw new Error('Equation resolve: cannot handle ± operator') },
-    '*': (a, b) => a * b,
-    '**': (a, b) => a * b,
+    '*': (a, b) => {
+        switch (a.type) {
+            case 'number':
+                switch (b.type) {
+                    case 'number':
+                        return valueWrap(a.value * b.value)
+                }
+        }
+        throw new Error(`Equation resolve: cannot handle operator`)
+    },
+    '**': (a, b) => operators['*'](a, b),
     '/': (a, b) => {
-        if (b === 0) {
+        if (b.type !== 'number') {
+            throw new Error(`Equation resolve: divisor must be a number`)
+        }
+        if (b.value === 0) {
             throw new Error(`Equation resolve: cannot divide by 0`)
         }
-        return a / b
+        switch (a.type) {
+            case 'number':
+                return valueWrap(a.value / b.value)
+        }
+        throw new Error(`Equation resolve: cannot handle operator`)
     },
-    '^': (a, b) => Math.pow(a, b),
+    '^': (a, b) => {
+        if (b.type !== 'number') {
+            throw new Error(`Equation resolve: exponent must be a number`)
+        }
+        switch (a.type) {
+            case 'number':
+                return valueWrap(Math.pow(a.value, b.value))
+        }
+        throw new Error(`Equation resolve: cannot handle operator`)
+    },
+}
+
+function negate(result: ResultTree): ResultTree {
+    switch (result.type) {
+        case 'number':
+            return {
+                type: 'number',
+                value: -result.value,
+            }
+    }
 }
 
 function resolveFunction(name: string, args: EquationTree[], variables: VariableLookup, functions: FunctionLookup) {
@@ -207,28 +264,26 @@ function resolveFunction(name: string, args: EquationTree[], variables: Variable
     } else {
         throw new Error(`Equation resolve: unknown function "${name}"`)
     }
-    const result = func(name, args, variables, functions)
-    if (typeof result !== 'number' || isNaN(result)) {
-        throw new Error(`Equation resolve: function "${name}" did not return a number`)
-    }
-
-    return result
+    return func(name, args, variables, functions)
 }
 
-function numberToTree(x: number): EquationTree {
-    if (x < 0) {
-        return {
-            type: 'negative',
-            value: {
-                type: 'number',
-                value: -x,
-            },
-        }
-    } else {
-        return {
-            type: 'number',
-            value: x,
-        }
+function resultToEquation(result: ResultTree): EquationTree {
+    switch (result.type) {
+        case 'number':
+            if (result.value < 0) {
+                return {
+                    type: 'negative',
+                    value: {
+                        type: 'number',
+                        value: -result.value,
+                    },
+                }
+            } else {
+                return {
+                    type: 'number',
+                    value: result.value,
+                }
+            }
     }
 }
 
