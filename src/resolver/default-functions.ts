@@ -1,4 +1,4 @@
-import { EquationTree, VariableLookup, FunctionLookup, ResolverFunction } from '../types'
+import { EquationTree, VariableLookup, FunctionLookup, ResolverFunction, ResultTreeNumber } from '../types'
 
 import checkArgs from './check-args'
 import isInteger from './is-integer'
@@ -49,35 +49,39 @@ const defaultFunctions: FunctionLookup = {
     ln: numberFunctionWrapper(Math.log),
     log: numberFunctionWrapper((x, base = 10) => Math.log(x) / Math.log(base), 1, 2),
 
-    sum: (name, args, variables, functions) => {
-        checkArgs(name, args, 4, 4)
+    sum,
+}
 
-        const [variable, startTree, endTree, expression] = args
+function sum(name: string, args: EquationTree[], variables: VariableLookup, functions: FunctionLookup) {
+    checkArgs(name, args, 4, 4)
 
-        if (variable.type !== 'variable') {
-            throw new Error(`Equation resolve: first argument of ${name} must be a variable, not ${args[0].type}`)
-        }
+    const [variable, startTree, endTree, expression] = args
 
-        let start = resolve(startTree, variables, functions)
-        let end = resolve(endTree, variables, functions)
-        if (!isInteger(start)) {
-            throw new Error(`Equation resolve: second argument of ${name} must be an integer (is ${start})`)
-        }
-        if (!isInteger(end)) {
-            throw new Error(`Equation resolve: third argument of ${name} must be an integer (is ${end})`)
-        }
-        if (start > end) {
-            [start, end] = [end, start]
-        }
-        const enhancedVariables = { ...variables }
-        let sum = valueWrap(0)
-        for (let i = start.value; i <= end.value; i++) {
-            enhancedVariables[variable.name] = valueWrap(i)
-            sum = operators['+'](sum, resolve(expression, enhancedVariables, functions))
-        }
+    if (variable.type !== 'variable') {
+        throw new Error(`Equation resolve: first argument of ${name} must be a variable, not ${args[0].type}`)
+    }
 
-        return sum
-    },
+    let start = resolve(startTree, variables, functions)
+    let end = resolve(endTree, variables, functions)
+    if (!isInteger(start)) {
+        throw new Error(`Equation resolve: second argument of ${name} must be an integer (is ${start})`)
+    }
+    if (!isInteger(end)) {
+        throw new Error(`Equation resolve: third argument of ${name} must be an integer (is ${end})`)
+    }
+    if (start > end) {
+        [start, end] = [end, start]
+    }
+    const enhancedVariables = { ...variables }
+    // Get initial value
+    enhancedVariables[variable.name] = start
+    let sum = resolve(expression, enhancedVariables, functions)
+    for (let i = start.value + 1; i <= end.value; i++) {
+        enhancedVariables[variable.name] = valueWrap(i)
+        sum = operators['+'](sum, resolve(expression, enhancedVariables, functions))
+    }
+
+    return sum
 }
 
 function numberFunctionWrapper(
@@ -100,7 +104,7 @@ function numberFunctionWrapper(
             throw new Error(`Equation resolve: arguments of ${name} must be numbers`)
         }
 
-        const numberArgs = resolvedArgs.map((arg) => arg.value)
+        const numberArgs = (resolvedArgs as ResultTreeNumber[]).map((arg) => arg.value)
 
         if (validate) {
             validate(name, ...numberArgs)
