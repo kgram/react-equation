@@ -56,8 +56,8 @@ function pushTree(tree: EquationTree, buffer: string[] = [], indent: string = ''
             if (tree.n === 1) {
                 buffer.push(`${ownIndent}v ${tree.m}`)
 
-                tree.values[0].forEach((cell, idx) => {
-                    pushTree(cell, buffer, descendantIndent, idx < tree.m - 1 ? 'regular' : 'last')
+                tree.values.forEach((row, idx) => {
+                    pushTree(row[0], buffer, descendantIndent, idx < tree.m - 1 ? 'regular' : 'last')
                 })
             } else {
                 buffer.push(`${ownIndent}m ${tree.m}x${tree.n}`)
