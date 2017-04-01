@@ -26,5 +26,12 @@ function resultToEquation(result: ResultTree): EquationTree {
                     value: result.value,
                 }
             }
+        case 'matrix':
+            return {
+                type: 'matrix',
+                m: result.m,
+                n: result.n,
+                values: result.values.map((row) => row.map(resultToEquation)),
+            }
     }
 }

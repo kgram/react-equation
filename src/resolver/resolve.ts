@@ -1,4 +1,4 @@
-import { EquationTree, ResultTree, VariableLookup, FunctionLookup } from '../types'
+import { EquationTree, ResultTree, ResultTreeNumber, VariableLookup, FunctionLookup } from '../types'
 import operators from './operators'
 import negate from './negate'
 import defaultVariables from './default-variables'
@@ -37,6 +37,19 @@ export default function resolve(
                 return resolve(tree.b)
             } else {
                 throw new Error('Equation resolve: equals left-hand side must be a variable')
+            }
+        case 'matrix':
+            const values = tree.values.map((row) => row.map((cell) => resolve(cell, variables, functions)))
+
+            if (!values.every((row) => row.every((cell) => cell.type === 'number'))) {
+                throw new Error(`Equation resolve: Cannot resolve nested matrices`)
+            }
+
+            return {
+                type: 'matrix',
+                m: tree.m,
+                n: tree.n,
+                values: values as ResultTreeNumber[][],
             }
         default:
             // Get around typescripts checks to catch any parsed types we don't handle yet

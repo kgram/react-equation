@@ -13,6 +13,7 @@ export {
 export {
     ResultTree,
     ResultTreeNumber,
+    ResultTreeMatrix,
 } from './result-tree'
 export { default as Operator } from './operator'
 export { default as Rendering } from './rendering'

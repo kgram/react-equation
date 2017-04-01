@@ -3,4 +3,13 @@ export type ResultTreeNumber = {
     value: number,
 }
 
-export type ResultTree = ResultTreeNumber
+export type ResultTreeMatrix = {
+    type: 'matrix',
+    n: number,
+    m: number,
+    values: ResultTreeNumber[][],
+}
+
+export type ResultTree =
+    ResultTreeNumber |
+    ResultTreeMatrix
