@@ -127,9 +127,9 @@ number -> integer
 # English letters                       A-Za-z
 # Modified latin letters (skip math)    \u00C0-\u00D6\u00D8-\u00F6\u00F8-\u01BF
 # Greek letters                         \u0391-\u03c9
-# Special symbols                       '"%‰°
+# Special symbols                       '"%‰°_
 
-letter -> [A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u01BF\u0391-\u03c9'"%‰°]
+letter -> [A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u01BF\u0391-\u03c9'"%‰°_]
         {% id %}
 
 alphanum -> letter

@@ -106,7 +106,7 @@ const defaultVariables: VariableLookup = {
     'Da':       unitWrap(1.660539e-27,  { kg: 1 }),     // dalton
 
     // Imperial ---------------------------------------------------------------
-    'oz':       unitWrap(2.83495e-4,    { kg: 1 }),     // ounce
+    'oz':       unitWrap(2.83495e-3,    { kg: 1 }),     // ounce
     'lb':       unitWrap(0.453592,      { kg: 1 }),     // pound
     'st':       unitWrap(6.350293,      { kg: 1 }),     // stone
     'ton':      unitWrap(1.0160e3,      { kg: 1 }),     // ton
