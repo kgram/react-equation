@@ -1,5 +1,11 @@
-import { EquationTree, ResultTree, VariableLookup, FunctionLookup } from '../types'
+import { EquationTree, ResultTree, ResultTreeNumber, ResultTreeMatrix, ResultTreeUnit, VariableLookup, FunctionLookup } from '../types'
 import resolve from './resolve'
+import defaultVariables from './default-variables'
+import operators from './operators'
+import { isSameUnit } from './unit-utils'
+
+// Attempt to simplify unit to one of these if possible
+const simplifiableUnits = ['N', 'J', 'W', 'Pa']
 
 export default function resolveTree(
     tree: EquationTree,
@@ -34,11 +40,12 @@ function resultToEquation(result: ResultTree): EquationTree {
                 values: result.values.map((row) => row.map(resultToEquation)),
             }
         case 'unit':
+            const simplifiedUnit = simplifyUnit(result)
             // Terms above fraction
             const positive: EquationTree[] = []
             // Terms below fraction
             const negative: EquationTree[] = []
-            for (const [unit, factor] of Object.entries(result.units)) {
+            for (const [unit, factor] of Object.entries(simplifiedUnit.units)) {
                 if (factor === 0) { continue }
 
                 if (factor > 0) {
@@ -49,15 +56,37 @@ function resultToEquation(result: ResultTree): EquationTree {
             }
             // If no units were actually added, just render without
             if (positive.length === 0 && negative.length === 0) {
-                return resultToEquation(result.value)
+                return resultToEquation(simplifiedUnit.value)
             }
 
             return {
                 type: 'operator',
                 operator: '**',
-                a: resultToEquation(result.value),
+                a: resultToEquation(simplifiedUnit.value),
                 b: divideLists(positive, negative),
             }
+    }
+}
+
+function simplifyUnit(result: ResultTreeUnit): ResultTreeUnit {
+    const unit = simplifiableUnits.find((u) => {
+        const variable = defaultVariables[u]
+
+        return variable &&
+            variable.type === 'unit' &&
+            variable.value.type === 'number' &&
+            isSameUnit(variable.units, result.units)
+    })
+
+    if (unit) {
+        const variable = defaultVariables[unit] as ResultTreeUnit
+        return {
+            type: 'unit',
+            units: { [unit]: 1 },
+            value: operators['*'](result.value, variable.value) as ResultTreeMatrix | ResultTreeNumber,
+        }
+    } else {
+        return result
     }
 }
 
