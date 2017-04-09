@@ -30,22 +30,22 @@ export default function render(tree: EquationTree, skipParentheses = false, ...i
 
 export function toRendering(parts: RenderingPart[]): Rendering {
     const aboveMiddle = parts.reduce((current, part) => Math.max(current, part.aboveMiddle), 0)
-        const belowMiddle = parts.reduce((current, part) => Math.max(current, part.belowMiddle), 0)
+    const belowMiddle = parts.reduce((current, part) => Math.max(current, part.belowMiddle), 0)
 
-        for (const part of parts) {
-            if (part.aboveMiddle < aboveMiddle) {
-                part.props.style = {
-                    top: `${aboveMiddle - part.aboveMiddle}em`,
-                }
+    for (const part of parts) {
+        if (part.aboveMiddle < aboveMiddle) {
+            part.props.style = {
+                top: `${aboveMiddle - part.aboveMiddle}em`,
             }
         }
+    }
 
-        return {
-            aboveMiddle,
-            belowMiddle,
-            height: aboveMiddle + belowMiddle,
-            elements: parts.map((part, idx) => React.createElement(part.type, { key: idx, ...part.props}, part.children)),
-        }
+    return {
+        aboveMiddle,
+        belowMiddle,
+        height: aboveMiddle + belowMiddle,
+        elements: parts.map((part, idx) => React.createElement(part.type, { key: idx, ...part.props}, part.children)),
+    }
 }
 
 export function pushTree(tree: EquationTree, current: RenderingPart[]) {
