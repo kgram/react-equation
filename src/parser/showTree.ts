@@ -80,8 +80,7 @@ function pushTree(tree: EquationTree, buffer: string[] = [], indent: string = ''
             break
         default:
             // Get around typescripts checks to catch any parsed types we don't handle yet
-            const type = (tree as any).type
-            throw new Error(`Equation tree to string: cannot resolve type "${type}"`)
+            throw new Error(`Equation tree to string: cannot resolve type "${(tree as any).type}"`)
     }
 
     return buffer

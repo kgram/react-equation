@@ -39,7 +39,7 @@ export default function resolve(
             } else {
                 throw new Error('Equation resolve: equals left-hand side must be a variable')
             }
-        case 'matrix':
+        case 'matrix': {
             // Keep track of resolved unit
             let unit: UnitLookup | null = null
             const values = tree.values.map((row) => row.map((cell) => {
@@ -81,11 +81,11 @@ export default function resolve(
                     },
                 }
             }
+        }
 
         default:
             // Get around typescripts checks to catch any parsed types we don't handle yet
-            const type = (tree as any).type
-            throw new Error(`Equation resolve: cannot resolve type "${type}"`)
+            throw new Error(`Equation resolve: cannot resolve type "${(tree as any).type}"`)
     }
 }
 

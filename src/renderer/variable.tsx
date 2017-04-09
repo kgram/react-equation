@@ -3,10 +3,6 @@ import classes from '../style.scss'
 
 import { Rendering, RenderingPart, EquationTreeVariable } from '../types'
 
-import render from './render'
-
-import RootSymbol from './root-symbol'
-
 const indexOffset = 0.3
 const indexFactor = 0.8
 

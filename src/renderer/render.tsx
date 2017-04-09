@@ -84,8 +84,7 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
             break
         default:
             // Get around typescripts checks to catch any parsed types we don't handle yet
-            const type = (tree as any).type
-            throw new Error(`Equation render: cannot resolve type "${type}"`)
+            throw new Error(`Equation render: cannot resolve type "${(tree as any).type}"`)
     }
 
     return current
