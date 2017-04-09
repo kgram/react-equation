@@ -5,6 +5,7 @@ import { EquationTree, EquationTreeOperator, EquationTreeFunction, Rendering, Re
 
 import Operator from './operator'
 
+import variable from './variable'
 import block from './block'
 import func from './func'
 import fraction from './fraction'
@@ -53,7 +54,7 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
             current.push(simplePart(tree.value, 'number'))
             break
         case 'variable':
-            current.push(simplePart(tree.name, 'variable'))
+            current.push(variable(tree))
             break
         case 'negative':
             // Unicode MINUS

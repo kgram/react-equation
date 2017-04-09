@@ -8,7 +8,7 @@ import './style.scss'
 
 import EquationWrapper from './equation-wrapper.stories'
 
-storiesOf('Variables', module)
+storiesOf('Available variables', module)
     .add('All variables', () => (
         <div>
             {Object.keys(defaultVariables).map((variable) => (

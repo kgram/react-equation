@@ -81,7 +81,12 @@ $line-border: 0.08em solid currentColor;
     }
 
     .variable {
+        display: inline-block;
         font-style: italic;
+    }
+
+    .variable-index {
+        font-size: 80%;
     }
 
     .matrix {

@@ -127,9 +127,9 @@ number -> integer
 # English letters                       A-Za-z
 # Modified latin letters (skip math)    \u00C0-\u00D6\u00D8-\u00F6\u00F8-\u01BF
 # Greek letters                         \u0391-\u03c9
-# Special symbols                       '"%‰°_
+# Special symbols                       '"%‰°
 
-letter -> [A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u01BF\u0391-\u03c9'"%‰°_]
+letter -> [A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u01BF\u0391-\u03c9'"%‰°]
         {% id %}
 
 alphanum -> letter
@@ -137,5 +137,11 @@ alphanum -> letter
     | [0-9]
         {% id %}
 
-name -> letter alphanum:*
-        {% ([first, chars]) => first + chars.join('') %}
+word -> alphanum:*
+        {% ([chars]) => chars.join('') %}
+
+# Name should always start with a letter
+name -> letter word
+        {% ([first, rest]) => first + rest %}
+    | letter word ("_" word):+
+        {% ([first, rest, indices]) => first + rest + indices.map(([separator, word]) => separator + word).join('') %}
