@@ -39,7 +39,7 @@ function resultToEquation(result: ResultTree): EquationTree {
                 n: result.n,
                 values: result.values.map((row) => row.map(resultToEquation)),
             }
-        case 'unit':
+        case 'unit': {
             const simplifiedUnit = simplifyUnit(result)
             // Terms above fraction
             const positive: EquationTree[] = []
@@ -65,6 +65,7 @@ function resultToEquation(result: ResultTree): EquationTree {
                 a: resultToEquation(simplifiedUnit.value),
                 b: divideLists(positive, negative),
             }
+        }
     }
 }
 
@@ -94,7 +95,7 @@ function getExponent(unit: string, factor: number): EquationTree {
     if (factor === 1) {
         return { type: 'variable', name: unit }
     } else {
-       return {
+        return {
             type: 'operator',
             operator: '^',
             a: { type: 'variable', name: unit },
