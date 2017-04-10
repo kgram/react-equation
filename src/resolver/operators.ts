@@ -1,6 +1,6 @@
 import { ResultTree, ResultTreeNumber, ResultTreeMatrix, UnitLookup, Operator } from '../types'
 
-import { getUnit, getUnitless, isEmptyUnit, isSameUnit} from './unit-utils'
+import { getUnit, getUnitless, isEmptyUnit, isSameUnit, mapUnit, combineUnits } from './unit-utils'
 
 import valueWrap from './value-wrap'
 import mapMatrix from './map-matrix'
@@ -49,7 +49,7 @@ function plusminus(a: ResultTree, b: ResultTree): ResultTree {
 
 function multiply(aTree: ResultTree, bTree: ResultTree): ResultTree {
     return handleCases(aTree, bTree,
-        (a, b) => mapUnits(a, b, (unit1, unit2) => unit1 + unit2),
+        (a, b) => combineUnits(a, b, (unit1, unit2) => unit1 + unit2),
         // number, number
         (a, b) => valueWrap(a.value * b.value),
         // number, matrix
@@ -111,7 +111,7 @@ function divide(aTree: ResultTree, bTree: ResultTree): ResultTree {
         throw new Error(`Equation resolve: cannot divide by 0`)
     }
     return handleCases(aTree, bTree,
-        (a, b) => mapUnits(a, b, (factor1, factor2) => factor1 - factor2),
+        (a, b) => combineUnits(a, b, (factor1, factor2) => factor1 - factor2),
         // number, number
         (a, b) => valueWrap(a.value / b.value),
         // number, matrix
@@ -141,39 +141,6 @@ function power(aTree: ResultTree, bTree: ResultTree): ResultTree {
         // matrix, matrix
         null,
     )
-}
-
-function mapUnits(
-    a: UnitLookup,
-    b: UnitLookup,
-    mapper: (a: number, b: number, key: string) => number,
-): UnitLookup {
-    // Get all units from a
-    const result = mapUnit(a, (value, key) => {
-        return mapper(value, b[key] || 0, key)
-    })
-    // Get remaining units from b
-    for (const [key, value] of Object.entries(b)) {
-        if (a[key]) { continue }
-        const newValue = mapper(0, value, key)
-        if (newValue !== 0) {
-            result[key] = newValue
-        }
-    }
-
-    return result
-}
-
-function mapUnit(x: UnitLookup, mapper: (value: number, key: string) => number) {
-    const result: UnitLookup = {}
-    for (const [key, value] of Object.entries(x)) {
-        const newValue = mapper(value, key)
-        if (newValue !== 0) {
-            result[key] = newValue
-        }
-    }
-
-    return result
 }
 
 function handleCases(
