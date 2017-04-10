@@ -1,4 +1,5 @@
 import { EquationTree } from '../types'
+import throwUnknownType from '../throw-unknown-type'
 
 export default function stringify(tree: EquationTree) {
     return stringifyTree(tree).join('')
@@ -67,8 +68,7 @@ function stringifyTree(tree: EquationTree, buffer: string[] = []) {
             buffer.push(']')
             break
         default:
-            // Get around typescripts checks to catch any parsed types we don't handle yet
-            throw new Error(`Equation tree to string: cannot resolve type "${(tree as any).type}"`)
+            throwUnknownType(tree, (type) => `Equation tree to string: cannot resolve type "${type}"`)
     }
 
     return buffer

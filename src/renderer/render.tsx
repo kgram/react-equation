@@ -1,6 +1,8 @@
 import * as React from 'react'
 import classes from '../style.scss'
 
+import throwUnknownType from '../throw-unknown-type'
+
 import { EquationTree, EquationTreeOperator, EquationTreeFunction, Rendering, RenderingPart } from '../types'
 
 import Operator from './operator'
@@ -83,8 +85,7 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
             current.push(matrix(tree))
             break
         default:
-            // Get around typescripts checks to catch any parsed types we don't handle yet
-            throw new Error(`Equation render: cannot resolve type "${(tree as any).type}"`)
+            throwUnknownType(tree, (type) => `Equation render: cannot resolve type "${type}"`)
     }
 
     return current

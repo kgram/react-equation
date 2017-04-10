@@ -4,6 +4,7 @@ import operators from './operators'
 import negate from './negate'
 import defaultVariables from './default-variables'
 import defaultFunctions from './default-functions'
+import throwUnknownType from '../throw-unknown-type'
 
 export default function resolve(
     tree: EquationTree,
@@ -84,8 +85,7 @@ export default function resolve(
         }
 
         default:
-            // Get around typescripts checks to catch any parsed types we don't handle yet
-            throw new Error(`Equation resolve: cannot resolve type "${(tree as any).type}"`)
+            return throwUnknownType(tree, (type) => `Equation resolve: cannot resolve type "${type}"`)
     }
 }
 
