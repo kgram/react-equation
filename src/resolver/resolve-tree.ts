@@ -1,7 +1,7 @@
 import { EquationTree, ResultTree, ResultTreeNumber, ResultTreeMatrix, ResultTreeUnit, VariableLookup, FunctionLookup } from '../types'
 import resolve from './resolve'
 import defaultVariables from './default-variables'
-import operators from './operators'
+import { multiply } from './operators'
 import { isSameUnit } from './unit-utils'
 
 // Attempt to simplify unit to one of these if possible
@@ -83,7 +83,7 @@ function simplifyUnit(result: ResultTreeUnit): ResultTreeUnit {
         return {
             type: 'unit',
             units: { [unit]: 1 },
-            value: operators['*'](result.value, variable.value) as ResultTreeMatrix | ResultTreeNumber,
+            value: multiply(result.value, variable.value),
         }
     } else {
         return result

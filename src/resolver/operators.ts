@@ -1,4 +1,4 @@
-import { ResultTree, ResultTreeNumber, ResultTreeMatrix, UnitLookup, Operator } from '../types'
+import { ResultTree, ResultTreeNumber, ResultTreeMatrix, ResultTreeUnit, UnitLookup, Operator } from '../types'
 
 import { getUnit, getUnitless, isEmptyUnit, isSameUnit, mapUnit, combineUnits } from './unit-utils'
 
@@ -6,7 +6,15 @@ import valueWrap from './value-wrap'
 import mapMatrix from './map-matrix'
 import negate from './negate'
 
-function plus(aTree: ResultTree, bTree: ResultTree): ResultTree {
+export function plus(aTree: ResultTreeUnit, bTree: ResultTree): ResultTreeUnit;
+export function plus(aTree: ResultTree, bTree: ResultTreeUnit): ResultTreeUnit;
+export function plus(aTree: ResultTreeNumber, bTree: ResultTreeNumber): ResultTreeNumber;
+export function plus(aTree: ResultTreeNumber, bTree: ResultTreeMatrix): ResultTreeMatrix;
+export function plus(aTree: ResultTreeMatrix, bTree: ResultTreeNumber): ResultTreeMatrix;
+export function plus(aTree: ResultTreeMatrix, bTree: ResultTreeMatrix): ResultTreeMatrix;
+export function plus(aTree: ResultTreeNumber | ResultTreeMatrix, bTree: ResultTreeNumber | ResultTreeMatrix): ResultTreeNumber | ResultTreeMatrix;
+export function plus(aTree: ResultTree, bTree: ResultTree): ResultTree;
+export function plus(aTree: ResultTree, bTree: ResultTree): ResultTree {
     return handleCases(aTree, bTree,
         (a, b) => {
             if (!isSameUnit(a, b)) {
@@ -17,9 +25,9 @@ function plus(aTree: ResultTree, bTree: ResultTree): ResultTree {
         // number, number
         (a, b) => valueWrap(a.value + b.value),
         // number, matrix
-        (a, b) => mapMatrix(b, (cell) => plus(a, cell) as ResultTreeNumber),
+        (a, b) => mapMatrix(b, (cell) => plus(a, cell)),
         // matrix, number
-        (a, b) => mapMatrix(a, (cell) => plus(cell, b) as ResultTreeNumber),
+        (a, b) => mapMatrix(a, (cell) => plus(cell, b)),
         // matrix, matrix
         (a, b) => {
             if (a.n !== b.n || a.m !== b.m) {
@@ -31,7 +39,7 @@ function plus(aTree: ResultTree, bTree: ResultTree): ResultTree {
                 n: a.n,
                 values: a.values.map(
                     (row, rowIdx) => row.map(
-                        (cell, cellIdx) => plus(cell, b.values[rowIdx][cellIdx]) as ResultTreeNumber,
+                        (cell, cellIdx) => plus(cell, b.values[rowIdx][cellIdx]),
                     ),
                 ),
             }
@@ -39,23 +47,39 @@ function plus(aTree: ResultTree, bTree: ResultTree): ResultTree {
     )
 }
 
-function minus(a: ResultTree, b: ResultTree): ResultTree {
+export function minus(aTree: ResultTreeUnit, bTree: ResultTree): ResultTreeUnit;
+export function minus(aTree: ResultTree, bTree: ResultTreeUnit): ResultTreeUnit;
+export function minus(aTree: ResultTreeNumber, bTree: ResultTreeNumber): ResultTreeNumber;
+export function minus(aTree: ResultTreeNumber, bTree: ResultTreeMatrix): ResultTreeMatrix;
+export function minus(aTree: ResultTreeMatrix, bTree: ResultTreeNumber): ResultTreeMatrix;
+export function minus(aTree: ResultTreeMatrix, bTree: ResultTreeMatrix): ResultTreeMatrix;
+export function minus(aTree: ResultTreeNumber | ResultTreeMatrix, bTree: ResultTreeNumber | ResultTreeMatrix): ResultTreeNumber | ResultTreeMatrix;
+export function minus(aTree: ResultTree, bTree: ResultTree): ResultTree;
+export function minus(a: ResultTree, b: ResultTree): ResultTree {
     return plus(a, negate(b))
 }
 
-function plusminus(a: ResultTree, b: ResultTree): ResultTree {
+export function plusminus(a: ResultTree, b: ResultTree): ResultTree {
     throw new Error('Equation resolve: cannot handle ± operator')
 }
 
-function multiply(aTree: ResultTree, bTree: ResultTree): ResultTree {
+export function multiply(aTree: ResultTreeUnit, bTree: ResultTree): ResultTreeUnit;
+export function multiply(aTree: ResultTree, bTree: ResultTreeUnit): ResultTreeUnit;
+export function multiply(aTree: ResultTreeNumber, bTree: ResultTreeNumber): ResultTreeNumber;
+export function multiply(aTree: ResultTreeNumber, bTree: ResultTreeMatrix): ResultTreeMatrix;
+export function multiply(aTree: ResultTreeMatrix, bTree: ResultTreeNumber): ResultTreeMatrix;
+export function multiply(aTree: ResultTreeMatrix, bTree: ResultTreeMatrix): ResultTreeMatrix;
+export function multiply(aTree: ResultTreeNumber | ResultTreeMatrix, bTree: ResultTreeNumber | ResultTreeMatrix): ResultTreeNumber | ResultTreeMatrix;
+export function multiply(aTree: ResultTree, bTree: ResultTree): ResultTree;
+export function multiply(aTree: ResultTree, bTree: ResultTree): ResultTree {
     return handleCases(aTree, bTree,
         (a, b) => combineUnits(a, b, (unit1, unit2) => unit1 + unit2),
         // number, number
         (a, b) => valueWrap(a.value * b.value),
         // number, matrix
-        (a, b) => mapMatrix(b, (cell) => multiply(a, cell) as ResultTreeNumber),
+        (a, b) => mapMatrix(b, (cell) => multiply(a, cell)),
         // matrix, number
-        (a, b) => mapMatrix(a, (cell) => multiply(cell, b) as ResultTreeNumber),
+        (a, b) => mapMatrix(a, (cell) => multiply(cell, b)),
         // matrix, matrix
         (a, b) => {
             if (a.n === 1 && b.n === 1) {
@@ -99,14 +123,29 @@ function matrixProduct(a: ResultTreeMatrix, b: ResultTreeMatrix): ResultTreeMatr
     }
 }
 
-function multiplyImplied(a: ResultTree, b: ResultTree): ResultTree {
+export function multiplyImplied(aTree: ResultTreeUnit, bTree: ResultTree): ResultTreeUnit;
+export function multiplyImplied(aTree: ResultTree, bTree: ResultTreeUnit): ResultTreeUnit;
+export function multiplyImplied(aTree: ResultTreeNumber, bTree: ResultTreeNumber): ResultTreeNumber;
+export function multiplyImplied(aTree: ResultTreeNumber, bTree: ResultTreeMatrix): ResultTreeMatrix;
+export function multiplyImplied(aTree: ResultTreeMatrix, bTree: ResultTreeNumber): ResultTreeMatrix;
+export function multiplyImplied(aTree: ResultTreeMatrix, bTree: ResultTreeMatrix): ResultTreeMatrix;
+export function multiplyImplied(aTree: ResultTreeNumber | ResultTreeMatrix, bTree: ResultTreeNumber | ResultTreeMatrix): ResultTreeNumber | ResultTreeMatrix;
+export function multiplyImplied(aTree: ResultTree, bTree: ResultTree): ResultTree;
+export function multiplyImplied(a: ResultTree, b: ResultTree): ResultTree {
     if (a.type === 'matrix' && b.type === 'matrix' && a.n === 1 && b.n === 1) {
         throw new Error(`Equation resolve: cannot use implied multiplication for scalar product`)
     }
     return multiply(a, b)
 }
 
-function divide(aTree: ResultTree, bTree: ResultTree): ResultTree {
+export function divide(aTree: ResultTreeUnit, bTree: ResultTree): ResultTreeUnit;
+export function divide(aTree: ResultTree, bTree: ResultTreeUnit): ResultTreeUnit;
+export function divide(aTree: ResultTreeNumber, bTree: ResultTreeNumber): ResultTreeNumber;
+export function divide(aTree: ResultTreeNumber, bTree: ResultTreeMatrix): ResultTreeMatrix;
+export function divide(aTree: ResultTreeMatrix, bTree: ResultTreeNumber): ResultTreeMatrix;
+export function divide(aTree: ResultTreeNumber | ResultTreeMatrix, bTree: ResultTreeNumber | ResultTreeMatrix): ResultTreeNumber | ResultTreeMatrix;
+export function divide(aTree: ResultTree, bTree: ResultTree): ResultTree;
+export function divide(aTree: ResultTree, bTree: ResultTree): ResultTree {
     if (bTree.type === 'number' && bTree.value === 0) {
         throw new Error(`Equation resolve: cannot divide by 0`)
     }
@@ -115,15 +154,20 @@ function divide(aTree: ResultTree, bTree: ResultTree): ResultTree {
         // number, number
         (a, b) => valueWrap(a.value / b.value),
         // number, matrix
-        (a, b) => mapMatrix(b, (cell) => divide(a, cell) as ResultTreeNumber),
+        (a, b) => mapMatrix(b, (cell) => divide(a, cell)),
         // matrix, number
-        (a, b) => mapMatrix(a, (cell) => divide(cell, b) as ResultTreeNumber),
+        (a, b) => mapMatrix(a, (cell) => divide(cell, b)),
         // matrix, matrix
         null,
     )
 }
 
-function power(aTree: ResultTree, bTree: ResultTree): ResultTree {
+export function power(aTree: ResultTreeUnit, bTree: ResultTree): ResultTreeUnit;
+export function power(aTree: ResultTree, bTree: ResultTreeUnit): ResultTreeUnit;
+export function power(aTree: ResultTreeNumber, bTree: ResultTreeNumber): ResultTreeNumber;
+export function power(aTree: ResultTreeMatrix, bTree: ResultTreeNumber): ResultTreeMatrix;
+export function power(aTree: ResultTree, bTree: ResultTree): ResultTree;
+export function power(aTree: ResultTree, bTree: ResultTree): ResultTree {
     if (bTree.type === 'unit') {
         throw new Error(`Equation resolve: exponent must be unitless`)
     }
