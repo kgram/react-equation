@@ -10,6 +10,10 @@ export type EquationTreeNumber = {
     value: string,
 }
 
+export type EquationTreeInfinity = {
+    type: 'infinity',
+}
+
 export type EquationTreeNegative = {
     type: 'negative',
     value: EquationTree,
@@ -54,6 +58,7 @@ export type EquationTreeMatrix = {
 export type EquationTree =
     EquationTreeVariable |
     EquationTreeNumber |
+    EquationTreeInfinity |
     EquationTreeNegative |
     EquationTreePlusMinus |
     EquationTreeFunction |

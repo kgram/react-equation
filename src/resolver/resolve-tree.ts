@@ -84,8 +84,7 @@ function simplifyNumber(value: number): EquationTree {
     // Handle infinity
     if (value === Infinity) {
         return {
-            type: 'number',
-            value: '∞',
+            type: 'infinity',
         }
     }
 

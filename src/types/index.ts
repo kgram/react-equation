@@ -2,6 +2,7 @@ export {
     EquationTree,
     EquationTreeVariable,
     EquationTreeNumber,
+    EquationTreeInfinity,
     EquationTreeNegative,
     EquationTreePlusMinus,
     EquationTreeFunction,

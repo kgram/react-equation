@@ -31,6 +31,8 @@ operand -> number
         {% ([value]) => ({ type: 'number', value }) %}
     | name
         {% ([name]) => ({ type: 'variable', name }) %}
+    | "∞"
+        {% () => ({ type: 'infinity' }) %}
 
 matrix -> vector
         {% ([values]) => ({ type: 'matrix', n: 1, m: values.length, values: values.map((v) => [v]) }) %}
@@ -122,8 +124,6 @@ number -> integer
         {% id %}
     | integer "." integer
         {% ([integer, , fraction]) => `${integer}.${fraction}` %}
-    | "∞"
-        {% id %}
 
 # Chars allowed for identifiers
 # English letters                       A-Za-z

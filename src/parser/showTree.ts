@@ -22,6 +22,9 @@ function pushTree(tree: EquationTree, buffer: string[] = [], indent: string = ''
         case 'number':
             buffer.push(ownIndent + tree.value)
             break
+        case 'infinity':
+            buffer.push(ownIndent + '∞')
+            break
         case 'variable':
             buffer.push(`${ownIndent}"${tree.name}"`)
             break

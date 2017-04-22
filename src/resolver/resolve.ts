@@ -15,9 +15,12 @@ export default function resolve(
         case 'number':
             return {
                 type: 'number',
-                value: tree.value === '∞'
-                    ? Infinity
-                    : parseFloat(tree.value)
+                value: parseFloat(tree.value)
+            }
+        case 'infinity':
+            return {
+                type: 'number',
+                value: Infinity,
             }
         case 'variable':
             return resolveVariable(tree.name, variables)

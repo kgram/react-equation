@@ -10,6 +10,9 @@ function stringifyTree(tree: EquationTree, buffer: string[] = []) {
         case 'number':
             buffer.push(tree.value.toString())
             break
+        case 'infinity':
+            buffer.push('∞')
+            break
         case 'variable':
             buffer.push(tree.name)
             break

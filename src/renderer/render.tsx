@@ -55,6 +55,9 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
         case 'number':
             current.push(simplePart(tree.value, 'number'))
             break
+        case 'infinity':
+            current.push(simplePart('∞', 'number'))
+            break
         case 'variable':
             current.push(variable(tree))
             break
