@@ -21,16 +21,10 @@ function resultToEquation(result: ResultTree): EquationTree {
             if (result.value < 0) {
                 return {
                     type: 'negative',
-                    value: {
-                        type: 'number',
-                        value: -result.value,
-                    },
+                    value: simplifyNumber(-result.value),
                 }
             } else {
-                return {
-                    type: 'number',
-                    value: result.value,
-                }
+                return simplifyNumber(result.value)
             }
         case 'matrix':
             return {
@@ -54,17 +48,69 @@ function resultToEquation(result: ResultTree): EquationTree {
                     negative.push(getExponent(unit, -factor))
                 }
             }
+
+            const value = resultToEquation(simplifiedUnit.value)
+
             // If no units were actually added, just render without
             if (positive.length === 0 && negative.length === 0) {
-                return resultToEquation(simplifiedUnit.value)
+                return value
             }
 
-            return {
-                type: 'operator',
-                operator: ' ',
-                a: resultToEquation(simplifiedUnit.value),
-                b: divideLists(positive, negative),
+            // Retain proper ordering of operations be letting negative wrap multiplication
+            if (value.type === 'negative') {
+                return {
+                    type: 'negative',
+                    value: {
+                        type: 'operator',
+                        operator: ' ',
+                        a: value.value,
+                        b: divideLists(positive, negative),
+                    },
+                }
+            } else {
+                return {
+                    type: 'operator',
+                    operator: ' ',
+                    a: value,
+                    b: divideLists(positive, negative),
+                }
             }
+
+        }
+    }
+}
+
+function simplifyNumber(value: number): EquationTree {
+    const factor = Math.log10(value)
+    if (Math.abs(factor) < 5) {
+        // Retain regular number
+        return {
+            type: 'number',
+            value,
+        }
+    } else {
+        // Rewrite as power-of-ten
+        const exponent = Math.floor(factor)
+        const significand = value / Math.pow(10, exponent)
+        return {
+            type: 'operator',
+            operator: '*',
+            a: {
+                type: 'number',
+                value: significand,
+            },
+            b: {
+                type: 'operator',
+                operator: '^',
+                a: {
+                    type: 'number',
+                    value: 10,
+                },
+                b: {
+                    type: 'number',
+                    value: exponent,
+                },
+            },
         }
     }
 }
