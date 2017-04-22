@@ -11,7 +11,7 @@ storiesOf('Blocks', module)
         <EquationWrapper>(10+3)*(2+5)</EquationWrapper>
     ))
     .add('Implied mult. alignment', () => (
-        <EquationWrapper>5**(2+5)</EquationWrapper>
+        <EquationWrapper>5 (2+5)</EquationWrapper>
     ))
     .add('Tall above', () => (
         <EquationWrapper>(1/2/3/4)</EquationWrapper>

@@ -11,7 +11,7 @@ storiesOf('Special - square root', module)
         <EquationWrapper>sqrt(25)</EquationWrapper>
     ))
     .add('Long', () => (
-        <EquationWrapper>sqrt(1/π^2+15**e/22)</EquationWrapper>
+        <EquationWrapper>sqrt(1/π^2+15 e/22)</EquationWrapper>
     ))
     .add('Tall above', () => (
         <EquationWrapper>sqrt(1/2/3/4/5/6)</EquationWrapper>

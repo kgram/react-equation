@@ -16,8 +16,8 @@ storiesOf('Operators', module)
     .add('Multiplication', () => (
         <EquationWrapper>5*3</EquationWrapper>
     ))
-    .add('Multiplication implied', () => (
-        <EquationWrapper>5**x</EquationWrapper>
+    .add('Multiplication implied (space)', () => (
+        <EquationWrapper>5 x</EquationWrapper>
     ))
     .add('Plus/minus', () => (
         <EquationWrapper>5±10</EquationWrapper>

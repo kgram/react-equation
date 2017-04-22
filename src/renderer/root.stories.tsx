@@ -11,7 +11,7 @@ storiesOf('Special - root', module)
         <EquationWrapper>root(3,8)</EquationWrapper>
     ))
     .add('Long', () => (
-        <EquationWrapper>root(3,1/π^2+15**e/22)</EquationWrapper>
+        <EquationWrapper>root(3,1/π^2+15 e/22)</EquationWrapper>
     ))
     .add('Tall above', () => (
         <EquationWrapper>root(10, 1/2/3/4/5/6)</EquationWrapper>

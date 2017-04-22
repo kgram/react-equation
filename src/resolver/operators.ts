@@ -259,8 +259,9 @@ const operators: { [key in Operator]: (a: ResultTree, b: ResultTree) => ResultTr
     '-': minus,
     '±': plusminus,
     '*': multiply,
-    '**': multiplyImplied,
+    ' ': multiplyImplied,
     '/': divide,
+    '÷': divide,
     '^': power,
 }
 

@@ -61,7 +61,7 @@ function resultToEquation(result: ResultTree): EquationTree {
 
             return {
                 type: 'operator',
-                operator: '**',
+                operator: ' ',
                 a: resultToEquation(simplifiedUnit.value),
                 b: divideLists(positive, negative),
             }
@@ -126,7 +126,7 @@ function multiplyList(list: EquationTree[]): EquationTree {
     }
     let current: EquationTree = {
         type: 'operator',
-        operator: '**',
+        operator: ' ',
         a: list[0],
         b: list[1],
     }
@@ -134,7 +134,7 @@ function multiplyList(list: EquationTree[]): EquationTree {
     for (let i = 2; i < list.length; i++) {
         current = {
             type: 'operator',
-            operator: '**',
+            operator: ' ',
             a: current,
             b: list[i],
         }

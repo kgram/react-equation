@@ -65,7 +65,7 @@ division -> level3 _ "/" _ level2
 
 # level4-----------------------------------------------------------------------
 
-multi -> level4 _ ("*" {% id %} | "**" {% id %}) _ level3
+multiDiv -> level4 _ [÷* ] _ level3
         {% operator %}
 
 # level5-----------------------------------------------------------------------
@@ -95,15 +95,15 @@ level2 -> (operand | matrix | function | block | exponent)
         {% nested %}
 level3 -> (operand | matrix | function | block | exponent | division)
         {% nested %}
-level4 -> (operand | matrix | function | block | exponent | division | multi)
+level4 -> (operand | matrix | function | block | exponent | division | multiDiv)
         {% nested %}
-level5 -> (operand | matrix | function | block | exponent | division | multi | addSub | negative | plusminus)
+level5 -> (operand | matrix | function | block | exponent | division | multiDiv | addSub | negative | plusminus)
         {% nested %}
-level6 -> (operand | matrix | function | block | exponent | division | multi | addSub | negative | plusminus | equals)
+level6 -> (operand | matrix | function | block | exponent | division | multiDiv | addSub | negative | plusminus | equals)
         {% nested %}
 
 # Used to ensure a matrix cannot be a direct child of a matrix
-level5NoMatrix -> (operand | function | block | exponent | division | multi | addSub | negative | plusminus)
+level5NoMatrix -> (operand | function | block | exponent | division | multiDiv | addSub | negative | plusminus)
         {% nested %}
 
 

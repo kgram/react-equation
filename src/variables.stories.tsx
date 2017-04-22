@@ -12,7 +12,7 @@ storiesOf('Available variables', module)
     .add('All variables', () => (
         <div>
             {Object.keys(defaultVariables).map((variable) => (
-                <EquationWrapper>{`1**${variable}`}</EquationWrapper>
+                <EquationWrapper>{`1 ${variable}`}</EquationWrapper>
             ))}
         </div>
     ))

@@ -11,7 +11,7 @@ storiesOf('Special - sum', module)
         <EquationWrapper>sum(n,1,5,n)</EquationWrapper>
     ))
     .add('Long arguments', () => (
-        <EquationWrapper>sum(n,log(2^2^2/2,2),5^2,2**n^2+5**n)</EquationWrapper>
+        <EquationWrapper>sum(n,log(2^2^2/2,2),5^2,2 n^2+5 n)</EquationWrapper>
     ))
     .add('Tall above', () => (
         <EquationWrapper>sum(n,1,10,1/2/3/4/5)</EquationWrapper>
