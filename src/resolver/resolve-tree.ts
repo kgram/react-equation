@@ -1,4 +1,4 @@
-import { EquationTree, ResultTree, ResultTreeNumber, ResultTreeMatrix, ResultTreeUnit, VariableLookup, FunctionLookup } from '../types'
+import { EquationTree, ResultTree, ResultTreeUnit, VariableLookup, FunctionLookup } from '../types'
 import resolve from './resolve'
 import defaultVariables from './default-variables'
 import { multiply } from './operators'
