@@ -3,7 +3,7 @@ import { EquationTree, VariableLookup, FunctionLookup, ResolverFunction, ResultT
 import checkArgs from './check-args'
 import isInteger from './is-integer'
 import valueWrap from './value-wrap'
-import operators from './operators'
+import { plus } from './operators'
 import { resolve } from '.'
 
 const defaultFunctions: FunctionLookup = {
@@ -78,7 +78,7 @@ function sum(name: string, args: EquationTree[], variables: VariableLookup, func
     let sum = resolve(expression, enhancedVariables, functions)
     for (let i = start.value + 1; i <= end.value; i++) {
         enhancedVariables[variable.name] = valueWrap(i)
-        sum = operators['+'](sum, resolve(expression, enhancedVariables, functions))
+        sum = plus(sum, resolve(expression, enhancedVariables, functions))
     }
 
     return sum
