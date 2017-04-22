@@ -91,10 +91,7 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
     return current
 }
 
-export function simplePart(value: string | number, cls?: string) {
-    if (typeof value === 'number') {
-        value = formatNumber(value, 3)
-    }
+export function simplePart(value: string, cls?: string) {
     return {
         type: 'span',
         props: { className: cls && classes[cls] },
@@ -144,30 +141,4 @@ function pushOperator(tree: EquationTreeOperator, current: RenderingPart[]) {
             })
             pushTree(tree.b, current)
     }
-}
-
-function formatNumber(x: number, digits: number, commaSep = '.', thousandSep = '') {
-    if (x === Infinity) {
-        return '∞'
-    }
-
-    const value = ensurePrecision(x, digits)
-
-    const parts = value.toString().split('.')
-
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSep)
-
-    return parts
-        .join(commaSep)
-}
-
-// number.toPrecision with trailing zeros stripped
-// Avoids scientific notation for large numbers
-function ensurePrecision(x: number, digits: number) {
-    // Handle cases where scientific notation would be used
-    if (Math.log(Math.abs(x)) * Math.LOG10E >= digits) {
-        return Math.round(x).toString()
-    }
-    // Strip trailing zeroes
-    return Number(x.toPrecision(digits)).toString()
 }

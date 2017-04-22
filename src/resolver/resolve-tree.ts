@@ -86,7 +86,7 @@ function simplifyNumber(value: number): EquationTree {
         // Retain regular number
         return {
             type: 'number',
-            value,
+            value: value.toString(),
         }
     } else {
         // Rewrite as power-of-ten
@@ -97,18 +97,18 @@ function simplifyNumber(value: number): EquationTree {
             operator: '*',
             a: {
                 type: 'number',
-                value: significand,
+                value: significand.toString(),
             },
             b: {
                 type: 'operator',
                 operator: '^',
                 a: {
                     type: 'number',
-                    value: 10,
+                    value: '10',
                 },
                 b: {
                     type: 'number',
-                    value: exponent,
+                    value: exponent.toString(),
                 },
             },
         }
@@ -145,7 +145,7 @@ function getExponent(unit: string, factor: number): EquationTree {
             type: 'operator',
             operator: '^',
             a: { type: 'variable', name: unit },
-            b: { type: 'number', value: factor },
+            b: { type: 'number', value: factor.toString() },
         }
     }
 }
@@ -164,9 +164,6 @@ function divideLists(a: EquationTree[], b: EquationTree[]): EquationTree {
 }
 
 function multiplyList(list: EquationTree[]): EquationTree {
-    if (list.length === 0) {
-        return { type: 'number', value: 1 }
-    }
     if (list.length === 1) {
         return list[0]
     }

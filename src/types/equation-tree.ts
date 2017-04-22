@@ -7,7 +7,7 @@ export type EquationTreeVariable = {
 
 export type EquationTreeNumber = {
     type: 'number',
-    value: number,
+    value: string,
 }
 
 export type EquationTreeNegative = {

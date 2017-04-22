@@ -13,7 +13,10 @@ export default function resolve(
 ): ResultTree {
     switch (tree.type) {
         case 'number':
-            return tree
+            return {
+                type: 'number',
+                value: parseFloat(tree.value)
+            }
         case 'variable':
             return resolveVariable(tree.name, variables)
         case 'negative':

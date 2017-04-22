@@ -116,12 +116,12 @@ _ -> [\s]:*
         {% () => null %}
 
 integer -> [0-9]:+
-        {% ([chars]) => parseInt(chars.join('')) %}
+        {% ([chars]) => chars.join('') %}
 
 number -> integer
         {% id %}
     | integer "." integer
-        {% ([integer, , fraction]) => parseFloat(`${integer}.${fraction}`) %}
+        {% ([integer, , fraction]) => `${integer}.${fraction}` %}
 
 # Chars allowed for identifiers
 # English letters                       A-Za-z
