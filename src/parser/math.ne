@@ -122,6 +122,8 @@ number -> integer
         {% id %}
     | integer "." integer
         {% ([integer, , fraction]) => `${integer}.${fraction}` %}
+    | "∞"
+        {% id %}
 
 # Chars allowed for identifiers
 # English letters                       A-Za-z
