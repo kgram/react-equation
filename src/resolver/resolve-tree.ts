@@ -81,12 +81,22 @@ function resultToEquation(result: ResultTree): EquationTree {
 }
 
 function simplifyNumber(value: number): EquationTree {
+    // Handle infinity
+    if (value === Infinity) {
+        return {
+            type: 'number',
+            value: '∞',
+        }
+    }
+
+    // Float exponent
     const factor = Math.log10(value)
-    if (Math.abs(factor) < 5) {
+
+    if (value === 0 || Math.abs(factor) < 5) {
         // Retain regular number
         return {
             type: 'number',
-            value: value.toString(),
+            value: formatNumber(value),
         }
     } else {
         // Rewrite as power-of-ten
@@ -97,7 +107,7 @@ function simplifyNumber(value: number): EquationTree {
             operator: '*',
             a: {
                 type: 'number',
-                value: significand.toString(),
+                value: formatNumber(significand),
             },
             b: {
                 type: 'operator',
@@ -108,12 +118,30 @@ function simplifyNumber(value: number): EquationTree {
                 },
                 b: {
                     type: 'number',
-                    value: exponent.toString(),
+                    value: formatNumber(exponent),
                 },
             },
         }
     }
 }
+
+function formatNumber(value: number, digits = 3, commaSep = '.'): string {
+    return ensurePrecision(value, digits)
+        .split('.')
+        .join(commaSep)
+}
+
+// number.toPrecision with trailing zeros stripped
+// Avoids scientific notation for large numbers
+function ensurePrecision(value: number, digits: number) {
+    // Handle cases where scientific notation would be used
+    if (Math.log(Math.abs(value)) * Math.LOG10E >= digits) {
+        return Math.round(value).toString()
+    }
+    // Strip trailing zeroes
+    return Number(value.toPrecision(digits)).toString()
+}
+
 
 function simplifyUnit(result: ResultTreeUnit): ResultTreeUnit {
     const unit = simplifiableUnits.find((u) => {
