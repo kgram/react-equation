@@ -3,6 +3,7 @@ const combineLoaders = require('webpack-combine-loaders')
 
 module.exports = {
     patch_require: true,
+    devtool: 'source-map',
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
         root: [
@@ -56,7 +57,14 @@ module.exports = {
             }, {
                 test: /\.ne$/,
                 loader: combineLoaders([
+                    // Use babel to allow es2015 features (primarily arrow-functions and destructuring)
+                    // It would be better to use typescript, but this does not work at the moment
                     {
+                        loader: 'babel',
+                        query: {
+                            presets: ['es2015'],
+                        },
+                    }, {
                         loader: 'string-replace',
                         query: {
                             search: 'module.exports ?= ?',
