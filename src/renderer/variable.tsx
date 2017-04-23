@@ -19,8 +19,17 @@ export default function variable({ name }: EquationTreeVariable): RenderingPart 
 }
 
 export function Variable({ main, indices, style = {} }: { main: string, indices: string[], style: React.CSSProperties }) {
+    style.height = `${1.4 + indices.length * indexOffset}em`
+
+    const classList = [
+        classes.variable,
+        // Certain variables should be moved closer to the preceding value.
+        // This is to avoid the space of implied multiplication
+        /^[%‰°'"]/.test(main) ? classes.variableClose : ''
+    ]
+
     return (
-        <span style={style} className={classes.variable}>
+        <span style={style} className={classList.join(' ')}>
             {main}
             {indices.map((indexName, idx) => (
                 <span
