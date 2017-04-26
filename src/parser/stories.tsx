@@ -123,7 +123,7 @@ class Editor extends React.Component<null, {value: string}> {
                 <div>
                     <textarea
                         className={classes.equationWrapperRaw}
-                        onInput={this.handleChange}
+                        onChange={this.handleChange}
                         value={this.state.value}
                     />
                 </div>
