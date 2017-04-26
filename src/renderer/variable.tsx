@@ -23,7 +23,7 @@ export function Variable({ main, indices, style = {} }: { main: string, indices:
 
     const classList = [
         classes.variable,
-        // Certain variables should be moved closer to the preceding value.
+        // Variables starting with a symbol should be moved closer to the preceding value.
         // This is to avoid the space of implied multiplication
         /^[%‰°'"]/.test(main) ? classes.variableClose : ''
     ]
