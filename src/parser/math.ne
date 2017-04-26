@@ -67,8 +67,12 @@ division -> level3 _ "/" _ level2
 
 # level4-----------------------------------------------------------------------
 
-multiDiv -> level4 _ [÷* ] _ level3
+multiDiv -> level4 _ [÷*] _ level3
         {% operator %}
+    # Implied multiplication
+    # Whitespace on both sides results in ambiguous results
+    | level4 _ " " level3
+        {% ([a, ,operator, b]) => ({type: 'operator', operator, a, b }) %}
 
 # level5-----------------------------------------------------------------------
 
