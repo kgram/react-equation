@@ -4,7 +4,8 @@
   "description": "Equation rendering in react",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test-watch": "jest --watch",
     "storybook": "start-storybook -p 9001 -c storybook",
     "storybook-build": "build-storybook -c storybook -o docs"
   },
@@ -18,6 +19,7 @@
   "devDependencies": {
     "@kadira/storybook": "^2.35.3",
     "@types/draft-js": "^0.9.1",
+    "@types/jest": "^19.2.2",
     "@types/node": "^7.0.0",
     "@types/react": "^15.0.0",
     "@types/react-dom": "^0.14.20",
@@ -27,14 +29,30 @@
     "css-loader": "^0.26.1",
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^6.10.3",
+    "jest": "^19.0.2",
     "nearley-loader": "0.0.2",
     "node-sass": "^4.3.0",
     "sass-loader": "^4.1.1",
     "source-map-loader": "^0.1.6",
     "string-replace-loader": "^1.0.5",
     "style-loader": "^0.13.1",
+    "ts-jest": "^19.0.13",
     "typescript": "^2.2.2",
     "typescript-eslint-parser": "^2.1.0",
     "webpack-combine-loaders": "^2.0.3"
+  },
+  "jest": {
+    "transform": {
+      "\\.(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js",
+      "\\.ne": "<rootDir>/jest-nearley-preprocessor.js"
+    },
+    "testRegex": "(/tests/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ne",
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ]
   }
 }
