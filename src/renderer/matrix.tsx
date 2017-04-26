@@ -32,13 +32,13 @@ export function Matrix({ content, height, style = {} }: { content: Rendering[][]
             <Parens className={classes.parens} height={height} type='[]' />
             <table className={classes.matrixTable}>
                 <tbody>
-                    {content.map((row) => {
+                    {content.map((row, rowIdx) => {
                         const rowHeight = maxOf(row, (cell) => cell.height) + cellPadding
                         const aboveMiddle = maxOf(row, (cell) => cell.aboveMiddle)
                         return (
-                            <tr style={{ height: `${rowHeight}em` }}>
-                                {row.map((cell) => (
-                                    <td style={{ top: `${aboveMiddle - cell.aboveMiddle}em` }}>
+                            <tr key={rowIdx} style={{ height: `${rowHeight}em` }}>
+                                {row.map((cell, cellIdx) => (
+                                    <td key={cellIdx} style={{ top: `${aboveMiddle - cell.aboveMiddle}em` }}>
                                         {cell.elements}
                                     </td>
                                 ))}
