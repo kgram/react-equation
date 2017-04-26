@@ -8,7 +8,7 @@ import grammar from './math.ne'
 
 export { showTree, stringify }
 
-export function parse(input: string) {
+export function parse(input: string): EquationTree {
     const parser = new Parser<EquationTree>(grammar.ParserRules, grammar.ParserStart)
     const result = parser.feed(input)
 
