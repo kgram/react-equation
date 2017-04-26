@@ -45,9 +45,9 @@ function stringifyTree(tree: EquationTree, buffer: string[] = []) {
             })
             buffer.push(')')
             break
-        case 'equals':
+        case 'comparison':
             stringifyTree(tree.a, buffer)
-            buffer.push('=')
+            buffer.push(tree.comparison)
             stringifyTree(tree.b, buffer)
             break
         case 'matrix':

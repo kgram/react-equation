@@ -42,12 +42,8 @@ export default function resolve(
                 variables,
                 functions,
             )
-        case 'equals':
-            if (tree.a.type === 'variable') {
-                return resolve(tree.b)
-            } else {
-                throw new Error('Equation resolve: equals left-hand side must be a variable')
-            }
+        case 'comparison':
+            throw new Error('Equation resolve: cannot resolve comparison')
         case 'matrix': {
             // Keep track of resolved unit
             let unit: UnitLookup | null = null

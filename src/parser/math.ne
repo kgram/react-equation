@@ -83,8 +83,8 @@ plusminus -> "±" _ level4
 
 # level6-----------------------------------------------------------------------
 
-equals -> level6 _ "=" _ level5
-        {% ([a, , , ,b]) => ({ type: 'equals', a, b }) %}
+comparison -> level6 _ [=<>≤≥≈] _ level5
+        {% ([a, , comparison, ,b]) => ({ type: 'comparison', comparison, a, b }) %}
 
 
 #------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ level4 -> (operand | matrix | function | block | exponent | division | multiDiv)
         {% nested %}
 level5 -> (operand | matrix | function | block | exponent | division | multiDiv | addSub | negative | plusminus)
         {% nested %}
-level6 -> (operand | matrix | function | block | exponent | division | multiDiv | addSub | negative | plusminus | equals)
+level6 -> (operand | matrix | function | block | exponent | division | multiDiv | addSub | negative | plusminus | comparison)
         {% nested %}
 
 # Used to ensure a matrix cannot be a direct child of a matrix

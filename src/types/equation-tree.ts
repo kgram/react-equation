@@ -42,8 +42,9 @@ export type EquationTreeOperator = {
     b: EquationTree,
 }
 
-export type EquationTreeEquals = {
-    type: 'equals',
+export type EquationTreeComparison = {
+    type: 'comparison',
+    comparison: '=' | '<' | '>' | '≤' | '≥' | '≈',
     a: EquationTree,
     b: EquationTree,
 }
@@ -64,5 +65,5 @@ export type EquationTree =
     EquationTreeFunction |
     EquationTreeBlock |
     EquationTreeOperator |
-    EquationTreeEquals |
+    EquationTreeComparison |
     EquationTreeMatrix

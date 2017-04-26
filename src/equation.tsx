@@ -23,7 +23,8 @@ export default function Equation({children = '', evaluate = false, variables, fu
             try {
                 const result = resolveTree(tree, variables, functions)
                 tree = {
-                    type: 'equals',
+                    type: 'comparison',
+                    comparison: '=',
                     a: tree,
                     b: result,
                 }

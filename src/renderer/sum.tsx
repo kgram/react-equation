@@ -11,7 +11,8 @@ const fontFactor = 0.8
 export default function sum({args: [variable, start, end, expression]}: EquationTreeFunction) {
     const top = render(end)
     const bottom = render({
-        type: 'equals',
+        type: 'comparison',
+        comparison: '=',
         a: variable,
         b: start,
     })

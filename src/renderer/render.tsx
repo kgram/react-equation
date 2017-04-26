@@ -79,9 +79,9 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
         case 'function':
             pushFunction(tree, current)
             break
-        case 'equals':
+        case 'comparison':
             pushTree(tree.a, current)
-            current.push(simplePart('=', 'equals'))
+            current.push(simplePart(tree.comparison, 'comparison'))
             pushTree(tree.b, current)
             break
         case 'matrix':

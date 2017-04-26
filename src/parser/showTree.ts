@@ -51,8 +51,8 @@ function pushTree(tree: EquationTree, buffer: string[] = [], indent: string = ''
                 pushTree(arg, buffer, descendantIndent, idx < tree.args.length - 1 ? 'regular' : 'last')
             })
             break
-        case 'equals':
-            buffer.push(`${ownIndent}=`)
+        case 'comparison':
+            buffer.push(ownIndent + tree.comparison)
             pushTree(tree.a, buffer, descendantIndent, 'regular')
             pushTree(tree.b, buffer, descendantIndent, 'last')
             break

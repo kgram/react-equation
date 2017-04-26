@@ -8,7 +8,7 @@ export {
     EquationTreeFunction,
     EquationTreeBlock,
     EquationTreeOperator,
-    EquationTreeEquals,
+    EquationTreeComparison,
     EquationTreeMatrix,
 } from './equation-tree'
 export {

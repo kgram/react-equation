@@ -41,10 +41,15 @@ function Math({children = []}: {children?: string[]}) {
         let resolveError
         if (tree) {
             try {
-                if (tree.type === 'equals' && tree.a.type === 'variable') {
-                    variableLookup[tree.a.name] = resolve(tree, variableLookup, functionLookup)
+                if (
+                    tree.type === 'comparison' &&
+                    tree.comparison === '=' &&
+                    tree.a.type === 'variable'
+                ) {
+                    variableLookup[tree.a.name] = resolve(tree.b, variableLookup, functionLookup)
                 } else if (
-                    tree.type === 'equals' &&
+                    tree.type === 'comparison' &&
+                    tree.comparison === '=' &&
                     tree.a.type === 'function' &&
                     tree.a.args.every((arg) => arg.type === 'variable')
                 ) {
