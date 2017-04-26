@@ -1,4 +1,5 @@
 import Operator from './operator'
+import Comparison from './comparison'
 
 export type EquationTreeVariable = {
     type: 'variable',
@@ -44,7 +45,7 @@ export type EquationTreeOperator = {
 
 export type EquationTreeComparison = {
     type: 'comparison',
-    comparison: '=' | '<' | '>' | '≤' | '≥' | '≈',
+    comparison: Comparison,
     a: EquationTree,
     b: EquationTree,
 }
