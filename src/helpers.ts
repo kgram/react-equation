@@ -1,7 +1,7 @@
 import {
     EquationTreeVariable,
     EquationTreeNumber,
-} from 'types'
+} from './types'
 
 export function buildNumber(number: number): EquationTreeNumber {
     if (number < 0) {

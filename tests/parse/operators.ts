@@ -1,8 +1,9 @@
 import { parse } from '../../src/parser'
+import { Operator } from '../../src/types'
 
 import { buildNumber, buildVariable } from '../../src/helpers'
 
-function runTest(operator) {
+function runTest(operator: Operator) {
     // Two numbers, no space
     expect(parse(`3${operator}2`)).toEqual({
         type: 'operator',

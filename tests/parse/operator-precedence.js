@@ -1,3 +1,5 @@
+// Keep this file as js, since typescript cannot understand jest-extensions
+
 const { isEqual } = require('lodash')
 
 const { parse } = require('../../src/parser')
