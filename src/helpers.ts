@@ -1,11 +1,15 @@
 import {
     EquationTreeVariable,
     EquationTreeNumber,
+    EquationTreeNegative,
 } from './types'
 
-export function buildNumber(number: number): EquationTreeNumber {
+export function buildNumber(number: number): EquationTreeNumber | EquationTreeNegative {
     if (number < 0) {
-        throw new Error('Numbers in equation-tree must be positive. Wrap in `negative`')
+        return {
+            type: 'negative',
+            value: buildNumber(-number),
+        }
     }
     return {
         type: 'number',
