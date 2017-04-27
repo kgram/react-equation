@@ -191,6 +191,18 @@ describe('operator precedence', () => {
 
         expect('^').not.toHaveHigherPrecedence('/')
 
-        expect('^').toHaveEqualPrecedence('^')
+        // Exponentiation does not follow normal rules when chained
+        // 1+2+3 is grouped as (1+2)+3 but 1^2^3 has to be grouped as 1^(2^3)
+        expect(parse('1^2^3')).toEqual({
+            type: 'operator',
+            operator: '^',
+            a: buildNumber(1),
+            b: {
+                type: 'operator',
+                operator: '^',
+                a: buildNumber(2),
+                b: buildNumber(3),
+            },
+        })
     })
 })
