@@ -4,18 +4,22 @@ import { storiesOf } from '@kadira/storybook'
 import '../stories.scss'
 import '../style.scss'
 
+import Equation from '../equation'
 import EquationWrapper from '../equation-wrapper.stories'
 
 storiesOf('Variables', module)
+    .addDecorator((story) => (
+        <EquationWrapper>{story()}</EquationWrapper>
+    ))
     .add('Simple', () => (
-        <EquationWrapper>x</EquationWrapper>
+        <Equation evaluate>x</Equation>
     ))
     .add('Numbers', () => (
-        <EquationWrapper>x52yh</EquationWrapper>
+        <Equation evaluate>x52yh</Equation>
     ))
     .add('Index', () => (
-        <EquationWrapper>x_5 * 2</EquationWrapper>
+        <Equation evaluate>x_5 * 2</Equation>
     ))
     .add('Multiple indices', () => (
-        <EquationWrapper>x_y_z_5_2_3 * 2</EquationWrapper>
+        <Equation evaluate>x_y_z_5_2_3 * 2</Equation>
     ))

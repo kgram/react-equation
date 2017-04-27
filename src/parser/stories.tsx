@@ -9,7 +9,7 @@ import { VariableLookup, FunctionLookup } from '../types'
 
 import { EquationTree } from '../types'
 
-import EquationWrapper from '../equation-wrapper.stories'
+import Equation from '../equation'
 
 import { parse, showTree, stringify } from '.'
 
@@ -37,7 +37,7 @@ function Math({children = []}: {children?: string[]}) {
             parseError = err.message
         }
         // Attempt to resolve to get error
-        // EquationWrapper will silently ignore error, but here we want it
+        // Equation will silently ignore error, but here we want it
         let resolveError
         if (tree) {
             try {
@@ -78,12 +78,15 @@ function Math({children = []}: {children?: string[]}) {
         <div>
             <div>
                 {equations.map(({ input, variables, functions }, idx) => (
-                    <EquationWrapper
-                        key={idx}
-                        input={false}
-                        variables={variables}
-                        functions={functions}
-                    >{input}</EquationWrapper>
+                    <div key={idx}>
+                        <div className={classes.equationWrapper}>
+                            <Equation
+                                evaluate
+                                variables={variables}
+                                functions={functions}
+                            >{input}</Equation>
+                        </div>
+                    </div>
                 ))}
             </div>
             <div style={{display: 'flex', flexDirection: 'row'}}>

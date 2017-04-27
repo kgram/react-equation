@@ -4,21 +4,25 @@ import { storiesOf } from '@kadira/storybook'
 import '../stories.scss'
 import '../style.scss'
 
+import Equation from '../equation'
 import EquationWrapper from '../equation-wrapper.stories'
 
 storiesOf('Powers', module)
+    .addDecorator((story) => (
+        <EquationWrapper>{story()}</EquationWrapper>
+    ))
     .add('Simple', () => (
-        <EquationWrapper>5^3</EquationWrapper>
+        <Equation evaluate>5^3</Equation>
     ))
     .add('Complex base', () => (
-        <EquationWrapper>(3/4)^2</EquationWrapper>
+        <Equation evaluate>(3/4)^2</Equation>
     ))
     .add('Complex exponent', () => (
-        <EquationWrapper>5^(1/2)</EquationWrapper>
+        <Equation evaluate>5^(1/2)</Equation>
     ))
     .add('Longer exponent', () => (
-        <EquationWrapper>5^(5*x+2*y)</EquationWrapper>
+        <Equation evaluate>5^(5*x+2*y)</Equation>
     ))
     .add('Tall exponent alignment', () => (
-        <EquationWrapper>1/2/3 * 5^(1/2/3)</EquationWrapper>
+        <Equation evaluate>1/2/3 * 5^(1/2/3)</Equation>
     ))

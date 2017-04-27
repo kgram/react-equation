@@ -4,24 +4,28 @@ import { storiesOf } from '@kadira/storybook'
 import '../stories.scss'
 import '../style.scss'
 
+import Equation from '../equation'
 import EquationWrapper from '../equation-wrapper.stories'
 
 storiesOf('Comparisons', module)
+    .addDecorator((story) => (
+        <EquationWrapper>{story()}</EquationWrapper>
+    ))
     .add('Equals', () => (
-        <EquationWrapper>7*17=119</EquationWrapper>
+        <Equation evaluate>7*17=119</Equation>
     ))
     .add('Less than', () => (
-        <EquationWrapper>22{'<'}15</EquationWrapper>
+        <Equation evaluate>22{'<'}15</Equation>
     ))
     .add('Greater than', () => (
-        <EquationWrapper>15>22</EquationWrapper>
+        <Equation evaluate>15>22</Equation>
     ))
     .add('Less than or equal', () => (
-        <EquationWrapper>7*17≤150</EquationWrapper>
+        <Equation evaluate>7*17≤150</Equation>
     ))
     .add('Greater than or equal', () => (
-        <EquationWrapper>25≥25</EquationWrapper>
+        <Equation evaluate>25≥25</Equation>
     ))
     .add('Almost equal', () => (
-        <EquationWrapper>π≈3.14</EquationWrapper>
+        <Equation evaluate>π≈3.14</Equation>
     ))

@@ -4,21 +4,25 @@ import { storiesOf } from '@kadira/storybook'
 import '../stories.scss'
 import '../style.scss'
 
+import Equation from '../equation'
 import EquationWrapper from '../equation-wrapper.stories'
 
 storiesOf('Functions', module)
+    .addDecorator((story) => (
+        <EquationWrapper>{story()}</EquationWrapper>
+    ))
     .add('Simple', () => (
-        <EquationWrapper>sin(0.2)</EquationWrapper>
+        <Equation evaluate>sin(0.2)</Equation>
     ))
     .add('Tall argument', () => (
-        <EquationWrapper>sin(2/3 π)</EquationWrapper>
+        <Equation evaluate>sin(2/3 π)</Equation>
     ))
     .add('Nested', () => (
-        <EquationWrapper>f(g(x))</EquationWrapper>
+        <Equation evaluate>f(g(x))</Equation>
     ))
     .add('Multiple arguments', () => (
-        <EquationWrapper>log(1024, 2)</EquationWrapper>
+        <Equation evaluate>log(1024, 2)</Equation>
     ))
     .add('Multiple, tall arguments', () => (
-        <EquationWrapper>unkownfunction(22/55*x^2, 52^(1/2))</EquationWrapper>
+        <Equation evaluate>unkownfunction(22/55*x^2, 52^(1/2))</Equation>
     ))

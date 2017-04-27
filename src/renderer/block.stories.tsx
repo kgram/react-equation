@@ -4,21 +4,25 @@ import { storiesOf } from '@kadira/storybook'
 import '../stories.scss'
 import '../style.scss'
 
+import Equation from '../equation'
 import EquationWrapper from '../equation-wrapper.stories'
 
 storiesOf('Blocks', module)
+    .addDecorator((story) => (
+        <EquationWrapper>{story()}</EquationWrapper>
+    ))
     .add('Simple', () => (
-        <EquationWrapper>(10+3)*(2+5)</EquationWrapper>
+        <Equation evaluate>(10+3)*(2+5)</Equation>
     ))
     .add('Implied mult. alignment', () => (
-        <EquationWrapper>5 (2+5)</EquationWrapper>
+        <Equation evaluate>5 (2+5)</Equation>
     ))
     .add('Tall above', () => (
-        <EquationWrapper>(1/2/3/4)</EquationWrapper>
+        <Equation evaluate>(1/2/3/4)</Equation>
     ))
     .add('Tall below', () => (
-        <EquationWrapper>(1/(2/(3/(4))))</EquationWrapper>
+        <Equation evaluate>(1/(2/(3/(4))))</Equation>
     ))
     .add('Nested', () => (
-        <EquationWrapper>((((1))/((2))))</EquationWrapper>
+        <Equation evaluate>((((1))/((2))))</Equation>
     ))

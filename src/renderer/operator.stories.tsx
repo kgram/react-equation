@@ -4,33 +4,37 @@ import { storiesOf } from '@kadira/storybook'
 import '../stories.scss'
 import '../style.scss'
 
+import Equation from '../equation'
 import EquationWrapper from '../equation-wrapper.stories'
 
 storiesOf('Operators', module)
+    .addDecorator((story) => (
+        <EquationWrapper>{story()}</EquationWrapper>
+    ))
     .add('Addition', () => (
-        <EquationWrapper>5236236+43435</EquationWrapper>
+        <Equation evaluate>5236236+43435</Equation>
     ))
     .add('Subtraction', () => (
-        <EquationWrapper>34634-4546</EquationWrapper>
+        <Equation evaluate>34634-4546</Equation>
     ))
     .add('Multiplication', () => (
-        <EquationWrapper>5*3</EquationWrapper>
+        <Equation evaluate>5*3</Equation>
     ))
     .add('Multiplication implied (space)', () => (
-        <EquationWrapper>5 x</EquationWrapper>
+        <Equation evaluate>5 x</Equation>
     ))
     .add('Division', () => (
-        <EquationWrapper>5÷2</EquationWrapper>
+        <Equation evaluate>5÷2</Equation>
     ))
     .add('Plus/minus', () => (
-        <EquationWrapper>5±10</EquationWrapper>
+        <Equation evaluate>5±10</Equation>
     ))
     .add('Leading minus', () => (
-        <EquationWrapper>-10 * (-10)</EquationWrapper>
+        <Equation evaluate>-10 * (-10)</Equation>
     ))
     .add('Leading plus/minus', () => (
-        <EquationWrapper>±10 * (±10)</EquationWrapper>
+        <Equation evaluate>±10 * (±10)</Equation>
     ))
     .add('Operators', () => (
-        <EquationWrapper>5*x+2*y</EquationWrapper>
+        <Equation evaluate>5*x+2*y</Equation>
     ))
