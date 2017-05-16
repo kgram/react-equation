@@ -191,17 +191,15 @@ function divideLists(a: EquationTree[], b: EquationTree[]): EquationTree {
 }
 
 function multiplyList(list: EquationTree[]): EquationTree {
-    if (list.length === 1) {
-        return list[0]
+    if (list.length === 0) {
+        return {
+            type: 'number',
+            value: '1',
+        }
     }
-    let current: EquationTree = {
-        type: 'operator',
-        operator: ' ',
-        a: list[0],
-        b: list[1],
-    }
+    let current = list[0]
     // Build multiplication tree
-    for (let i = 2; i < list.length; i++) {
+    for (let i = 1; i < list.length; i++) {
         current = {
             type: 'operator',
             operator: ' ',
