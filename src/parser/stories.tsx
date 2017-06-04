@@ -21,7 +21,7 @@ function setPersistantState(state: string) {
     window.localStorage.persistantEquationState = state
 }
 
-function Code({children}: {children?: JSX.Element}) {
+function Code({children}: {children?: JSX.Element | string}) {
     return <div><pre className={classes.equationWrapperRaw}>{children}</pre></div>
 }
 
@@ -105,8 +105,8 @@ function Math({children = [], largeSize}: {children?: string[], largeSize: boole
     )
 }
 
-class Editor extends React.Component<null, {value: string, largeSize: boolean}> {
-    constructor(props: null) {
+class Editor extends React.Component<{}, {value: string, largeSize: boolean}> {
+    constructor(props: {}) {
         super(props)
         this.state = {
             value: getPersistantState(),

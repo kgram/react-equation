@@ -8,7 +8,7 @@ import { VariableLookup, FunctionLookup } from './types'
 import { render } from './renderer'
 
 type Props = {
-    children?: string,
+    children?: string | string [],
     evaluate?: boolean,
     variables?: VariableLookup,
     functions?: FunctionLookup,
@@ -17,6 +17,9 @@ type Props = {
 
 export default function Equation({children = '', evaluate = false, variables, functions, style = {}}: Props) {
     try {
+        if (children instanceof Array) {
+            children = children.join('')
+        }
         let tree = parse(children)
 
         if (evaluate) {
