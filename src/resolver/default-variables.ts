@@ -143,15 +143,15 @@ const defaultVariables: VariableLookup = {
     // Frequency
     // ========================================================================
 
-    'nHz':       unitWrap(1e-9,          { s: -1 }),          // nanohertz
-    'μHz':       unitWrap(1e-6,          { s: -1 }),          // microhertz
-    'mHz':       unitWrap(1e-3,          { s: -1 }),          // millihertz
-    'Hz':        unitWrap(1e0,           { s: -1 }),          // hertz
-    'kHz':       unitWrap(1e3,           { s: -1 }),          // kilohertz
-    'MHz':       unitWrap(1e6,           { s: -1 }),          // megahertz
-    'GHz':       unitWrap(1e9,           { s: -1 }),          // gigahertz
-    'THz':       unitWrap(1e12,          { s: -1 }),          // terahertz
-    'PHz':       unitWrap(1e15,          { s: -1 }),          // petahertz
+    'nHz':       unitWrap(1e-9,         { s: -1 }),     // nanohertz
+    'μHz':       unitWrap(1e-6,         { s: -1 }),     // microhertz
+    'mHz':       unitWrap(1e-3,         { s: -1 }),     // millihertz
+    'Hz':        unitWrap(1e0,          { s: -1 }),     // hertz
+    'kHz':       unitWrap(1e3,          { s: -1 }),     // kilohertz
+    'MHz':       unitWrap(1e6,          { s: -1 }),     // megahertz
+    'GHz':       unitWrap(1e9,          { s: -1 }),     // gigahertz
+    'THz':       unitWrap(1e12,         { s: -1 }),     // terahertz
+    'PHz':       unitWrap(1e15,         { s: -1 }),     // petahertz
 
     // ========================================================================
     // Angle
