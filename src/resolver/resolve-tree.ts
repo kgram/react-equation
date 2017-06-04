@@ -5,7 +5,7 @@ import { multiply } from './operators'
 import { isSameUnit } from './unit-utils'
 
 // Attempt to simplify unit to one of these if possible
-const simplifiableUnits = ['N', 'J', 'W', 'Pa']
+const simplifiableUnits = ['N', 'J', 'W', 'Pa', 'Hz', 'lx', 'C', 'V', 'F', 'Ω', 'S', 'Wb', 'T', 'H', 'Gy']
 
 export default function resolveTree(
     tree: EquationTree,
