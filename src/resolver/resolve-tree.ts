@@ -12,7 +12,13 @@ export default function resolveTree(
     variables: VariableLookup = {},
     functions: FunctionLookup = {},
 ): EquationTree {
-    return resultToEquation(resolve(tree, variables, functions))
+    const result = resultToEquation(resolve(tree, variables, functions))
+    return {
+        type: 'comparison',
+        comparison: '=',
+        a: tree,
+        b: result,
+    }
 }
 
 function resultToEquation(result: ResultTree): EquationTree {

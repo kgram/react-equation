@@ -24,13 +24,7 @@ export default function Equation({children = '', evaluate = false, variables, fu
 
         if (evaluate) {
             try {
-                const result = resolveTree(tree, variables, functions)
-                tree = {
-                    type: 'comparison',
-                    comparison: '=',
-                    a: tree,
-                    b: result,
-                }
+                tree = resolveTree(tree, variables, functions)
             } catch (err) {
                 // Suppress errors
             }
