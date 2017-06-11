@@ -7,7 +7,7 @@
     "test": "jest",
     "test-watch": "jest --watch",
     "storybook": "start-storybook -p 9001 -c storybook",
-    "storybook-build": "build-storybook -c storybook -o out"
+    "storybook-build": "build-storybook -c storybook -o docs"
   },
   "author": "Kristoffer Gram <kristoffer.gram@gmail.com>",
   "license": "ISC",
