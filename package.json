@@ -38,7 +38,7 @@
     "string-replace-loader": "^1.0.5",
     "style-loader": "^0.13.1",
     "ts-jest": "^19.0.13",
-    "typescript": "^2.2.2",
+    "typescript": "^2.3.4",
     "typescript-eslint-parser": "^2.1.0",
     "webpack-combine-loaders": "^2.0.3"
   },
