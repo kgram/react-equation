@@ -1,8 +1,8 @@
-import { EquationTree, ResultTree, ResultTreeUnit, VariableLookup, FunctionLookup } from '../types'
+import { EquationTree, ResultTree, ResultTreeUnit, VariableLookup, FunctionLookup, UnitLookup } from '../types'
 import resolve from './resolve'
 import defaultVariables from './default-variables'
-import { multiply } from './operators'
-import { isSameUnit } from './unit-utils'
+import { divide } from './operators'
+import { isSameUnit, isEmptyUnit, getUnit, getUnitless, combineUnits } from './unit-utils'
 
 // Attempt to simplify unit to one of these if possible
 const simplifiableUnits = ['N', 'J', 'W', 'Pa', 'Hz', 'lx', 'C', 'V', 'F', 'Ω', 'S', 'Wb', 'T', 'H', 'Gy']
@@ -11,17 +11,25 @@ export default function resolveTree(
     tree: EquationTree,
     variables: VariableLookup = {},
     functions: FunctionLookup = {},
+    unitTree?: EquationTree,
 ): EquationTree {
-    const result = resultToEquation(resolve(tree, variables, functions))
+    const result = resolve(tree, variables, functions)
+    let unitResult
+    if (unitTree) {
+        unitResult = resolve(unitTree, variables, functions)
+        if (!isUnitTree(unitTree) || !isUnitResult(unitResult)) {
+            throw new Error('Equation resolve: invalid unit')
+        }
+    }
     return {
         type: 'comparison',
         comparison: '=',
         a: tree,
-        b: result,
+        b: resultToEquation(result, unitTree, unitResult),
     }
 }
 
-function resultToEquation(result: ResultTree): EquationTree {
+function resultToEquation(result: ResultTree, unitTree?: EquationTree, unitResult?: ResultTree): EquationTree {
     switch (result.type) {
         case 'number':
             if (result.value < 0) {
@@ -37,51 +45,27 @@ function resultToEquation(result: ResultTree): EquationTree {
                 type: 'matrix',
                 m: result.m,
                 n: result.n,
-                values: result.values.map((row) => row.map(resultToEquation)),
+                values: result.values.map((row) => row.map((cell) => resultToEquation(cell))),
             }
         case 'unit': {
-            const simplifiedUnit = simplifyUnit(result)
-            // Terms above fraction
-            const positive: EquationTree[] = []
-            // Terms below fraction
-            const negative: EquationTree[] = []
-            for (const [unit, factor] of Object.entries(simplifiedUnit.units)) {
-                if (factor === 0) { continue }
-
-                if (factor > 0) {
-                    positive.push(getExponent(unit, factor))
+            if (unitTree && unitResult) {
+                const value = divide(result.value, getUnitless(unitResult))
+                const diffUnits = combineUnits(result.units, getUnit(unitResult), (a, b) => a - b)
+                if (isEmptyUnit(diffUnits)) {
+                    return wrapUnit(resultToEquation(value), unitTree)
                 } else {
-                    negative.push(getExponent(unit, -factor))
-                }
-            }
-
-            const value = resultToEquation(simplifiedUnit.value)
-
-            // If no units were actually added, just render without
-            if (positive.length === 0 && negative.length === 0) {
-                return value
-            }
-
-            // Retain proper ordering of operations be letting negative wrap multiplication
-            if (value.type === 'negative') {
-                return {
-                    type: 'negative',
-                    value: {
+                    return wrapUnit(resultToEquation(value), {
                         type: 'operator',
-                        operator: ' ',
-                        a: value.value,
-                        b: divideLists(positive, negative),
-                    },
+                        operator: '*',
+                        a: unitTree,
+                        b: unitToEquation(diffUnits),
+                    })
                 }
             } else {
-                return {
-                    type: 'operator',
-                    operator: ' ',
-                    a: value,
-                    b: divideLists(positive, negative),
-                }
-            }
+                const unit = guessUnit(result)
 
+                return wrapUnit(resultToEquation(unit.value), unitToEquation(unit.units))
+            }
         }
     }
 }
@@ -147,8 +131,59 @@ function ensurePrecision(value: number, digits: number) {
     return Number(value.toPrecision(digits)).toString()
 }
 
+function isUnitTree(unitTree: EquationTree): boolean {
+    switch (unitTree.type) {
+        case 'operator':
+            switch (unitTree.operator) {
+                case '*':
+                case ' ':
+                case '/':
+                case '÷':
+                    return isUnitTree(unitTree.a) && isUnitTree(unitTree.b)
+                case '^':
+                    return unitTree.a.type === 'variable' && unitTree.b.type === 'number'
+            }
+        case 'variable':
+            return true
+    }
 
-function simplifyUnit(result: ResultTreeUnit): ResultTreeUnit {
+    return false
+}
+
+function isUnitResult(unitResult: ResultTree): boolean {
+    switch (unitResult.type) {
+        case 'unit':
+            return isUnitResult(unitResult.value)
+        case 'number':
+            return true
+    }
+
+    return false
+}
+
+function wrapUnit(value: EquationTree, units: EquationTree): EquationTree {
+    // Retain proper ordering of operations be letting negative wrap multiplication
+    if (value.type === 'negative') {
+        return {
+            type: 'negative',
+            value: {
+                type: 'operator',
+                operator: ' ',
+                a: value.value,
+                b: units,
+            },
+        }
+    } else {
+        return {
+            type: 'operator',
+            operator: ' ',
+            a: value,
+            b: units,
+        }
+    }
+}
+
+function guessUnit(result: ResultTreeUnit): ResultTreeUnit {
     const unit = simplifiableUnits.find((u) => {
         const variable = defaultVariables[u]
 
@@ -163,7 +198,7 @@ function simplifyUnit(result: ResultTreeUnit): ResultTreeUnit {
         return {
             type: 'unit',
             units: { [unit]: 1 },
-            value: multiply(result.value, variable.value),
+            value: divide(result.value, variable.value),
         }
     } else {
         return result
@@ -183,16 +218,27 @@ function getExponent(unit: string, factor: number): EquationTree {
     }
 }
 
-function divideLists(a: EquationTree[], b: EquationTree[]): EquationTree {
-    if (b.length === 0) {
-        return multiplyList(a)
+function unitToEquation(units: UnitLookup): EquationTree {
+    // Terms above fraction
+    const positive: EquationTree[] = []
+    // Terms below fraction
+    const negative: EquationTree[] = []
+    for (const [unit, factor] of Object.entries(units)) {
+        if (factor > 0) {
+            positive.push(getExponent(unit, factor))
+        } else {
+            negative.push(getExponent(unit, -factor))
+        }
+    }
+    if (negative.length === 0) {
+        return multiplyList(positive)
     }
 
     return {
         type: 'operator',
         operator: '/',
-        a: multiplyList(a),
-        b: multiplyList(b),
+        a: multiplyList(positive),
+        b: multiplyList(negative),
     }
 }
 

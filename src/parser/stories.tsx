@@ -29,10 +29,14 @@ function Math({children = [], largeSize}: {children?: string[], largeSize: boole
     const variableLookup: VariableLookup = {}
     const functionLookup: FunctionLookup = {}
     const equations = children.map((input) => {
+        const [inputEquation, inputUnit] = input.split(':')
+
         let tree: EquationTree | null = null
+        let unitTree: EquationTree | null = null
         let parseError
         try {
-            tree = parse(input)
+            tree = parse(inputEquation)
+            unitTree = inputUnit ? parse(inputUnit) : null
         } catch (err) {
             parseError = err.message
         }
@@ -57,6 +61,9 @@ function Math({children = [], largeSize}: {children?: string[], largeSize: boole
                     functionLookup[name] = buildResolver(args.map((arg) => (arg as any).name), tree.b, variableLookup, functionLookup)
                 } else {
                     resolve(tree, variableLookup, functionLookup)
+                    if (unitTree) {
+                        resolve(unitTree, variableLookup, functionLookup)
+                    }
                 }
 
             } catch (err) {
@@ -65,7 +72,8 @@ function Math({children = [], largeSize}: {children?: string[], largeSize: boole
         }
 
         return {
-            input,
+            inputEquation,
+            inputUnit,
             variables: { ...variableLookup },
             functions: { ...functionLookup },
             tree,
@@ -77,14 +85,15 @@ function Math({children = [], largeSize}: {children?: string[], largeSize: boole
     return (
         <div>
             <div style={{ fontSize: largeSize ? '300%' : '100%' }}>
-                {equations.map(({ input, variables, functions }, idx) => (
+                {equations.map(({ inputEquation, inputUnit, variables, functions }, idx) => (
                     <div key={idx}>
                         <div className={classes.equationWrapper}>
                             <Equation
                                 evaluate
                                 variables={variables}
                                 functions={functions}
-                            >{input}</Equation>
+                                unit={inputUnit}
+                            >{inputEquation}</Equation>
                         </div>
                     </div>
                 ))}
@@ -148,6 +157,7 @@ class Editor extends React.Component<{}, {value: string, largeSize: boolean}> {
                         <p>Multiplication without symbol is only supported with a space ("2 x", not "2x"). Hopefully this can be resolved.</p>
                         <p>Common variables and units are available.</p>
                         <p>Variables and functions can be assigned and used later.</p>
+                        <p>The output can be evaluated as a specific unit by writing the unit after a colon.</p>
                     </div>
                 </div>
                 <Math largeSize={this.state.largeSize}>{equations}</Math>

@@ -12,19 +12,25 @@ type Props = {
     evaluate?: boolean,
     variables?: VariableLookup,
     functions?: FunctionLookup,
+    unit?: string | string [],
     style?: React.CSSProperties,
 }
 
-export default function Equation({children = '', evaluate = false, variables, functions, style = {}}: Props) {
+export default function Equation({children = '', evaluate = false, variables, functions, unit, style = {}}: Props) {
     try {
         if (children instanceof Array) {
             children = children.join('')
         }
+        if (unit && unit instanceof Array) {
+            unit = unit.join('')
+        }
+
         let tree = parse(children)
+        let unitTree = unit ? parse(unit) : undefined
 
         if (evaluate) {
             try {
-                tree = resolveTree(tree, variables, functions)
+                tree = resolveTree(tree, variables, functions, unitTree)
             } catch (err) {
                 // Suppress errors
             }
