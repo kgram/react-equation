@@ -6,4 +6,4 @@ before_install:
   -in deploy-key.enc -out deploy-key -d
 script:
 - npm run test -s
-- deploy
+- bash ./deploy
