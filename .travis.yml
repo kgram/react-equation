@@ -6,4 +6,4 @@ before_install:
   -in deploy-key.enc -out deploy-key -d
 script:
 - npm run test -s
-- npm run storybook-build -s
+- deploy
