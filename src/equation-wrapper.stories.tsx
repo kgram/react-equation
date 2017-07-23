@@ -3,14 +3,14 @@ import classes from './stories.scss'
 
 import { VariableLookup, FunctionLookup } from './types'
 
-type Props = {
+export type Props = {
     children?: string,
     evaluate?: boolean,
     variables?: VariableLookup,
     functions?: FunctionLookup,
 }
 
-type State = {
+export type State = {
     largeSize: boolean,
 }
 

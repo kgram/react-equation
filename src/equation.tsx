@@ -7,7 +7,7 @@ import { VariableLookup, FunctionLookup } from './types'
 
 import { render } from './renderer'
 
-type Props = {
+export type Props = {
     children?: string | string [],
     evaluate?: boolean,
     variables?: VariableLookup,
