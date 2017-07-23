@@ -1,6 +1,6 @@
 const path = require('path')
 
-const srcPath = path.resolve(__dirname, 'src')
+const srcPath = path.resolve(__dirname, '../src')
 
 module.exports = {
     resolve: {
@@ -33,14 +33,14 @@ module.exports = {
                             modules: true,
                             getLocalIdent: (loaderContext, localIdentName, localName) => {
                                 const requestPath = path.relative(srcPath, loaderContext.resourcePath)
-                                return requestPath
+                                return 'react-equation_' + requestPath
                                     // Use - instead of /
                                     .replace(/\//g, '_')
                                     // Strip file-name
-                                    .replace(/\.scss$/, '')
+                                    .replace(/\.scss$/, '_')
                                     // Strip default file-name
-                                    .replace(/-style$/, '') +
-                                    '_' + localName
+                                    .replace(/style_$/, '') +
+                                    localName
                             },
                             camelCase: true,
                         }
