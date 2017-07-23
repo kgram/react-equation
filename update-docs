@@ -5,7 +5,7 @@ set -e # Exit with nonzero exit code if anything fails
 SOURCE_BRANCH="master"
 TARGET_BRANCH="gh-pages"
 
-function doCompile {
+function generate-docs {
     npm run storybook-build -s
 }
 
@@ -25,24 +25,29 @@ REPO=`git config remote.origin.url`
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 SHA=`git rev-parse --verify HEAD`
 
-# Clone the existing gh-pages for this repo into out/
+# Clone the existing gh-pages for this repo into gh-pages/
 # Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deply)
-git clone $REPO out
-cd out
+git clone $REPO gh-pages
+cd gh-pages
 git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
+echo 'before rm -rf'
+ls
 rm -rf *
+echo 'after rm -rf'
+ls
 cd ..
 
 # Run our compile script
-doCompile
-cp -R docs/* out
+generate-docs
+cp -R docs/* gh-pages
 
-# Now let's go have some fun with the cloned repo
-cd out
+cd gh-pages
+echo 'after build'
+ls
 git config user.name "Deployment Bot"
 git config user.email "deploy@travis-ci.org"
 
-# If there are no changes to the compiled out (e.g. this is a README update) then just bail.
+# If there are no changes to the compiled docs then just bail.
 if git diff --quiet; then
     echo "No changes to the output"
     exit 0
