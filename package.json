@@ -42,6 +42,9 @@
     "typescript-eslint-parser": "^2.1.0",
     "webpack-combine-loaders": "^2.0.3"
   },
+  "babel": {
+    "preset": [["es2015"]]
+  },
   "jest": {
     "transform": {
       "\\.(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js",
