@@ -3,8 +3,8 @@ import classes from './stories.scss'
 
 import { VariableLookup, FunctionLookup } from './types'
 
-export type Props = {
-    children?: string,
+type Props = {
+    children?: React.Component<any, any> | React.StatelessComponent<any> | JSX.Element,
     evaluate?: boolean,
     variables?: VariableLookup,
     functions?: FunctionLookup,

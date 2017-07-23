@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { storiesOf } from '@kadira/storybook'
+import { storiesOf } from '@storybook/react'
 
 import '../stories.scss'
 import '../style.scss'

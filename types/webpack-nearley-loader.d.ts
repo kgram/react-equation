@@ -1,6 +1,6 @@
 declare module '*.ne' {
-    import { Grammar } from 'nearley'
+    import { ParserRules as ParserRulesType, ParserStart as ParserStartType } from 'nearley'
 
-    const grammar: Grammar
-    export default grammar
+    export const ParserRules: ParserRulesType
+    export const ParserStart: ParserStartType
 }

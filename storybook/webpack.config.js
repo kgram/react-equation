@@ -1,84 +1,66 @@
 const path = require('path')
-const combineLoaders = require('webpack-combine-loaders')
+
+const srcPath = path.resolve(__dirname, 'src')
 
 module.exports = {
-    patch_require: true,
-    devtool: 'source-map',
     resolve: {
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
-        root: [
-            path.resolve('../src'),
-            path.resolve('../types'),
-        ]
+        extensions: ['.ts', '.tsx', '.js'],
     },
 
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.tsx?$/,
                 loader: 'awesome-typescript-loader'
-            }, {
-                test: /\.css$/,
-                loader: combineLoaders([
-                    {
-                        loader: 'style-loader'
-                    }, {
-                        loader: 'css-loader',
-                        query: {
-                            modules: true,
-                            localIdentName: '[path][name]_[local]',
-                            camelCase: true,
-                        }
-                    }
-                ]),
-            }, {
+            },
+            {
                 test: /\.scss$/,
-                loader: combineLoaders([
+                loaders: [
                     {
-                        loader: 'string-replace',
-                        query: {
+                        loader: 'string-replace-loader',
+                        options: {
                             search: 'module.exports ?= ?',
                             replace: 'module.exports={};module.exports.default=',
                             flags: '',
                         },
-                    }, {
+                    },
+                    {
                         loader: 'style-loader'
-                    }, {
+                    },
+                    {
                         loader: 'css-loader',
-                        query: {
+                        options: {
                             modules: true,
-                            localIdentName: '[path][name]_[local]',
+                            getLocalIdent: (loaderContext, localIdentName, localName) => {
+                                const requestPath = path.relative(srcPath, loaderContext.resourcePath)
+                                return requestPath
+                                    // Use - instead of /
+                                    .replace(/\//g, '_')
+                                    // Strip file-name
+                                    .replace(/\.scss$/, '')
+                                    // Strip default file-name
+                                    .replace(/-style$/, '') +
+                                    '_' + localName
+                            },
                             camelCase: true,
                         }
                     }, {
                         loader: 'sass-loader'
                     }
-                ]),
-            }, {
+                ],
+            },
+            {
                 test: /\.ne$/,
-                loader: combineLoaders([
+                loaders: [
                     // Use babel to allow es2015 features (primarily arrow-functions and destructuring)
                     // It would be better to use typescript, but this does not work at the moment
                     {
-                        loader: 'babel',
-                        query: {
-                            presets: ['es2015'],
-                        },
+                        loader: 'babel-loader',
                     }, {
-                        loader: 'string-replace',
-                        query: {
-                            search: 'module.exports ?= ?',
-                            replace: 'module.exports={};module.exports.default=',
-                            flags: '',
-                        },
-                    }, {
-                        loader: 'nearley',
+                        loader: 'nearley-loader',
                     }
-                ]),
+                ],
             },
-        ],
-        preLoaders: [
-            { test: /\.js$/, loader: 'source-map-loader' },
         ],
     },
 }

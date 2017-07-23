@@ -1,10 +1,10 @@
-import { configure } from '@kadira/storybook';
+import { configure } from '@storybook/react'
 
 import './default.scss'
 
 function loadStories() {
-    const context = require.context('../src', true, /(?:\/|\.)stories\.(js|ts|tsx)$/);
-    return context.keys().forEach((file) => context(file));
+    const context = require.context('../src', true, /(?:\/|\.)stories\.(js|ts|tsx)$/)
+    return context.keys().forEach((file) => context(file))
 }
 
-configure(loadStories, module);
+configure(loadStories, module)

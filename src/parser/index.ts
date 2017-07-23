@@ -4,12 +4,12 @@ import { EquationTree } from '../types'
 
 import showTree from './showTree'
 import stringify from './stringify'
-import grammar from './math.ne'
+import { ParserRules, ParserStart } from './math.ne'
 
 export { showTree, stringify }
 
 export function parse(input: string): EquationTree {
-    const parser = new Parser<EquationTree>(grammar.ParserRules, grammar.ParserStart)
+    const parser = new Parser<EquationTree>(ParserRules, ParserStart)
     const result = parser.feed(input)
 
     switch (result.results.length) {

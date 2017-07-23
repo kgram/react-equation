@@ -10,7 +10,7 @@ function parseNearley(src) {
     parser.feed(src)
 
     var compilation = compile(parser.results[0], {})
-    return generate(compilation, 'Grammar').replace('module.exports ?= ?', 'module.exports={};module.exports.default=')
+    return generate(compilation, 'Grammar')
 }
 
 module.exports = {
