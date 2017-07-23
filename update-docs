@@ -59,7 +59,10 @@ fi
 git add -A .
 git commit -m "Deploy to GitHub Pages: ${SHA}"
 
+# Add SSH-key for deployment
 eval `ssh-agent -s`
+# ssh-add will fail if broad permissions are given
+chmod 600 ../deploy_key
 ssh-add ../deploy-key
 
 # Now that we're all set up, we can push.
