@@ -49,7 +49,7 @@ git config user.name "Deployment Bot"
 git config user.email "deploy@travis-ci.org"
 
 # If there are no changes to the compiled docs then just bail.
-if git diff --quiet; then
+if [ $(git status --porcelain | wc -l) -lt 1 ]; then
     echo "No changes to the output"
     exit 0
 fi
