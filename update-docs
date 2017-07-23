@@ -30,17 +30,18 @@ SHA=`git rev-parse --verify HEAD`
 git clone $REPO gh-pages
 cd gh-pages
 git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
-rm -rf *
 cd ..
 
 # Run our compile script
 generate-docs
 # Copy to pages-repo
-cp -R docs/* gh-pages/master
+rm -rf gh-pages/storybook/master/*
+cp -R docs/* gh-pages/storybook/master
 # If building a tag, copy to new folder in pages
 if [[ $TRAVIS_TAG ]]; then
-    mkdir "gh-pages/$TRAVIS_TAG"
-    cp -R docs/* "gh-pages/$TRAVIS_TAG"
+    mkdir "gh-pages/storybook/$TRAVIS_TAG"
+    cp -R docs/* "gh-pages/storybook/$TRAVIS_TAG"
+    echo "$TRAVIS_TAG\n" >> gh-pages/versions.txt
 fi
 
 cd gh-pages
