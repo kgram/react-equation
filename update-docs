@@ -50,7 +50,7 @@ git config user.name "Deployment Bot"
 git config user.email "deploy@travis-ci.org"
 
 # If there are no changes to the compiled docs then just bail.
-if git diff --quiet; then
+if git diff --quiet --exit-code; then
     echo "No changes to the output"
     exit 0
 fi
