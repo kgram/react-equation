@@ -32,9 +32,11 @@ cd gh-pages
 git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
 echo 'before rm -rf'
 ls
+ls static
 rm -rf *
 echo 'after rm -rf'
 ls
+ls static
 cd ..
 
 # Run our compile script
@@ -44,6 +46,7 @@ cp -R docs/* gh-pages
 cd gh-pages
 echo 'after build'
 ls
+ls static
 git config user.name "Deployment Bot"
 git config user.email "deploy@travis-ci.org"
 
