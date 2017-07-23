@@ -15,10 +15,10 @@ storiesOf('Comparisons', module)
         <Equation evaluate>7*17=119</Equation>
     ))
     .add('Less than', () => (
-        <Equation evaluate>22{'<'}15</Equation>
+        <Equation evaluate>15{'<'}22</Equation>
     ))
     .add('Greater than', () => (
-        <Equation evaluate>15>22</Equation>
+        <Equation evaluate>22>15</Equation>
     ))
     .add('Less than or equal', () => (
         <Equation evaluate>7*17≤150</Equation>
