@@ -36,7 +36,6 @@ ls static
 rm -rf *
 echo 'after rm -rf'
 ls
-ls static
 cd ..
 
 # Run our compile script
