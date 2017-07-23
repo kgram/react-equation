@@ -40,7 +40,13 @@ cd ..
 
 # Run our compile script
 generate-docs
-cp -R docs/* gh-pages
+# Copy to pages-repo
+cp -R docs/* gh-pages/master
+# If building a tag, copy to new folder in pages
+if [[ $TRAVIS_TAG ]]; then
+    mkdir "gh-pages/$TRAVIS_TAG"
+    cp -R docs/* "gh-pages/$TRAVIS_TAG"
+fi
 
 cd gh-pages
 echo 'after build'
