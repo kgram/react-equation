@@ -2,12 +2,18 @@ import * as React from 'react'
 
 import { Rendering, RenderingPart, EquationTreeOperator } from '../../types'
 
-import classes from './styles.scss'
-
 import render from '../render'
 
 const fontFactor = 0.7
 const exponentOffset = 0.8
+
+const styles = {
+    exponent: {
+        fontSize: `${fontFactor * 100}%`,
+        display: 'inline-block',
+        verticalAlign: 'top',
+    }
+}
 
 export default function power({ a, b }: EquationTreeOperator): RenderingPart {
     const base = render(a, false)
@@ -27,18 +33,10 @@ function Power({ base, exponent, baseOffset, style = {} }: {
     baseOffset: number,
     style: React.CSSProperties,
 }) {
-    style.height = `${base.height + baseOffset}em`
-    const baseStyle = {
-        top: `${baseOffset}em`,
-        height: `${base.height}em`,
-    }
-    const exponentStyle = {
-        height: `${exponent.height}em`,
-    }
     return (
-        <span style={style}>
-            <span style={baseStyle}>{base.elements}</span>
-            <span style={exponentStyle} className={classes.exponent}>{exponent.elements}</span>
+        <span style={{ height: `${base.height + baseOffset}em`, ...style}}>
+            <span style={{ position: 'relative', top: `${baseOffset}em`, height: `${base.height}em`}}>{base.elements}</span>
+            <span style={{ ...styles.exponent, height: `${exponent.height}em` }}>{exponent.elements}</span>
         </span>
     )
 }

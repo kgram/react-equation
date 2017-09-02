@@ -2,12 +2,33 @@ import * as React from 'react'
 
 import { Rendering, RenderingPart, EquationTreeOperator } from '../../types'
 
-import classes from './styles.scss'
-
 import render from '../render'
 
 const fontFactor = 0.9
 const separatorSize = 0.06
+
+const styles = {
+    wrapper: {
+        display: 'inline-block',
+        verticalAlign: 'top',
+    },
+    
+    part: {
+        fontSize: `${fontFactor * 100}%`,
+        display: 'block',
+        textAlign: 'center',
+        width: '100%',
+        padding: '0 0.4em',
+    },
+    
+    separator: {
+        display: 'block',
+        background: 'currentColor',
+        width: '100%',
+        borderTop: `${separatorSize}em solid currentColor`,
+    },
+    
+}
 
 export default function fraction({ a, b }: EquationTreeOperator): RenderingPart {
     const top = render(a, true)
@@ -26,10 +47,10 @@ function Fraction({top, bottom, style}: {
     style: React.CSSProperties,
 }) {
     return (
-        <span style={style} className={classes.wrapper}>
-            <span style={{ height: `${top.height}em` }} className={classes.top}>{top.elements}</span>
-            <span className={classes.separator} />
-            <span style={{ height: `${bottom.height}em` }} className={classes.bottom}>{bottom.elements}</span>
+        <span style={{ ...styles.wrapper , ...style}}>
+            <span style={{ ...styles.part, height: `${top.height}em` }}>{top.elements}</span>
+            <span style={styles.separator} />
+            <span style={{ ...styles.part, height: `${bottom.height}em` }}>{bottom.elements}</span>
         </span>
     )
 }

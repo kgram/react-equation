@@ -1,5 +1,4 @@
 import * as React from 'react'
-import classes from './styles.scss'
 
 import { Rendering, EquationTree, EquationTreeFunction } from '../../../types'
 
@@ -7,6 +6,31 @@ import render from '../../render'
 
 const iconSize = 1.8
 const fontFactor = 0.8
+
+const styles = {
+    wrapper: {
+        display: 'inline-block',
+    },
+    
+    block: {
+        display: 'inline-block',
+        verticalAlign: 'top',
+        textAlign: 'center',
+    },
+    
+    icon: {
+        display: 'block',
+        lineHeight: 0.8,
+        fontSize: '2.25em',
+        padding: '0 0.1em',
+        top: '1px',
+    },
+    
+    small: {
+        display: 'block',
+        fontSize: `${fontFactor * 100}%`,
+    },
+}
 
 export default function sum({args: [variable, start, end, expression]}: EquationTreeFunction) {
     const top = render(end)
@@ -25,7 +49,7 @@ export default function sum({args: [variable, start, end, expression]}: Equation
     const rendering = render(wrapParenthesis(expression), false, block)
     return {
         type: 'span',
-        props: { className: classes.wrapper },
+        props: { style: styles.wrapper },
         aboveMiddle: rendering.aboveMiddle,
         belowMiddle: rendering.belowMiddle,
         children: rendering.elements,
@@ -34,10 +58,10 @@ export default function sum({args: [variable, start, end, expression]}: Equation
 
 function Sum({ top, bottom, style }: { top: Rendering, bottom: Rendering, style: React.CSSProperties}) {
     return (
-        <span style={style} className={classes.block}>
-            <span style={{ height: `${top.height}em` }} className={classes.top}>{top.elements}</span>
-            <span className={classes.icon}>Σ</span>
-            <span style={{ height: `${bottom.height}em` }} className={classes.bottom}>{bottom.elements}</span>
+        <span style={{ ...styles.block, ...style }}>
+            <span style={{ height: `${top.height}em`, ...styles.small }}>{top.elements}</span>
+            <span style={styles.icon}>Σ</span>
+            <span style={{ height: `${bottom.height}em`, ...styles.small }}>{bottom.elements}</span>
         </span>
     )
 }

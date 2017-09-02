@@ -1,5 +1,4 @@
 import * as React from 'react'
-import classes from './styles.scss'
 
 import { Rendering, RenderingPart, EquationTreeFunction } from '../../../types'
 
@@ -8,6 +7,26 @@ import render from '../../render'
 import RootSymbol from './root-symbol'
 
 const padding = 0.1
+
+const styles = {
+    wrapper: {
+        display: 'inline-block',
+        paddingTop: '0.1em',
+    },
+    
+    symbol: {
+        verticalAlign: 'top',
+    },
+    
+    line: {
+        position: 'absolute',
+        width: 'calc(100% - 0.7em)',
+        borderTop: '0.08em solid currentColor',
+        top: `${padding}em`,
+        left: '0.8em',
+    },
+    
+}
 
 export default function sqrt({args: [expression]}: EquationTreeFunction): RenderingPart {
     const content = render(expression)
@@ -21,11 +40,10 @@ export default function sqrt({args: [expression]}: EquationTreeFunction): Render
 }
 
 export function Sqrt({ content, style = {} }: { content: Rendering, style: React.CSSProperties }) {
-    style.height = `${content.height + padding}em`
     return (
-        <span style={style} className={classes.wrapper}>
-            <RootSymbol className={classes.symbol} height={content.height + padding} />
-            <div className={classes.line} />
+        <span style={{ ...styles.wrapper, position: 'relative', height: `${content.height + padding}em`, ...style}}>
+            <RootSymbol style={styles.symbol} height={content.height + padding} />
+            <div style={{ ...styles.line, position: 'absolute' }}/>
             {content.elements}
         </span>
     )

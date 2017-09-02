@@ -19,8 +19,6 @@ import specialAbs from './special/abs'
 import specialSqrt from './special/sqrt'
 import specialRoot from './special/root'
 
-import classes from './styles.scss'
-
 export default function render(tree: EquationTree, skipParentheses = false, ...initial: RenderingPart[]): Rendering {
     let parts
     if (skipParentheses && tree.type === 'block') {
@@ -37,10 +35,10 @@ export function toRendering(parts: RenderingPart[]): Rendering {
     const belowMiddle = parts.reduce((current, part) => Math.max(current, part.belowMiddle), 0)
 
     for (const part of parts) {
-        if (part.aboveMiddle < aboveMiddle) {
-            part.props.style = {
-                top: `${aboveMiddle - part.aboveMiddle}em`,
-            }
+        part.props.style = {
+            ...part.props.style,
+            top: part.aboveMiddle < aboveMiddle ? `${aboveMiddle - part.aboveMiddle}em` : null,
+            position: 'relative',
         }
     }
 
@@ -65,11 +63,11 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
             break
         case 'negative':
             // Unicode MINUS
-            current.push(simplePart('−', classes.minusStandalone))
+            current.push(simplePart('−', { padding: '0 0.1em' }))
             pushTree(tree.value, current)
             break
         case 'plusminus':
-            current.push(simplePart('±', classes.plusminusStandalone))
+            current.push(simplePart('±', { padding: '0 0.1em' }))
             pushTree(tree.value, current)
             break
         case 'block':
@@ -96,10 +94,10 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
     return current
 }
 
-export function simplePart(value: string, className?: string) {
+export function simplePart(value: string, style?: React.CSSProperties) {
     return {
         type: 'span',
-        props: { className },
+        props: { style },
         children: value,
         aboveMiddle: 0.7,
         belowMiddle: 0.7,

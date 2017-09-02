@@ -1,5 +1,4 @@
 import * as React from 'react'
-import classes from './styles.scss'
 
 import { Rendering, RenderingPart, EquationTreeFunction } from '../../../types'
 
@@ -33,6 +32,9 @@ function Root({ content, rootIndex, style = {} }: { content: Rendering, rootInde
         // Rescale to root index font-size
         top: `${Math.max(contentHeight / rootIndexFactor - indexHeight, 0)}em`,
         height: rootIndex.height,
+        fontSize: `${rootIndexFactor * 100}%`,
+        display: 'inline-block',
+        verticalAlign: 'top',
     }
     const sqrtStyle = {
         top: `${Math.max(indexHeight * rootIndexFactor - contentHeight, 0)}em`,
@@ -41,8 +43,8 @@ function Root({ content, rootIndex, style = {} }: { content: Rendering, rootInde
         marginLeft: `${Math.atan(contentHeight) * 0.6 - 1}em`,
     }
     return (
-        <span style={style} className={classes.wrapper}>
-            <span style={rootIndexStyle} className={classes.index}>{rootIndex.elements}</span>
+        <span style={{ display: 'inline-block', ...style}} >
+            <span style={{ ...rootIndexStyle, position: 'relative' }}>{rootIndex.elements}</span>
             <Sqrt style={sqrtStyle} content={content} />
         </span>
 

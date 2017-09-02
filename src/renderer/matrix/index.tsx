@@ -1,5 +1,4 @@
 import * as React from 'react'
-import classes from './styles.scss'
 
 import { Rendering, RenderingPart, EquationTreeMatrix } from '../../types'
 
@@ -9,14 +8,37 @@ import Parens from '../parens'
 
 const padding = 0.2
 const cellPadding = 0.4
-const factor = 0.9
+const fontFactor = 0.9
+
+const styles = {
+    wrapper: {
+        padding: '0.1em 0',
+    },
+    table: {
+        display: 'inline-table',
+        verticalAlign: 'top',
+        borderCollapse: 'collapse',
+        fontSize: `${fontFactor * 100}%`,
+        marginTop: '0.1em',
+        
+    },
+    cell: {
+        padding: '0.2em 0.5em',
+        textAlign: 'center',
+        verticalAlign: 'top',
+    },
+    cellContent: {
+        width: '100%',
+        height: '100%',
+    }
+}
 
 export default function matrix({ values, n, m }: EquationTreeMatrix): RenderingPart {
     const content = values.map((row) => row.map((value) => render(value)))
 
     const cellHeight = sumOf(content, (row) => maxOf(row, ({height}) => height))
 
-    const height = factor * (m * cellPadding + cellHeight)
+    const height = fontFactor * (m * cellPadding + cellHeight)
 
     return {
         type: Matrix,
@@ -28,9 +50,9 @@ export default function matrix({ values, n, m }: EquationTreeMatrix): RenderingP
 
 export function Matrix({ content, height, style = {} }: { content: Rendering[][], height: number, style: React.CSSProperties }) {
     return (
-        <span style={style} className={classes.wrapper}>
+        <span style={{ ...styles.wrapper, ...style }}>
             <Parens height={height} type='[]' />
-            <table className={classes.table}>
+            <table style={styles.table}>
                 <tbody>
                     {content.map((row, rowIdx) => {
                         const rowHeight = maxOf(row, (cell) => cell.height) + cellPadding
@@ -38,8 +60,8 @@ export function Matrix({ content, height, style = {} }: { content: Rendering[][]
                         return (
                             <tr key={rowIdx} style={{ height: `${rowHeight}em` }}>
                                 {row.map((cell, cellIdx) => (
-                                    <td key={cellIdx} className={classes.cell} style={{ top: `${aboveMiddle - cell.aboveMiddle}em` }}>
-                                        {cell.elements}
+                                    <td key={cellIdx} style={styles.cell}>
+                                        <div style={{ position: 'relative', top: `${aboveMiddle - cell.aboveMiddle}em` }}>{cell.elements}</div>
                                     </td>
                                 ))}
                             </tr>

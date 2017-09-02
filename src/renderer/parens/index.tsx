@@ -1,9 +1,8 @@
 import * as React from 'react'
-import classes from './styles.scss'
 
 export default function Parens({ height, type = '()', flip = false }: { height: number, className?: string, type?: '()' | '[]' | '{}', flip?: boolean }) {
     return (
-        <svg width='0.4em' className={`${classes.parens} ${flip ? classes.flip : ''}`} viewBox={`0 0 0.4 ${height}`}>
+        <svg width='0.4em' style={{ verticalAlign: 'top', transform: flip ? 'scale(-1, 1)' : null }} viewBox={`0 0 0.4 ${height}`}>
             <path d={pathBuilders[type](height)} />
         </svg>
     )

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import classes from './styles.scss'
 
 import { Rendering, RenderingPart, EquationTreeFunction } from '../../types'
 
@@ -13,7 +12,7 @@ export default function func({ name, args }: EquationTreeFunction): RenderingPar
     const argParts: RenderingPart[] = []
     args.forEach((arg, i) => {
         if (i > 0) {
-            argParts.push(simplePart(',', classes.comma))
+            argParts.push(simplePart(',', { paddingRight: '0.4em' }))
         }
         pushTree(arg, argParts)
     })
@@ -32,7 +31,7 @@ export function Func({ name, args, style = {} }: { name: string, args: Rendering
     style.height = `${args.height}em`
     return (
         <span style={style}>
-            <span style={{ top: `${args.aboveMiddle - 0.7}em` }}>{name}</span>
+            <span style={{ position: 'relative', top: `${args.aboveMiddle - 0.7}em` }}>{name}</span>
             <Parens height={args.height} />
             {args.elements}
             <Parens height={args.height} flip />

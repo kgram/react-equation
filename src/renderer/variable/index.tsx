@@ -1,5 +1,4 @@
 import * as React from 'react'
-import classes from './styles.scss'
 
 import { RenderingPart, EquationTreeVariable } from '../../types'
 
@@ -21,23 +20,21 @@ export default function variable({ name }: EquationTreeVariable): RenderingPart 
 export function Variable({ main, indices, style = {} }: { main: string, indices: string[], style: React.CSSProperties }) {
     style.height = `${1.4 + indices.length * indexOffset}em`
 
-    const classList = [
-        classes.wrapper,
-        // Variables starting with a symbol should be moved closer to the preceding value.
-        // This is to avoid the space of implied multiplication
-        /^[%‰°'"]/.test(main) ? classes.close : ''
-    ]
-
     return (
-        <span style={style} className={classList.join(' ')}>
+        <span style={{
+            display: 'inline-block',
+            fontStyle: 'italic',
+            marginLeft: /^[%‰°'"]/.test(main) ? '-0.2em' : null,
+        }}>
             {main}
             {indices.map((indexName, idx) => (
                 <span
                     key={idx}
                     style={{
+                        fontSize: `${indexFactor * 100}%`,
+                        position: 'relative',
                         top: `${indexOffset * (idx + 1) / indexFactor}em`
                     }}
-                    className={classes.index}
                 >{indexName}</span>
             ))}
         </span>

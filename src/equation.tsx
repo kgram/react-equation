@@ -1,11 +1,18 @@
 import * as React from 'react'
-import classes from './styles.scss'
 
 import { parse } from './parser'
 import { resolveTree } from './resolver'
 import { VariableLookup, FunctionLookup } from './types'
 
 import { render } from './renderer'
+
+const styles= {
+    equation: {
+        display: 'inline-block',
+        lineHeight: 1.4,
+        fontFamily: 'MathJax, Times New Roman, serif',
+    }
+}
 
 export type Props = {
     children?: string | string [],
@@ -14,9 +21,10 @@ export type Props = {
     functions?: FunctionLookup,
     unit?: string | string [],
     style?: React.CSSProperties,
+    className?: string,
 }
 
-export default function Equation({children = '', evaluate = false, variables, functions, unit, style = {}}: Props) {
+export default function Equation({children = '', evaluate = false, variables, functions, unit, style = {}, className}: Props) {
     try {
         if (children instanceof Array) {
             children = children.join('')
@@ -38,10 +46,8 @@ export default function Equation({children = '', evaluate = false, variables, fu
 
         const { elements, height } = render(tree)
 
-        style.height = `${height}em`
-
-        return <span style={style} className={classes.equation}>{elements}</span>
+        return <span style={{ ...styles.equation, height: `${height}em`, ...style}} className={className}>{elements}</span>
     } catch (err) {
-        return <span className={classes.equation} />
+        return <span style={{ ...styles.equation, ...style}} />
     }
 }
