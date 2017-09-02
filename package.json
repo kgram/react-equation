@@ -17,10 +17,11 @@
     "react-dom": "^15.4.2"
   },
   "devDependencies": {
+    "@storybook/addon-links": "^3.2.6",
     "@storybook/addon-storyshots": "^3.1.9",
     "@storybook/addons": "^3.1.6",
     "@storybook/channels": "^3.1.6",
-    "@storybook/react": "^3.1.9",
+    "@storybook/react": "^3.2.8",
     "@types/draft-js": "^0.9.1",
     "@types/jest": "^19.2.2",
     "@types/node": "^7.0.0",
@@ -46,15 +47,15 @@
     "string-replace-loader": "^1.0.5",
     "style-loader": "^0.13.1",
     "ts-jest": "^19.0.13",
-    "typescript": "^2.3.4",
+    "typescript": "^2.5.2",
     "typescript-eslint-parser": "^2.1.0",
     "webpack": "^2.6.1",
     "webpack-combine-loaders": "^2.0.3"
   },
   "babel": {
     "presets": [
-        "es2015",
-        "es2017"
+      "es2015",
+      "es2017"
     ]
   },
   "jest": {

@@ -1,10 +1,11 @@
 import * as React from 'react'
 import classes from './stories.scss'
+import { Renderable } from '@storybook/react'
 
 import { VariableLookup, FunctionLookup } from './types'
 
 type Props = {
-    children?: React.Component<any, any> | React.StatelessComponent<any> | JSX.Element,
+    children?: Renderable,
     evaluate?: boolean,
     variables?: VariableLookup,
     functions?: FunctionLookup,
