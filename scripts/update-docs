@@ -5,10 +5,6 @@ set -e # Exit with nonzero exit code if anything fails
 SOURCE_BRANCH="master"
 TARGET_BRANCH="gh-pages"
 
-function generate-docs {
-    npm run storybook-build -s
-}
-
 # Pull requests shouldn't deploy
 if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     echo "Pull request, skipping deploy"
@@ -33,14 +29,15 @@ git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
 cd ..
 
 # Run our compile script
-generate-docs
+npm run docs -s
 # Copy to pages-repo
-rm -rf gh-pages/$TRAVIS_BRANCH/storybook/*
-cp -R docs/* gh-pages/$TRAVIS_BRANCH/storybook
+rm -rf "gh-pages/$TRAVIS_BRANCH/*"
+mkdir "gh-pages/$TRAVIS_BRANCH/"
+cp -R "docs/*" "gh-pages/$TRAVIS_BRANCH"
 # If building a tag, copy to new folder in pages
 if [[ $TRAVIS_TAG ]]; then
-    mkdir "gh-pages/$TRAVIS_TAG/storybook/"
-    cp -R docs/* "gh-pages/$TRAVIS_TAG/storybook"
+    mkdir "gh-pages/$TRAVIS_TAG/"
+    cp -R docs/* "gh-pages/$TRAVIS_TAG"
     echo "$TRAVIS_TAG\n" >> gh-pages/versions.txt
 fi
 

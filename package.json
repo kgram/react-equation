@@ -6,8 +6,12 @@
   "scripts": {
     "test": "jest",
     "test-watch": "jest --watch",
+
     "storybook": "start-storybook -p 9001 -c storybook",
-    "storybook-build": "build-storybook -c storybook -o docs",
+
+    "docs:storybook": "build-storybook -c storybook -o docs/storybook",
+    "docs": "rimraf docs && npm run docs:storybook -s",
+
     "build:typescript": "tsc",
     "build:nearley": "nearleyc src/parser/math.ne -o dist/parser/math.ne.js && babel dist/parser/math.ne.js -o dist/parser/math.ne.js",
     "build:link-ne": "sed -i '' 's#require(\"./math.ne\")#require(\"./math.ne.js\")#' dist/parser/index.js",
