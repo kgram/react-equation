@@ -1,5 +1,5 @@
 import * as React from 'react'
-import classes from './style.scss'
+import classes from './styles.scss'
 
 import { parse } from './parser'
 import { resolveTree } from './resolver'

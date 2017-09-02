@@ -1,0 +1,10 @@
+@import './fonts';
+
+.equation {
+    display: inline-block;
+    line-height: 1.4;
+    font-family: 'MathJax', 'Times New Roman', serif;
+    span {
+        position: relative;
+    }
+}

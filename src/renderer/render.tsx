@@ -1,5 +1,4 @@
 import * as React from 'react'
-import classes from '../style.scss'
 
 import throwUnknownType from '../throw-unknown-type'
 
@@ -13,11 +12,14 @@ import func from './func'
 import fraction from './fraction'
 import power from './power'
 import matrix from './matrix'
+import comparison from './comparison'
 
-import sum from './sum'
-import abs from './abs'
-import sqrt from './sqrt'
-import root from './root'
+import specialSum from './special/sum'
+import specialAbs from './special/abs'
+import specialSqrt from './special/sqrt'
+import specialRoot from './special/root'
+
+import classes from './styles.scss'
 
 export default function render(tree: EquationTree, skipParentheses = false, ...initial: RenderingPart[]): Rendering {
     let parts
@@ -53,21 +55,21 @@ export function toRendering(parts: RenderingPart[]): Rendering {
 export function pushTree(tree: EquationTree, current: RenderingPart[]) {
     switch (tree.type) {
         case 'number':
-            current.push(simplePart(tree.value, 'number'))
+            current.push(simplePart(tree.value))
             break
         case 'infinity':
-            current.push(simplePart('∞', 'number'))
+            current.push(simplePart('∞'))
             break
         case 'variable':
             current.push(variable(tree))
             break
         case 'negative':
             // Unicode MINUS
-            current.push(simplePart('−', 'minus-standalone'))
+            current.push(simplePart('−', classes.minusStandalone))
             pushTree(tree.value, current)
             break
         case 'plusminus':
-            current.push(simplePart('±', 'plusminus-standalone'))
+            current.push(simplePart('±', classes.plusminusStandalone))
             pushTree(tree.value, current)
             break
         case 'block':
@@ -81,7 +83,7 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
             break
         case 'comparison':
             pushTree(tree.a, current)
-            current.push(simplePart(tree.comparison, 'comparison'))
+            current.push(comparison(tree))
             pushTree(tree.b, current)
             break
         case 'matrix':
@@ -94,10 +96,10 @@ export function pushTree(tree: EquationTree, current: RenderingPart[]) {
     return current
 }
 
-export function simplePart(value: string, cls?: string) {
+export function simplePart(value: string, className?: string) {
     return {
         type: 'span',
-        props: { className: cls && classes[cls] },
+        props: { className },
         children: value,
         aboveMiddle: 0.7,
         belowMiddle: 0.7,
@@ -107,16 +109,16 @@ export function simplePart(value: string, cls?: string) {
 function pushFunction(tree: EquationTreeFunction, current: RenderingPart[]) {
     switch (tree.name) {
         case 'sum':
-            current.push(sum(tree))
+            current.push(specialSum(tree))
             break
         case 'abs':
-            current.push(abs(tree))
+            current.push(specialAbs(tree))
             break
         case 'sqrt':
-            current.push(sqrt(tree))
+            current.push(specialSqrt(tree))
             break
         case 'root':
-            current.push(root(tree))
+            current.push(specialRoot(tree))
             break
         default:
             current.push(func(tree))

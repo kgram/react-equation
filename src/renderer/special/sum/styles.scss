@@ -1,0 +1,22 @@
+.wrapper {
+    display: inline-block;
+}
+
+.block {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: top;
+}
+
+.icon {
+    line-height: 0.8;
+    font-size: 2.25em;
+    padding: 0 0.1em;
+    top: 1px;
+}
+
+.bottom,
+.top {
+    font-size: 80%;
+}

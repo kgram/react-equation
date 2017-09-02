@@ -3,12 +3,11 @@ import { storiesOf } from '@storybook/react'
 
 import defaultVariables from './resolver/default-variables'
 
-import classes from './stories.scss'
-import './style.scss'
+import classes from '../storybook/styles.scss'
 
 import Equation from './equation'
 
-storiesOf('Available variables', module)
+storiesOf('variable lookup', module)
     .add('All variables', () => (
         <div>
             {Object.keys(defaultVariables).map((variable) => (

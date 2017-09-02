@@ -39,7 +39,9 @@ module.exports = {
                                     // Strip file-name
                                     .replace(/\.scss$/, '_')
                                     // Strip default file-name
-                                    .replace(/style_$/, '') +
+                                    .replace(/styles_$/, '')
+                                    // Strip renderer
+                                    .replace(/renderer_/, '') +
                                     localName
                             },
                             camelCase: true,

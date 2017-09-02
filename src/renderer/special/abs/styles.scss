@@ -1,0 +1,19 @@
+.abs {
+    display: inline-block;
+    padding: 0 0.3em;
+    &:before,
+    &:after {
+        content: ' ';
+        display: block;
+        position: absolute;
+        border-left: 0.08em solid currentColor;
+        top: 0.2em;
+        height: calc(100% - 0.4em);
+    }
+    &:before {
+        left: 0.1em;
+    }
+    &:after {
+        right: 0.1em;
+    }
+}

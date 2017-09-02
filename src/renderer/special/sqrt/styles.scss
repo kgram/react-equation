@@ -1,0 +1,16 @@
+.wrapper {
+    display: inline-block;
+    padding-top: 0.1em;
+}
+
+.symbol {
+    vertical-align: top;
+}
+
+.line {
+    position: absolute;
+    width: calc(100% - 0.7em);
+    border-top: 0.08em solid currentColor;
+    top: 0.1em;
+    left: 0.8em;
+}

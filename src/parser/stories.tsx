@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 
-import classes from '../stories.scss'
-import '../style.scss'
+import classes from '../../storybook/styles.scss'
 
 import { resolve, buildResolver} from '../resolver'
 import { VariableLookup, FunctionLookup } from '../types'
@@ -166,7 +165,7 @@ class Editor extends React.Component<{}, {value: string, largeSize: boolean}> {
     }
 }
 
-storiesOf('Parser', module)
-    .add('REPL', () => (
+storiesOf('parser', module)
+    .add('Editor', () => (
         <Editor />
     ))
