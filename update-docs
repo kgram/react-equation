@@ -35,12 +35,12 @@ cd ..
 # Run our compile script
 generate-docs
 # Copy to pages-repo
-rm -rf gh-pages/storybook/master/*
-cp -R docs/* gh-pages/storybook/master
+rm -rf gh-pages/$TRAVIS_BRANCH/storybook/*
+cp -R docs/* gh-pages/$TRAVIS_BRANCH/storybook
 # If building a tag, copy to new folder in pages
 if [[ $TRAVIS_TAG ]]; then
-    mkdir "gh-pages/storybook/$TRAVIS_TAG"
-    cp -R docs/* "gh-pages/storybook/$TRAVIS_TAG"
+    mkdir "gh-pages/$TRAVIS_TAG/storybook/"
+    cp -R docs/* "gh-pages/$TRAVIS_TAG/storybook"
     echo "$TRAVIS_TAG\n" >> gh-pages/versions.txt
 fi
 
