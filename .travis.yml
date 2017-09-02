@@ -8,4 +8,4 @@ install:
 - npm install -q
 script:
 - npm run test -s
-- bash ./update-docs
+- bash ./scripts/update-docs
