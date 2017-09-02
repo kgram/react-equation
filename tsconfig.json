@@ -9,6 +9,7 @@
         "allowSyntheticDefaultImports": true,
         "strictNullChecks": true,
         "noUnusedLocals": true,
+        "skipLibCheck": true,
         "lib": [
             "dom",
             "es5",
