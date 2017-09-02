@@ -1,7 +1,7 @@
 {
   "name": "react-equation",
   "version": "0.0.1",
-  "description": "Equation rendering in react",
+  "description": "A parser, resolver and renderer for equations in react",
   "main": "index.js",
   "scripts": {
     "test": "jest",
