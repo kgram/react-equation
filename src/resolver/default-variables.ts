@@ -13,14 +13,6 @@ const defaultVariables: VariableLookup = {
     'φ':        valueWrap(1.618033988749895),
 
     // ========================================================================
-    // Physical constants
-    // ========================================================================
-
-    'g_0':      unitWrap(9.80665,       { m: 1, s: -2 }),           // gravity of Earth
-    'G':        unitWrap(6.67408e-11,   { m: 3, kg: -1, s: -2 }),   // Gravitational constant
-    'c':        unitWrap(299792458,     { m: 1, s: -1 }),           // Speed of light in vacuum
-
-    // ========================================================================
     // Length
     // ========================================================================
 
@@ -182,7 +174,6 @@ const defaultVariables: VariableLookup = {
     '°C_0':     unitWrap(273.15,        { K: 1 }),      // degree Celcius offset from absolute zero
     '°F_0':     unitWrap(255.372,       { K: 1 }),      // degree Fahrenheit offset from absolute zero
 
-
     // ========================================================================
     // Speed
     // ========================================================================
@@ -190,6 +181,13 @@ const defaultVariables: VariableLookup = {
     'kph':      unitWrap(0.27778,       { m: 1, s: -1 }),           // kilometers per hour
     'mph':      unitWrap(0.44704,       { m: 1, s: -1 }),           // miles per hour
     'kn':       unitWrap(0.514444,      { m: 1, s: -1 }),           // knot, nautical mile per hour
+    'c':        unitWrap(299792458,     { m: 1, s: -1 }),           // Speed of light in vacuum
+
+    // ========================================================================
+    // Acceperation
+    // ========================================================================
+
+    'g_0':      unitWrap(9.80665,       { m: 1, s: -2 }),           // gravity of Earth
 
     // ========================================================================
     // Force
@@ -562,7 +560,11 @@ const defaultVariables: VariableLookup = {
     'ZiB':      unitWrap(9444732965739290427392,    { bit: 1 }),    // zettabyte
     'YiB':      unitWrap(9671406556917033397649408, { bit: 1 }),    // yottabyte
 
+    // ========================================================================
+    // Miscellaneous
+    // ========================================================================
 
+    'G':        unitWrap(6.67408e-11,   { m: 3, kg: -1, s: -2 }),   // Gravitational constant
 }
 
 function unitWrap(value: number, units: UnitLookup): ResultTreeUnit {
