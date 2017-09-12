@@ -270,15 +270,15 @@ const defaultVariables: VariableLookup = {
     // Amount of substance
     // ========================================================================
 
-    'nmol':      unitWrap(1e-9,          { mol: 1 }),               // nanomole
-    'μmol':      unitWrap(1e-6,          { mol: 1 }),               // micromole
-    'mmol':      unitWrap(1e-3,          { mol: 1 }),               // millimole
-    'mol':       unitWrap(1e0,           { mol: 1 }),               // mole (base unit)
-    'kmol':      unitWrap(1e3,           { mol: 1 }),               // kilomole
-    'Mmol':      unitWrap(1e6,           { mol: 1 }),               // megamole
-    'Gmol':      unitWrap(1e9,           { mol: 1 }),               // gigamole
-    'Tmol':      unitWrap(1e12,          { mol: 1 }),               // teramole
-    'Pmol':      unitWrap(1e15,          { mol: 1 }),               // petamole
+    'nmol':      unitWrap(1e-9,         { mol: 1 }),                // nanomole
+    'μmol':      unitWrap(1e-6,         { mol: 1 }),                // micromole
+    'mmol':      unitWrap(1e-3,         { mol: 1 }),                // millimole
+    'mol':       unitWrap(1e0,          { mol: 1 }),                // mole (base unit)
+    'kmol':      unitWrap(1e3,          { mol: 1 }),                // kilomole
+    'Mmol':      unitWrap(1e6,          { mol: 1 }),                // megamole
+    'Gmol':      unitWrap(1e9,          { mol: 1 }),                // gigamole
+    'Tmol':      unitWrap(1e12,         { mol: 1 }),                // teramole
+    'Pmol':      unitWrap(1e15,         { mol: 1 }),                // petamole
 
     // Related ----------------------------------------------------------------
     'N_A':      unitWrap(6.022140857e23, { mol: -1 }),              // Avogadro constant
