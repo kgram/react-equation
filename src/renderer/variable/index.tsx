@@ -25,6 +25,7 @@ export function Variable({ main, indices, style = {} }: { main: string, indices:
             display: 'inline-block',
             fontStyle: 'italic',
             marginLeft: /^[%‰°'"]/.test(main) ? '-0.2em' : null,
+            ...style
         }}>
             {main}
             {indices.map((indexName, idx) => (
