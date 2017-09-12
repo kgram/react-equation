@@ -82,6 +82,7 @@ function canStandAlone(tree: EquationTree): boolean {
         tree.type === 'number' ||
         tree.type === 'block' ||
         tree.type === 'function' ||
+        tree.type === 'matrix' ||
         (tree.type === 'operator' && (
             tree.operator === '/' ||
             tree.operator === '^'
