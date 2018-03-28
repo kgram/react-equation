@@ -5,7 +5,7 @@ declare module 'nearley' {
     class Parser<T> {
         constructor(rules: ParserRules, start: ParserStart)
 
-        feed(input: string): { results: [T] }
+        feed(input: string): { results: T[] }
     }
 
     export { Parser }
