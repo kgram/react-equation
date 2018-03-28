@@ -56,7 +56,7 @@
     "string-replace-loader": "^1.0.5",
     "style-loader": "^0.13.1",
     "ts-jest": "^19.0.13",
-    "typescript": "^2.5.2",
+    "typescript": "^2.8.1",
     "typescript-eslint-parser": "^2.1.0",
     "webpack": "^2.6.1",
     "webpack-combine-loaders": "^2.0.3"
