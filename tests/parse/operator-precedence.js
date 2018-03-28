@@ -4,7 +4,7 @@ const { isEqual } = require('lodash')
 
 const { parse } = require('../../src/parser')
 
-const { buildNumber } = require('../../src/helpers')
+const toNumber = require('../helpers/toNumber').default
 
 // operator a should come first regardless of order
 function toHaveHigherPrecedence(op1, op2) {
@@ -12,12 +12,12 @@ function toHaveHigherPrecedence(op1, op2) {
     const op1First = isEqual(parse(`1${op1}2${op2}3`), {
         type: 'operator',
         operator: op1,
-        a: buildNumber(1),
+        a: toNumber(1),
         b: {
             type: 'operator',
             operator: op2,
-            a: buildNumber(2),
-            b: buildNumber(3),
+            a: toNumber(2),
+            b: toNumber(3),
         },
     })
     // b first
@@ -27,10 +27,10 @@ function toHaveHigherPrecedence(op1, op2) {
         a: {
             type: 'operator',
             operator: op2,
-            a: buildNumber(1),
-            b: buildNumber(2),
+            a: toNumber(1),
+            b: toNumber(2),
         },
-        b: buildNumber(3),
+        b: toNumber(3),
     })
 
     const pass = this.isNot
@@ -52,10 +52,10 @@ function toHaveEqualPrecedence(op1, op2) {
         a: {
             type: 'operator',
             operator: op1,
-            a: buildNumber(1),
-            b: buildNumber(2),
+            a: toNumber(1),
+            b: toNumber(2),
         },
-        b: buildNumber(3),
+        b: toNumber(3),
     })
     // b first
     const op2First = isEqual(parse(`1${op2}2${op1}3`), {
@@ -64,10 +64,10 @@ function toHaveEqualPrecedence(op1, op2) {
         a: {
             type: 'operator',
             operator: op2,
-            a: buildNumber(1),
-            b: buildNumber(2),
+            a: toNumber(1),
+            b: toNumber(2),
         },
-        b: buildNumber(3),
+        b: toNumber(3),
     })
 
     const pass = op1First && op2First
@@ -198,12 +198,12 @@ describe('operator precedence', () => {
         expect(parse('1^2^3')).toEqual({
             type: 'operator',
             operator: '^',
-            a: buildNumber(1),
+            a: toNumber(1),
             b: {
                 type: 'operator',
                 operator: '^',
-                a: buildNumber(2),
-                b: buildNumber(3),
+                a: toNumber(2),
+                b: toNumber(3),
             },
         })
     })

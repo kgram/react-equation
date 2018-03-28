@@ -72,7 +72,7 @@
       "\\.(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js",
       "\\.ne": "<rootDir>/jest-nearley-preprocessor.js"
     },
-    "testRegex": "(/tests/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "(/tests/(?!helpers/).*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ne",
       "ts",
