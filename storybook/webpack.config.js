@@ -1,68 +1,16 @@
-const path = require('path')
-
-const srcPath = path.resolve(__dirname, '../src')
-
-module.exports = {
-    resolve: {
-        extensions: ['.ts', '.tsx', '.js'],
-    },
-
-    module: {
-        rules: [
-            {
-                test: /\.tsx?$/,
-                loader: 'awesome-typescript-loader'
-            },
-            {
-                test: /\.scss$/,
-                loaders: [
-                    {
-                        loader: 'string-replace-loader',
-                        options: {
-                            search: 'module.exports ?= ?',
-                            replace: 'module.exports={};module.exports.default=',
-                            flags: '',
-                        },
-                    },
-                    {
-                        loader: 'style-loader'
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true,
-                            getLocalIdent: (loaderContext, localIdentName, localName) => {
-                                const requestPath = path.relative(srcPath, loaderContext.resourcePath)
-                                return 'react-equation_' + requestPath
-                                    // Use - instead of /
-                                    .replace(/\//g, '_')
-                                    // Strip file-name
-                                    .replace(/\.scss$/, '_')
-                                    // Strip default file-name
-                                    .replace(/styles_$/, '')
-                                    // Strip renderer
-                                    .replace(/renderer_/, '') +
-                                    localName
-                            },
-                            camelCase: true,
-                        }
-                    }, {
-                        loader: 'sass-loader'
-                    }
-                ],
-            },
-            {
-                test: /\.ne$/,
-                loaders: [
-                    // Use babel to allow es2015 features (primarily arrow-functions and destructuring)
-                    // It would be better to use typescript, but this does not work at the moment
-                    {
-                        loader: 'babel-loader',
-                    }, {
-                        loader: 'nearley-loader',
-                    }
-                ],
-            },
-        ],
-    },
-}
+module.exports = async ({ config }) => ({
+	...config,
+	resolve: {
+		...config.resolve,
+		extensions: [ '.ts', '.tsx', '.mjs', '.js', '.jsx', '.json' ],
+	},
+	module: {
+		rules: [
+			{
+				...config.module.rules[0],
+				test: /\.(mjs|js|jsx|ts|tsx)$/,
+			},
+			...config.module.rules.slice(1),
+		],
+	},
+})

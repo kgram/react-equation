@@ -1,46 +1,30 @@
-import * as React from 'react'
-import classes from './styles.scss'
-import { Renderable } from '@storybook/react'
+import React, { useState } from 'react'
 
-import { VariableLookup, FunctionLookup } from '../src/types'
+import Equation from '../src/equation'
 
 type Props = {
-    children?: Renderable,
-    evaluate?: boolean,
-    variables?: VariableLookup,
-    functions?: FunctionLookup,
+    value: string,
 }
 
-export type State = {
-    largeSize: boolean,
-}
+export const EquationWrapper = ({ value }: Props) => {
+    const [isLargeSize, setLargeSize] = useState(false)
 
-export default class EquationWrapper extends React.PureComponent<Props, State> {
-    state = { largeSize: false }
-
-    handleChange = (e: React.FormEvent<HTMLInputElement>) => this.setState({largeSize: e.currentTarget.checked})
-
-    render() {
-        const { children } = this.props
-        const child = React.Children.only(children)
-        const text = child && child.props.children
-        return (
-            <div>
-                <div className={classes.sizeControl}>
-                    <label>
-                        <input
-                            type='checkbox'
-                            checked={this.state.largeSize}
-                            onChange={this.handleChange}
-                        />
-                        3x font
-                    </label>
-                </div>
-                <div><pre className={classes.equationWrapperRaw}>{text}</pre></div>
-                <div className={classes.equationWrapper} style={{ fontSize: this.state.largeSize ? '300%' : '100%' }}>
-                    {children}
-                </div>
+    return (
+        <div>
+            <div className='size-control'>
+                <label>
+                    <input
+                        type='checkbox'
+                        checked={isLargeSize}
+                        onChange={(event) => setLargeSize(event.currentTarget.checked)}
+                    />
+                    3x font
+                </label>
             </div>
-        )
-    }
+            <div><pre className='equation-wrapper-raw'>{value}</pre></div>
+            <div className='equation-wrapper' style={{ fontSize: isLargeSize ? '300%' : '100%' }}>
+                <Equation value={value} evaluate />
+            </div>
+        </div>
+    )
 }
