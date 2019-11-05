@@ -1,31 +1,13 @@
 {
     "compilerOptions": {
-        "outDir": "./dist/",
-        "sourceMap": true,
-        "noImplicitAny": true,
-        "module": "commonjs",
-        "target": "es5",
-        "jsx": "react",
-        "allowSyntheticDefaultImports": true,
-        "strictNullChecks": true,
-        "noUnusedLocals": true,
-        "skipLibCheck": true,
-        "declaration": true,
+		"strict": true,
+		"noUnusedLocals": false,
+		"stripInternal": true,
         "lib": [
             "dom",
-            "es5",
-            "es2015",
-            "es2017",
-            "dom.iterable",
-            "scripthost"
-        ]
+        ],
     },
-    "include": [
-        "./src/**/*",
-        "./types/**/*"
-    ],
-    "exclude": [
-        "**/stories.tsx",
-        "**/*.stories.tsx"
+    "files": [
+        "src/index.tsx",
     ]
 }
