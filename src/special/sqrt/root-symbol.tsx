@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 
 export default function RootSymbol({ height, style }: { height: number, style?: React.CSSProperties }) {
     height = Math.max(height, 1.4)

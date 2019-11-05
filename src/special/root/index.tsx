@@ -1,8 +1,10 @@
-import * as React from 'react'
+import React from 'react'
+import { EquationNodeFunction } from 'equation-parser'
 
-import { Rendering, RenderingPart, EquationTreeFunction } from '../../../types'
+import { Rendering } from '../../Rendering'
+import { RenderingPart } from '../../RenderingPart'
 
-import render from '../../render'
+import { render } from '../../render'
 
 import { Sqrt } from '../sqrt'
 
@@ -10,7 +12,7 @@ const padding = 0.1
 const rootIndexFactor = 0.7
 const rootIndexOffset = 1
 
-export default function root({args: [rootIndex, expression]}: EquationTreeFunction): RenderingPart {
+export default function root({args: [rootIndex, expression]}: EquationNodeFunction): RenderingPart {
     const content = render(expression)
     const rootIndexContent = render(rootIndex)
 

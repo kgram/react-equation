@@ -1,12 +1,14 @@
-import * as React from 'react'
+import React from 'react'
+import { EquationNodeBlock } from 'equation-parser'
 
-import { Rendering, RenderingPart, EquationTreeBlock } from '../types'
+import { Rendering } from '../Rendering'
+import { RenderingPart } from '../RenderingPart'
 
-import render from '../render'
+import { render } from '../render'
 
 import Parens from '../parens'
 
-export default function block({ child }: EquationTreeBlock): RenderingPart {
+export default function block({ child }: EquationNodeBlock): RenderingPart {
     const content = render(child)
 
     return {

@@ -1,7 +1,7 @@
 import renderInternal from './render'
 
-import { EquationTree } from './types'
+import { EquationNode } from './types'
 
-export function render(tree: EquationTree) {
+export function render(tree: EquationNode) {
     return renderInternal(tree)
 }

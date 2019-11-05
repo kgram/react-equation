@@ -1,8 +1,9 @@
-import * as React from 'react'
+import React from 'react'
+import { EquationNodeFunction } from 'equation-parser'
 
-import { Rendering, EquationTree, EquationTreeFunction } from '../../../types'
+import { Rendering } from '../../Rendering'
 
-import render from '../../render'
+import { render } from '../../render'
 
 const iconSize = 1.8
 const fontFactor = 0.8
@@ -32,7 +33,7 @@ const styles = {
     },
 }
 
-export default function sum({args: [variable, start, end, expression]}: EquationTreeFunction) {
+export default function sum({args: [variable, start, end, expression]}: EquationNodeFunction) {
     const top = render(end)
     const bottom = render({
         type: 'equals',
@@ -65,7 +66,7 @@ function Sum({ top, bottom, style }: { top: Rendering, bottom: Rendering, style:
     )
 }
 
-function wrapParenthesis(tree: EquationTree): EquationTree {
+function wrapParenthesis(tree: EquationNode): EquationNode {
     if (canStandAlone(tree)) {
         return tree
     } else {
@@ -76,7 +77,7 @@ function wrapParenthesis(tree: EquationTree): EquationTree {
     }
 }
 
-function canStandAlone(tree: EquationTree): boolean {
+function canStandAlone(tree: EquationNode): boolean {
     return tree.type === 'variable' ||
         tree.type === 'number' ||
         tree.type === 'block' ||

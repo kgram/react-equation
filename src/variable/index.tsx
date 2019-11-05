@@ -1,11 +1,12 @@
-import * as React from 'react'
+import React from 'react'
+import { EquationNodeVariable } from 'equation-parser'
 
-import { RenderingPart, EquationTreeVariable } from '../../types'
+import { RenderingPart } from '../RenderingPart'
 
 const indexOffset = 0.3
 const indexFactor = 0.8
 
-export default function variable({ name }: EquationTreeVariable): RenderingPart {
+export default function variable({ name }: EquationNodeVariable): RenderingPart {
 
     const [main, ...indices] = name.split('_')
 

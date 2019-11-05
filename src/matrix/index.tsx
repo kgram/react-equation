@@ -1,8 +1,10 @@
-import * as React from 'react'
+import React from 'react'
+import { EquationNodeMatrix } from 'equation-parser'
 
-import { Rendering, RenderingPart, EquationTreeMatrix } from '../../types'
+import { Rendering } from '../Rendering'
+import { RenderingPart } from '../RenderingPart'
 
-import render from '../render'
+import { render } from '../render'
 
 import Parens from '../parens'
 
@@ -32,7 +34,7 @@ const styles = {
     },
 } as const
 
-export default function matrix({ values, m }: EquationTreeMatrix): RenderingPart {
+export default function matrix({ values, m }: EquationNodeMatrix): RenderingPart {
     const content = values.map((row) => row.map((value) => render(value)))
 
     const cellHeight = sumOf(content, (row) => maxOf(row, ({height}) => height))

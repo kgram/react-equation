@@ -1,7 +1,7 @@
-import * as React from 'react'
+import React from 'react'
 import { storiesOf } from '@storybook/react'
 
-import { EquationWrapper } from '../../../storybook/equation-wrapper'
+import { EquationWrapper } from '../../storybook/equation-wrapper'
 
 storiesOf('block', module)
     .add('Simple', () => (

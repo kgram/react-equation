@@ -1,12 +1,14 @@
-import * as React from 'react'
+import React from 'react'
+import { EquationNodeFunction } from 'equation-parser'
 
-import { Rendering, RenderingPart, EquationTreeFunction } from '../types'
+import { Rendering } from '../Rendering'
+import { RenderingPart } from '../RenderingPart'
 
 import { toRendering, pushTree, simplePart } from '../render'
 
 import Parens from '../parens'
 
-export default function func({ name, args }: EquationTreeFunction): RenderingPart {
+export default function func({ name, args }: EquationNodeFunction): RenderingPart {
     // Use manual rendering to allow commas to be pushed between args
     // without having to resort to manual alignment
     const argParts: RenderingPart[] = []

@@ -1,8 +1,10 @@
-import * as React from 'react'
+import React from 'react'
+import { EquationNode, EquationNodeFunction } from 'equation-parser'
 
-import throwUnknownType from '../throw-unknown-type'
+import { Rendering } from './Rendering'
+import { RenderingPart } from './RenderingPart'
 
-import { EquationTree, EquationTreeFunction, Rendering, RenderingPart } from './types'
+import { throwUnknownType } from './throwUnknownType'
 
 import variable from './variable'
 import block from './block'
@@ -16,7 +18,7 @@ import specialAbs from './special/abs'
 import specialSqrt from './special/sqrt'
 import specialRoot from './special/root'
 
-export default function render(tree: EquationTree, skipParentheses = false, ...initial: RenderingPart[]): Rendering {
+export function render(tree: EquationNode, skipParentheses = false, ...initial: RenderingPart[]): Rendering {
     let parts
     if (skipParentheses && tree.type === 'block') {
         parts = pushTree(tree.child, initial)
@@ -47,124 +49,124 @@ export function toRendering(parts: RenderingPart[]): Rendering {
     }
 }
 
-export function pushTree(tree: EquationTree, current: RenderingPart[]) {
-    switch (tree.type) {
+export function pushTree(node: EquationNode, current: RenderingPart[]) {
+    switch (node.type) {
         // Operands
         case 'number':
-            current.push(simplePart(tree.value))
+            current.push(simplePart(node.value))
             break
         case 'variable':
-            current.push(variable(tree))
+            current.push(variable(node))
             break
 
         // Unary operators
         case 'positive':
             current.push(simplePart('+', { padding: '0 0.1em' }))
-            pushTree(tree.value, current)
+            pushTree(node.value, current)
             break
         case 'negative':
             // Unicode MINUS
             current.push(simplePart('−', { padding: '0 0.1em' }))
-            pushTree(tree.value, current)
+            pushTree(node.value, current)
             break
         case 'positive-negative':
             current.push(simplePart('±', { padding: '0 0.1em' }))
-            pushTree(tree.value, current)
+            pushTree(node.value, current)
             break
 
         // Binary operators
         case 'plus':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             current.push(simplePart('+', { padding: '0 0.3em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'minus':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             // Unicode MINUS
             current.push(simplePart('−', { padding: '0 0.3em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'plus-minus':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             // Unicode MINUS
             current.push(simplePart('±', { padding: '0 0.3em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'multiply-implicit':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             // Unicode DOT OPERATOR
             current.push(simplePart('', { padding: '0 0.1em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'multiply-dot':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             // Unicode DOT OPERATOR
             current.push(simplePart('⋅', { padding: '0 0.15em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'multiply-cross':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             // Unicode MULTIPLICATION SIGN
             current.push(simplePart('×', { padding: '0 0.3em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'divide-inline':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             // Unicode DIVISION SIGN
             current.push(simplePart('÷', { padding: '0 0.3em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'divide-fraction':
-            current.push(fraction(tree))
+            current.push(fraction(node))
             break
         case 'power':
-            current.push(power(tree))
+            current.push(power(node))
             break
 
         // Comparisons
         case 'equals':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             current.push(simplePart('=', { padding: '0 0.3em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'less-than':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             current.push(simplePart('<', { padding: '0 0.3em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'less-than-equals':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             current.push(simplePart('≤', { padding: '0 0.3em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'greater-than':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             current.push(simplePart('>', { padding: '0 0.3em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'greater-than-equals':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             current.push(simplePart('≥', { padding: '0 0.3em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
         case 'approximates':
-            pushTree(tree.a, current)
+            pushTree(node.a, current)
             current.push(simplePart('≈', { padding: '0 0.3em' }))
-            pushTree(tree.b, current)
+            pushTree(node.b, current)
             break
 
         case 'block':
-            current.push(block(tree))
+            current.push(block(node))
             break
         case 'function':
-            pushFunction(tree, current)
+            pushFunction(node, current)
             break
 
         case 'matrix':
-            current.push(matrix(tree))
+            current.push(matrix(node))
             break
         default:
-            throwUnknownType(tree, (type) => `Equation render: cannot resolve type "${type}"`)
+            throwUnknownType(node, (type) => `Equation render: cannot resolve type "${type}"`)
     }
 
     return current
@@ -180,7 +182,7 @@ export function simplePart(value: string, style?: React.CSSProperties) {
     }
 }
 
-function pushFunction(tree: EquationTreeFunction, current: RenderingPart[]) {
+function pushFunction(tree: EquationNodeFunction, current: RenderingPart[]) {
     switch (tree.name) {
         case 'sum':
             current.push(specialSum(tree))

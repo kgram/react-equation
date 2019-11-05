@@ -1,10 +1,9 @@
-import * as React from 'react'
+import React from 'react'
 
-import { parse } from './parser'
-import { resolveTree } from './resolver'
-import { VariableLookup, FunctionLookup } from './types'
+import { parse } from 'equation-parser'
+import { format } from 'equation-resolver'
 
-import { render } from './renderer'
+import { render }  from './render'
 
 const styles= {
     equation: {
@@ -31,7 +30,7 @@ export default function Equation({value, evaluate = false, variables, functions,
 
         if (evaluate) {
             try {
-                tree = resolveTree(tree, variables, functions, unitTree)
+                tree = format(tree, unitTree, { variables, functions })
             } catch (err) {
                 console.error(err)
                 // Suppress errors

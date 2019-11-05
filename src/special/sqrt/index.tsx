@@ -1,8 +1,10 @@
-import * as React from 'react'
+import React from 'react'
+import { EquationNodeFunction } from 'equation-parser'
 
-import { Rendering, RenderingPart, EquationTreeFunction } from '../../../types'
+import { Rendering } from '../../Rendering'
+import { RenderingPart } from '../../RenderingPart'
 
-import render from '../../render'
+import { render } from '../../render'
 
 import RootSymbol from './root-symbol'
 
@@ -13,11 +15,11 @@ const styles = {
         display: 'inline-block',
         paddingTop: '0.1em',
     },
-    
+
     symbol: {
         verticalAlign: 'top',
     },
-    
+
     line: {
         position: 'absolute',
         width: 'calc(100% - 0.7em)',
@@ -25,10 +27,10 @@ const styles = {
         top: `${padding}em`,
         left: '0.8em',
     },
-    
+
 }
 
-export default function sqrt({args: [expression]}: EquationTreeFunction): RenderingPart {
+export default function sqrt({args: [expression]}: EquationNodeFunction): RenderingPart {
     const content = render(expression)
 
     return {

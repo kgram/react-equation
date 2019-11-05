@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 
 export default function Parens({ height, type = '()', flip = false }: { height: number, className?: string, type?: '()' | '[]' | '{}', flip?: boolean }) {
     return (

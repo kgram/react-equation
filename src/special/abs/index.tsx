@@ -1,8 +1,10 @@
-import * as React from 'react'
+import React from 'react'
+import { EquationNodeFunction } from 'equation-parser'
 
-import { Rendering, RenderingPart, EquationTreeFunction } from '../../../types'
+import { Rendering } from '../../Rendering'
+import { RenderingPart } from '../../RenderingPart'
 
-import render from '../../render'
+import { render } from '../../render'
 
 const styles = {
     wrapper: {
@@ -17,7 +19,7 @@ const styles = {
     },
 }
 
-export default function abs({args: [expression]}: EquationTreeFunction): RenderingPart {
+export default function abs({args: [expression]}: EquationNodeFunction): RenderingPart {
     const content = render(expression)
 
     return {

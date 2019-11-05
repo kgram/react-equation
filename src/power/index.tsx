@@ -1,8 +1,10 @@
-import * as React from 'react'
+import React from 'react'
+import { EquationNodePower } from 'equation-parser'
 
-import { Rendering, RenderingPart, EquationTreeOperator } from '../../types'
+import { Rendering } from '../Rendering'
+import { RenderingPart } from '../RenderingPart'
 
-import render from '../render'
+import { render } from '../render'
 
 const fontFactor = 0.7
 const exponentOffset = 0.8
@@ -15,7 +17,7 @@ const styles = {
     },
 }
 
-export default function power({ a, b }: EquationTreeOperator): RenderingPart {
+export default function power({ a, b }: EquationNodePower): RenderingPart {
     const base = render(a, false)
     const exponent = render(b, true)
     const baseOffset = exponent.height * fontFactor - exponentOffset

@@ -1,7 +1,7 @@
-import * as React from 'react'
+import React from 'react'
 import { storiesOf } from '@storybook/react'
 
-import defaultVariables from './resolver/default-variables'
+import { defaultVariables } from 'equation-resolver'
 
 import Equation from './equation'
 

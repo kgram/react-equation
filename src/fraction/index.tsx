@@ -1,8 +1,10 @@
-import * as React from 'react'
+import React from 'react'
+import { EquationNodeDivideFraction } from 'equation-parser'
 
-import { Rendering, RenderingPart, EquationTreeDivideFraction } from '../../types'
+import { Rendering } from '../Rendering'
+import { RenderingPart } from '../RenderingPart'
 
-import render from '../render'
+import { render } from '../render'
 
 const fontFactor = 0.9
 const separatorSize = 0.06
@@ -29,7 +31,7 @@ const styles = {
     },
 }
 
-export default function fraction({ a, b }: EquationTreeDivideFraction): RenderingPart {
+export default function fraction({ a, b }: EquationNodeDivideFraction): RenderingPart {
     const top = render(a, true)
     const bottom = render(b, true)
     return {
