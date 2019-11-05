@@ -11,35 +11,29 @@ const styles= {
         display: 'inline-block',
         lineHeight: 1.4,
         fontFamily: 'MathJax, Times New Roman, serif',
-    }
+    },
 }
 
 export type Props = {
-    children?: string | string [],
+    value: string,
     evaluate?: boolean,
     variables?: VariableLookup,
     functions?: FunctionLookup,
-    unit?: string | string [],
+    unit?: string,
     style?: React.CSSProperties,
     className?: string,
 }
 
-export default function Equation({children = '', evaluate = false, variables, functions, unit, style = {}, className}: Props) {
+export default function Equation({value, evaluate = false, variables, functions, unit, style = {}, className}: Props) {
     try {
-        if (children instanceof Array) {
-            children = children.join('')
-        }
-        if (unit && unit instanceof Array) {
-            unit = unit.join('')
-        }
-
-        let tree = parse(children)
-        let unitTree = unit ? parse(unit) : undefined
+        let tree = parse(value)
+        const unitTree = unit ? parse(unit) : undefined
 
         if (evaluate) {
             try {
                 tree = resolveTree(tree, variables, functions, unitTree)
             } catch (err) {
+                console.error(err)
                 // Suppress errors
             }
         }
@@ -48,6 +42,7 @@ export default function Equation({children = '', evaluate = false, variables, fu
 
         return <span style={{ ...styles.equation, height: `${height}em`, ...style}} className={className}>{elements}</span>
     } catch (err) {
+        console.error(err)
         return <span style={{ ...styles.equation, ...style}} />
     }
 }

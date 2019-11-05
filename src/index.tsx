@@ -1,9 +1,7 @@
-import Equation from './equation'
-import { parse } from './parser'
-import { resolve } from './resolver'
+import renderInternal from './render'
 
-export {
-    Equation,
-    parse,
-    resolve,
+import { EquationTree } from './types'
+
+export function render(tree: EquationTree) {
+    return renderInternal(tree)
 }
