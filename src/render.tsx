@@ -6,6 +6,8 @@ import { RenderingPart } from './RenderingPart'
 
 import { throwUnknownType } from './throwUnknownType'
 
+import { errorMessages } from './errorMessages'
+
 import variable from './variable'
 import block from './block'
 import func from './func'
@@ -164,6 +166,26 @@ export function pushTree(node: EquationNode, current: RenderingPart[]) {
 
         case 'matrix':
             current.push(matrix(node))
+            break
+        case 'parser-error':
+            current.push({
+                type: 'div',
+                props: {},
+                children: (
+                    <>
+                        <div>
+                            {node.equation.substring(0, node.position)}
+                            <span style={{ color: 'red' }}>{node.equation.substring(node.position, node.position + 1)}</span>
+                            {node.equation.substring(node.position + 1)}
+                        </div>
+                        <div>
+                            {(errorMessages[node.errorType] as any)(...node.values)}
+                        </div>
+                    </>
+                ),
+                aboveMiddle: 1.4,
+                belowMiddle: 1.4,
+            })
             break
         default:
             throwUnknownType(node, (type) => `Equation render: cannot resolve type "${type}"`)
