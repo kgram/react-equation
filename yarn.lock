@@ -3589,22 +3589,17 @@ entities@^2.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.0.tgz#68d6084cab1b079767540d80e56a39b423e4abf4"
   integrity sha512-D9f7V0JSRwIxlRI2mjMqufDrRDnx8p+eEOz7aUM9SuvF8gsBzra0/6tbjl1m8eQHrZlYj6PxqE00hZ1SAIKPLw==
 
-equation-parser@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/equation-parser/-/equation-parser-0.0.2.tgz#7807d8694aac862622bd9e25634fec3eb71437c8"
-  integrity sha512-7xuMYDOOO+bEhvdEo2sAr8CTUBIJbmUZrwK2RI1I7XwYIz0LOrbmm9f2PTADugtzrJUlFMtSAwkndRoBTk2dmA==
+equation-parser@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/equation-parser/-/equation-parser-0.1.0.tgz#0dde407a26584392020e2c8baa92f8d881f7ccc5"
+  integrity sha512-Z/i63RaSt7IdX45nnpQV2mpp7W0tv7/BMrTHnGURyHt8ccXFuboZtE0nl/+Ms3BFJWLPjLQrnKeIvilkJvZ5Qg==
 
-equation-parser@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/equation-parser/-/equation-parser-0.0.3.tgz#62dcfd0f6b9889075d53ce45d3998f98960e7e56"
-  integrity sha512-50PCYFPXammST8iSJLDm9Z/RxBQvYiAdCno3aCnxmDOIjKLv3+49ScQt5/N3s6mag6rxPIMOX+lIqfrtMyteSg==
-
-equation-resolver@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/equation-resolver/-/equation-resolver-0.0.1.tgz#c0ef17f320c3ea20ad70e5651a4a66b05d24df7a"
-  integrity sha512-si1Gq7qEEBR6ZpKwrWe/bdgZbhPnpv8PsmF2f70pzfcT8qq7IxgFuDuE1ocv/GVBepaG8HP5xgDisZpgoF9i5w==
+equation-resolver@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/equation-resolver/-/equation-resolver-0.1.4.tgz#8b9fe56cc36885cb8181ae77202e31d53fdfc3aa"
+  integrity sha512-kDEu7Q4ksjKjAMcpB3ndhQaIXRzuCmkL9ceAiPbr1OJiu50+0oHj9VDCQwKrtTnfGl4HaRyVIVlf5RmVGss60A==
   dependencies:
-    equation-parser "^0.0.2"
+    equation-parser "^0.1.0"
 
 errno@^0.1.3, errno@~0.1.7:
   version "0.1.7"

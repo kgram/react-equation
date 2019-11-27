@@ -20,8 +20,8 @@
     "dist"
   ],
   "dependencies": {
-    "equation-parser": "^0.0.3",
-    "equation-resolver": "^0.0.1"
+    "equation-parser": "^0.1.0",
+    "equation-resolver": "^0.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.7.0",
