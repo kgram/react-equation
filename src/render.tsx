@@ -94,6 +94,37 @@ export function toRendering(parts: RenderingPart[]): Rendering {
     }
 }
 
+// Lookups for operator symbols with optional styling
+const binaryOperatorLookup = {
+    'plus': ['+'],
+    // Unicode MINUS
+    'minus': ['−'],
+    // Unicode MINUS
+    'plus-minus': ['±'],
+    'multiply-implicit': ['', { padding: '0 0.1em' }],
+    // Unicode DOT OPERATOR
+    'multiply-dot': ['⋅', { padding: '0 0.15em' }],
+    // Unicode MULTIPLICATION SIGN
+    'multiply-cross': ['×'],
+    // Unicode DIVISION SIGN
+    'divide-inline': ['÷'],
+    'equals': ['='],
+    'less-than': ['<'],
+    'less-than-equals': ['≤'],
+    'greater-than': ['>'],
+    'greater-than-equals': ['≥'],
+    'approximates': ['≈'],
+    'operator-placeholder': ['?'],
+} as const
+
+const unaryOperatorLookup = {
+    'positive': ['+'],
+    // Unicode MINUS
+    'negative': ['−'],
+    'positive-negative': ['±'],
+    'operator-unary-placeholder': ['?'],
+} as const
+
 export function pushTree(node: EquationNode, current: RenderingPart[]) {
     switch (node.type) {
         // Operands
@@ -103,64 +134,42 @@ export function pushTree(node: EquationNode, current: RenderingPart[]) {
         case 'variable':
             current.push(variable(node))
             break
+        case 'operand-placeholder':
+            current.push(simplePart('_'))
+            break
 
         // Unary operators
         case 'positive':
-            current.push(simplePart('+', { padding: '0 0.1em' }))
-            pushTree(node.value, current)
-            break
         case 'negative':
-            // Unicode MINUS
-            current.push(simplePart('−', { padding: '0 0.1em' }))
-            pushTree(node.value, current)
-            break
         case 'positive-negative':
-            current.push(simplePart('±', { padding: '0 0.1em' }))
+        case 'operator-unary-placeholder': {
+            const [symbol, style = { padding: '0 0.1em' }] = unaryOperatorLookup[node.type]
+            current.push(simplePart(symbol, style))
             pushTree(node.value, current)
             break
+        }
 
-        // Binary operators
         case 'plus':
-            pushTree(node.a, current)
-            current.push(simplePart('+', { padding: '0 0.3em' }))
-            pushTree(node.b, current)
-            break
         case 'minus':
-            pushTree(node.a, current)
-            // Unicode MINUS
-            current.push(simplePart('−', { padding: '0 0.3em' }))
-            pushTree(node.b, current)
-            break
         case 'plus-minus':
-            pushTree(node.a, current)
-            // Unicode MINUS
-            current.push(simplePart('±', { padding: '0 0.3em' }))
-            pushTree(node.b, current)
-            break
         case 'multiply-implicit':
-            pushTree(node.a, current)
-            // Unicode DOT OPERATOR
-            current.push(simplePart('', { padding: '0 0.1em' }))
-            pushTree(node.b, current)
-            break
         case 'multiply-dot':
-            pushTree(node.a, current)
-            // Unicode DOT OPERATOR
-            current.push(simplePart('⋅', { padding: '0 0.15em' }))
-            pushTree(node.b, current)
-            break
         case 'multiply-cross':
-            pushTree(node.a, current)
-            // Unicode MULTIPLICATION SIGN
-            current.push(simplePart('×', { padding: '0 0.3em' }))
-            pushTree(node.b, current)
-            break
         case 'divide-inline':
+        case 'equals':
+        case 'less-than':
+        case 'less-than-equals':
+        case 'greater-than':
+        case 'greater-than-equals':
+        case 'approximates':
+        case 'operator-placeholder': {
+            const [symbol, style = { padding: '0 0.3em' }] = binaryOperatorLookup[node.type]
             pushTree(node.a, current)
-            // Unicode DIVISION SIGN
-            current.push(simplePart('÷', { padding: '0 0.3em' }))
+            current.push(simplePart(symbol, style))
             pushTree(node.b, current)
             break
+        }
+
         case 'divide-fraction':
             current.push(fraction(node))
             break
@@ -168,43 +177,14 @@ export function pushTree(node: EquationNode, current: RenderingPart[]) {
             current.push(power(node))
             break
 
-        // Comparisons
-        case 'equals':
-            pushTree(node.a, current)
-            current.push(simplePart('=', { padding: '0 0.3em' }))
-            pushTree(node.b, current)
-            break
-        case 'less-than':
-            pushTree(node.a, current)
-            current.push(simplePart('<', { padding: '0 0.3em' }))
-            pushTree(node.b, current)
-            break
-        case 'less-than-equals':
-            pushTree(node.a, current)
-            current.push(simplePart('≤', { padding: '0 0.3em' }))
-            pushTree(node.b, current)
-            break
-        case 'greater-than':
-            pushTree(node.a, current)
-            current.push(simplePart('>', { padding: '0 0.3em' }))
-            pushTree(node.b, current)
-            break
-        case 'greater-than-equals':
-            pushTree(node.a, current)
-            current.push(simplePart('≥', { padding: '0 0.3em' }))
-            pushTree(node.b, current)
-            break
-        case 'approximates':
-            pushTree(node.a, current)
-            current.push(simplePart('≈', { padding: '0 0.3em' }))
-            pushTree(node.b, current)
-            break
-
         case 'block':
             current.push(block(node))
             break
         case 'function':
             pushFunction(node, current)
+            break
+        case 'function-placeholder':
+            current.push(func(node))
             break
 
         case 'matrix':
