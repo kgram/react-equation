@@ -1,10 +1,9 @@
 import React from 'react'
 import { EquationNodeFunction } from 'equation-parser'
 
-import { Rendering } from '../../Rendering'
 import { RenderingPart } from '../../RenderingPart'
 
-import { render } from '../../render'
+import { renderInternal } from '../../render'
 
 import RootSymbol from './root-symbol'
 
@@ -12,8 +11,9 @@ const padding = 0.1
 
 const styles = {
     wrapper: {
+        position: 'relative',
         display: 'inline-block',
-        paddingTop: '0.1em',
+        marginTop: '0.1em',
     },
 
     symbol: {
@@ -24,29 +24,23 @@ const styles = {
         position: 'absolute',
         width: 'calc(100% - 0.7em)',
         borderTop: '0.08em solid currentColor',
-        top: `${padding}em`,
+        top: 0,
         left: '0.8em',
     },
-
-}
+} as const
 
 export default function sqrt({args: [expression]}: EquationNodeFunction): RenderingPart {
-    const content = render(expression)
+    const content = renderInternal(expression || { type: 'operand-placeholder' })
 
     return {
-        type: Sqrt,
-        props: { content },
-        aboveMiddle: content.aboveMiddle,
+        type: 'span',
+        props: { style: { ...styles.wrapper, height: `${content.height + padding}em` } },
+        aboveMiddle: content.aboveMiddle + padding,
         belowMiddle: content.belowMiddle,
-    }
-}
-
-export function Sqrt({ content, style = {} }: { content: Rendering, style: React.CSSProperties }) {
-    return (
-        <span style={{ ...styles.wrapper, position: 'relative', height: `${content.height + padding}em`, ...style}}>
+        children: <>
             <RootSymbol style={styles.symbol} height={content.height + padding} />
-            <div style={{ ...styles.line, position: 'absolute' }}/>
+            <div style={styles.line}/>
             {content.elements}
-        </span>
-    )
+        </>,
+    }
 }

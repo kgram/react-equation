@@ -1,10 +1,9 @@
 import React from 'react'
 import { EquationNodeMatrix } from 'equation-parser'
 
-import { Rendering } from '../Rendering'
 import { RenderingPart } from '../RenderingPart'
 
-import { render } from '../render'
+import { renderInternal } from '../render'
 
 import Parens from '../parens'
 
@@ -35,23 +34,18 @@ const styles = {
 } as const
 
 export default function matrix({ values, m }: EquationNodeMatrix): RenderingPart {
-    const content = values.map((row) => row.map((value) => render(value)))
+    const content = values.map((row) => row.map((value) => renderInternal(value)))
 
     const cellHeight = sumOf(content, (row) => maxOf(row, ({height}) => height))
 
     const height = fontFactor * (m * cellPadding + cellHeight)
 
     return {
-        type: Matrix,
-        props: { content, height },
+        type: 'span',
+        props: { style: styles.wrapper },
         aboveMiddle: (height + padding) / 2,
         belowMiddle: (height + padding) / 2,
-    }
-}
-
-export function Matrix({ content, height, style = {} }: { content: Rendering[][], height: number, style: React.CSSProperties }) {
-    return (
-        <span style={{ ...styles.wrapper, ...style }}>
+        children: <>
             <Parens height={height} type='[]' />
             <table style={styles.table}>
                 <tbody>
@@ -71,8 +65,8 @@ export function Matrix({ content, height, style = {} }: { content: Rendering[][]
                 </tbody>
             </table>
             <Parens height={height} type='[]' flip />
-        </span>
-    )
+        </>,
+    }
 }
 
 function maxOf<T>(array: T[], get: (value: T) => number): number {

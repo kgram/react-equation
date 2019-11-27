@@ -1,10 +1,9 @@
 import React from 'react'
 import { EquationNodeDivideFraction } from 'equation-parser'
 
-import { Rendering } from '../Rendering'
 import { RenderingPart } from '../RenderingPart'
 
-import { render } from '../render'
+import { renderInternal } from '../render'
 
 const fontFactor = 0.9
 const separatorSize = 0.06
@@ -32,26 +31,17 @@ const styles = {
 }
 
 export default function fraction({ a, b }: EquationNodeDivideFraction): RenderingPart {
-    const top = render(a, true)
-    const bottom = render(b, true)
+    const top = renderInternal(a, true)
+    const bottom = renderInternal(b, true)
     return {
-        type: Fraction,
-        props: { top, bottom },
+        type: 'span',
+        props: { style: { ...styles.wrapper } },
         aboveMiddle: top.height * fontFactor - separatorSize / 2,
         belowMiddle: bottom.height * fontFactor + separatorSize * 3 / 2,
-    }
-}
-
-function Fraction({top, bottom, style}: {
-    top: Rendering,
-    bottom: Rendering,
-    style: React.CSSProperties,
-}) {
-    return (
-        <span style={{ ...styles.wrapper , ...style}}>
+        children: <>
             <span style={{ ...styles.part, height: `${top.height}em` }}>{top.elements}</span>
             <span style={styles.separator} />
             <span style={{ ...styles.part, height: `${bottom.height}em` }}>{bottom.elements}</span>
-        </span>
-    )
+        </>,
+    }
 }

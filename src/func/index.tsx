@@ -1,42 +1,37 @@
 import React from 'react'
-import { EquationNodeFunction } from 'equation-parser'
+import { EquationNodeFunction, EquationNode } from 'equation-parser'
 
-import { Rendering } from '../Rendering'
 import { RenderingPart } from '../RenderingPart'
 
-import { toRendering, pushTree, simplePart } from '../render'
+import { toRendering, pushTree, simplePart, renderInternal } from '../render'
 
 import Parens from '../parens'
 
-export default function func({ name, args }: EquationNodeFunction): RenderingPart {
+export default function func(node: EquationNodeFunction | { type: 'function-placeholder', args: EquationNode[], name?: undefined }): RenderingPart {
     // Use manual rendering to allow commas to be pushed between args
     // without having to resort to manual alignment
     const argParts: RenderingPart[] = []
-    args.forEach((arg, i) => {
+    node.args.forEach((arg, i) => {
         if (i > 0) {
             argParts.push(simplePart(',', { paddingRight: '0.4em' }))
         }
         pushTree(arg, argParts)
     })
 
+    // Render name as variable or placeholder
+    const nameRendering = renderInternal(node.type === 'function' ? { type: 'variable', name: node.name } : { type: 'operand-placeholder' })
     const argRendering = toRendering(argParts)
 
     return {
-        type: Func,
-        props: { name, args: argRendering },
-        aboveMiddle: argRendering.aboveMiddle,
-        belowMiddle: argRendering.belowMiddle,
+        type: 'span',
+        props: { style: { height: `${Math.max(nameRendering.height, argRendering.height)}em` } },
+        aboveMiddle: Math.max(nameRendering.aboveMiddle, argRendering.aboveMiddle),
+        belowMiddle: Math.max(nameRendering.belowMiddle, argRendering.belowMiddle),
+        children: <>
+            <span style={{ position: 'relative', top: `${argRendering.aboveMiddle - nameRendering.aboveMiddle}em` }}>{nameRendering.elements}</span>
+            <Parens height={argRendering.height} />
+            {argRendering.elements}
+            <Parens height={argRendering.height} flip />
+        </>,
     }
-}
-
-export function Func({ name, args, style = {} }: { name: string, args: Rendering, style: React.CSSProperties }) {
-    style.height = `${args.height}em`
-    return (
-        <span style={style}>
-            <span style={{ position: 'relative', top: `${args.aboveMiddle - 0.7}em` }}>{name}</span>
-            <Parens height={args.height} />
-            {args.elements}
-            <Parens height={args.height} flip />
-        </span>
-    )
 }

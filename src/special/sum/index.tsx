@@ -1,9 +1,7 @@
 import React from 'react'
-import { EquationNodeFunction } from 'equation-parser'
+import { EquationNode, EquationNodeFunction } from 'equation-parser'
 
-import { Rendering } from '../../Rendering'
-
-import { render } from '../../render'
+import { renderInternal } from '../../render'
 
 const iconSize = 1.8
 const fontFactor = 0.8
@@ -34,19 +32,23 @@ const styles = {
 }
 
 export default function sum({args: [variable, start, end, expression]}: EquationNodeFunction) {
-    const top = render(end)
-    const bottom = render({
+    const top = renderInternal(end || { type: 'operand-placeholder' })
+    const bottom = renderInternal({
         type: 'equals',
-        a: variable,
-        b: start,
+        a: variable || { type: 'operand-placeholder' },
+        b: start || { type: 'operand-placeholder' },
     })
-    const block = {
-        type: Sum,
-        props: { top, bottom },
+    const rendering = renderInternal(wrapParenthesis(expression || { type: 'operand-placeholder' }), false, {
+        type: 'span',
+        props: { style: styles.block },
         aboveMiddle: iconSize / 2 + top.height * fontFactor,
         belowMiddle: iconSize / 2 + bottom.height * fontFactor,
-    }
-    const rendering = render(wrapParenthesis(expression), false, block)
+        children: <>
+            <span style={{ height: `${top.height}em`, ...styles.small }}>{top.elements}</span>
+            <span style={styles.icon}>Σ</span>
+            <span style={{ height: `${bottom.height}em`, ...styles.small }}>{bottom.elements}</span>
+        </>,
+    })
     return {
         type: 'span',
         props: { style: styles.wrapper },
@@ -54,16 +56,6 @@ export default function sum({args: [variable, start, end, expression]}: Equation
         belowMiddle: rendering.belowMiddle,
         children: rendering.elements,
     }
-}
-
-function Sum({ top, bottom, style }: { top: Rendering, bottom: Rendering, style: React.CSSProperties}) {
-    return (
-        <span style={{ ...styles.block, ...style }}>
-            <span style={{ height: `${top.height}em`, ...styles.small }}>{top.elements}</span>
-            <span style={styles.icon}>Σ</span>
-            <span style={{ height: `${bottom.height}em`, ...styles.small }}>{bottom.elements}</span>
-        </span>
-    )
 }
 
 function wrapParenthesis(tree: EquationNode): EquationNode {
@@ -85,5 +77,12 @@ function canStandAlone(tree: EquationNode): boolean {
         tree.type === 'matrix' ||
         tree.type === 'divide-fraction' ||
         tree.type === 'power' ||
-        (tree.type === 'negative' && canStandAlone(tree.value))
+        tree.type === 'operand-placeholder' ||
+        tree.type === 'function-placeholder' ||
+        ((
+            tree.type === 'negative' ||
+            tree.type === 'positive' ||
+            tree.type === 'positive-negative' ||
+            tree.type === 'operator-unary-placeholder'
+        ) && canStandAlone(tree.value))
 }

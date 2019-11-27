@@ -1,54 +1,60 @@
 import React from 'react'
 import { EquationNodeFunction } from 'equation-parser'
 
-import { Rendering } from '../../Rendering'
 import { RenderingPart } from '../../RenderingPart'
 
-import { render } from '../../render'
+import { renderInternal, toRendering } from '../../render'
 
-import { Sqrt } from '../sqrt'
+import sqrt from '../sqrt'
 
-const padding = 0.1
 const rootIndexFactor = 0.7
-const rootIndexOffset = 1
+const rootIndexOffset = 0.8
+
+const styles = {
+    wrapper: {
+        display: 'inline-block',
+        position: 'relative',
+    },
+    indexOuter: {
+        display: 'inline-block',
+    },
+    indexInner: {
+        fontSize: `${rootIndexFactor * 100}%`,
+        verticalAlign: 'top',
+    },
+} as const
 
 export default function root({args: [rootIndex, expression]}: EquationNodeFunction): RenderingPart {
-    const content = render(expression)
-    const rootIndexContent = render(rootIndex)
-
-    const rootIndexHeight = (rootIndexContent.height + rootIndexOffset) * rootIndexFactor
+    const rootIndexContent = renderInternal(rootIndex || { type: 'operand-placeholder' })
+    // Pretend this is a sqrt to avoid repeat of logic
+    const sqrtContent = sqrt({ type: 'function', name: 'sqrt', args: [expression] })
+    const bottom = sqrtContent.belowMiddle - rootIndexOffset
+    const offset = 1 - Math.atan(sqrtContent.aboveMiddle + sqrtContent.belowMiddle) * 0.6
+    const rendering = toRendering([
+        {
+            type: 'span',
+            props: {
+                style: {
+                    ...styles.indexOuter,
+                    height: `${rootIndexContent.height * rootIndexFactor}em`,
+                    marginRight: `${-offset}em`,
+                    minWidth: `${offset}em`,
+                },
+            },
+            aboveMiddle: rootIndexContent.height * rootIndexFactor - bottom,
+            belowMiddle: bottom,
+            children: (
+                <span style={styles.indexInner}>{rootIndexContent.elements}</span>
+            ),
+        },
+        sqrtContent,
+    ])
 
     return {
-        type: Root,
-        props: { content, rootIndex: rootIndexContent },
-        aboveMiddle: content.aboveMiddle + Math.max(0, rootIndexHeight - content.height - padding),
-        belowMiddle: content.belowMiddle,
+        type: 'span',
+        props: { style: styles.wrapper },
+        aboveMiddle: rendering.aboveMiddle,
+        belowMiddle: rendering.belowMiddle,
+        children: rendering.elements,
     }
-}
-
-function Root({ content, rootIndex, style = {} }: { content: Rendering, rootIndex: Rendering, style: React.CSSProperties }) {
-    const contentHeight = content.height + padding
-    const indexHeight = rootIndex.height + rootIndexOffset
-    style.height = `${Math.max(contentHeight, indexHeight * rootIndexFactor)}em`
-    const rootIndexStyle = {
-        // Rescale to root index font-size
-        top: `${Math.max(contentHeight / rootIndexFactor - indexHeight, 0)}em`,
-        height: rootIndex.height,
-        fontSize: `${rootIndexFactor * 100}%`,
-        display: 'inline-block',
-        verticalAlign: 'top',
-    }
-    const sqrtStyle = {
-        top: `${Math.max(indexHeight * rootIndexFactor - contentHeight, 0)}em`,
-        // Move index closer to radical line
-        // Experimentally determined factor
-        marginLeft: `${Math.atan(contentHeight) * 0.6 - 1}em`,
-    }
-    return (
-        <span style={{ display: 'inline-block', ...style}} >
-            <span style={{ ...rootIndexStyle, position: 'relative' }}>{rootIndex.elements}</span>
-            <Sqrt style={sqrtStyle} content={content} />
-        </span>
-
-    )
 }
