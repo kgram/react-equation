@@ -1,5 +1,6 @@
 import React from 'react'
-import { EquationNode, EquationNodeFunction } from 'equation-parser'
+import { EquationNode, EquationNodeFunction, EquationParserError } from 'equation-parser'
+import { EquationResolveError } from 'equation-resolver'
 
 import { Rendering } from './Rendering'
 import { RenderingPart } from './RenderingPart'
@@ -20,7 +21,49 @@ import specialAbs from './special/abs'
 import specialSqrt from './special/sqrt'
 import specialRoot from './special/root'
 
-export function render(tree: EquationNode, skipParentheses = false, ...initial: RenderingPart[]): Rendering {
+const styles= {
+    equation: {
+        display: 'inline-block',
+        lineHeight: 1.4,
+        fontFamily: 'MathJax, Times New Roman, serif',
+    },
+}
+
+export const render = (node: EquationNode | EquationParserError | EquationResolveError) => {
+    if (node.type === 'parser-error') {
+        return (
+            <span style={styles.equation}>
+                <div>
+                    {node.equation.substring(0, node.start)}
+                    <span style={{ color: 'red' }}>{node.equation.substring(node.start, node.end + 1)}</span>
+                    {node.equation.substring(node.end + 1)}
+                </div>
+                <div>
+                    {(errorMessages[node.errorType] as any)(...node.values)}
+                </div>
+            </span>
+        )
+    }
+    if (node.type === 'resolve-error') {
+        // TODO: pretty error handling
+        const { elements, height } = renderInternal(node.node)
+        return (
+            <span style={styles.equation}>
+                <span style={{ height: `${height}em`, display: 'inline-block' }}>{elements}</span>
+                <br />
+                <span>{node.errorType}</span>
+            </span>
+        )
+    }
+
+    const { elements, height } = renderInternal(node)
+
+    return (
+        <span style={{ height: `${height}em`, ...styles.equation }}>{elements}</span>
+    )
+}
+
+export function renderInternal(tree: EquationNode, skipParentheses = false, ...initial: RenderingPart[]): Rendering {
     let parts
     if (skipParentheses && tree.type === 'block') {
         parts = pushTree(tree.child, initial)
@@ -166,26 +209,6 @@ export function pushTree(node: EquationNode, current: RenderingPart[]) {
 
         case 'matrix':
             current.push(matrix(node))
-            break
-        case 'parser-error':
-            current.push({
-                type: 'div',
-                props: {},
-                children: (
-                    <>
-                        <div>
-                            {node.equation.substring(0, node.position)}
-                            <span style={{ color: 'red' }}>{node.equation.substring(node.position, node.position + 1)}</span>
-                            {node.equation.substring(node.position + 1)}
-                        </div>
-                        <div>
-                            {(errorMessages[node.errorType] as any)(...node.values)}
-                        </div>
-                    </>
-                ),
-                aboveMiddle: 1.4,
-                belowMiddle: 1.4,
-            })
             break
         default:
             throwUnknownType(node, (type) => `Equation render: cannot resolve type "${type}"`)
