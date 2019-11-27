@@ -1,12 +1,20 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 
-import { resolve, createResolverFunction } from 'equation-resolver'
-import { parse, EquationNode } from 'equation-parser'
-import renderTree from 'equation-parser/dist/renderTree'
-import stringify from 'equation-parser/dist/stringify'
+import { resolve, createResolverFunction, VariableLookup, FunctionLookup, defaultVariables, defaultFunctions } from 'equation-resolver'
+import { parse, EquationNodeVariable } from 'equation-parser'
 
-import Equation from './equation'
+import Equation from './Equation'
+import EquationEvaluate from './EquationEvaluate'
+
+const comparisons = [
+    'equals',
+    'less-than',
+    'greater-than',
+    'less-than-equals',
+    'greater-than-equals',
+    'approximates',
+]
 
 function getPersistantState(): string {
     return window.localStorage.persistantEquationState || ''
@@ -16,52 +24,29 @@ function setPersistantState(state: string) {
     window.localStorage.persistantEquationState = state
 }
 
-function Code({children}: {children?: JSX.Element | string}) {
-    return <div><pre className='equation-wrapper-raw'>{children}</pre></div>
-}
-
 function Math({children = [], largeSize}: {children?: string[], largeSize: boolean}) {
-    const variables: VariableLookup = {}
-    const functions: FunctionLookup = {}
+    const variables: VariableLookup = { ...defaultVariables }
+    const functions: FunctionLookup = { ...defaultFunctions }
     const equations = children.map((input) => {
         const [inputEquation, inputUnit] = input.split(':')
 
-        let tree: EquationNode | null = null
-        let unitTree: EquationNode | null = null
-        let parseError
-        try {
-            tree = parse(inputEquation)
-            unitTree = inputUnit ? parse(inputUnit) : null
-        } catch (err) {
-            parseError = err.message
-        }
-        // Attempt to resolve to get error
-        // Equation will silently ignore error, but here we want it
-        let resolveError
-        if (tree) {
-            try {
-                if (
-                    tree.type === 'equals' &&
-                    tree.a.type === 'variable'
-                ) {
-                    variables[tree.a.name] = resolve(tree.b, { variables, functions })
-                } else if (
-                    tree.type === 'equals' &&
-                    tree.a.type === 'function' &&
-                    tree.a.args.every((arg) => arg.type === 'variable')
-                ) {
-                    const { name, args } = tree.a
-                    functions[name] = createResolverFunction(args.map((arg) => (arg as any).name), tree.b, { variables, functions })
-                } else {
-                    resolve(tree, { variables, functions })
-                    if (unitTree) {
-                        resolve(unitTree, { variables, functions })
-                    }
-                }
+        const node = parse(inputEquation)
 
-            } catch (err) {
-                resolveError = err.message.replace('Equation resolve: ', '')
+        if (
+            node.type === 'equals' &&
+            node.a.type === 'variable'
+        ) {
+            const value = resolve(node.b, { variables, functions })
+            if (value.type !== 'resolve-error') {
+                variables[node.a.name] = value
             }
+        } else if (
+            node.type === 'equals' &&
+            node.a.type === 'function' &&
+            node.a.args.every((arg) => arg.type === 'variable')
+        ) {
+            const { name, args } = node.a
+            functions[name] = createResolverFunction(args.map((arg) => (arg as EquationNodeVariable).name), node.b, { variables, functions })
         }
 
         return {
@@ -69,38 +54,32 @@ function Math({children = [], largeSize}: {children?: string[], largeSize: boole
             inputUnit,
             variables: { ...variables },
             functions: { ...functions },
-            tree,
-            parseError,
-            resolveError,
+            evaluate: !comparisons.includes(node.type),
         }
     })
 
     return (
         <div>
             <div style={{ fontSize: largeSize ? '300%' : '100%' }}>
-                {equations.map(({ inputEquation, inputUnit, variables, functions }, idx) => (
+                {equations.map(({ inputEquation, inputUnit, variables, functions, evaluate }, idx) => (
                     <div key={idx}>
                         <div className='equation-wrapper'>
-                            <Equation
-                                value={inputEquation}
-                                evaluate
-                                variables={variables}
-                                functions={functions}
-                                unit={inputUnit}
-                            />
+                            {evaluate
+                                ? (
+                                    <EquationEvaluate
+                                        value={inputEquation}
+                                        variables={variables}
+                                        functions={functions}
+                                        unit={inputUnit}
+                                    />
+                                )
+                                : (
+                                    <Equation
+                                        value={inputEquation}
+                                    />
+                                )
+                            }
                         </div>
-                    </div>
-                ))}
-            </div>
-            <div style={{display: 'flex', flexDirection: 'row'}}>
-                {equations.map(({ tree, parseError, resolveError }, idx) => (
-                    <div key={idx}>
-                        {resolveError && <Code>{resolveError}</Code>}
-                        {tree
-                            ? <Code>{renderTree(tree)}</Code>
-                            : <Code>{parseError}</Code>
-                        }
-                        {tree && <Code>{stringify(tree)}</Code>}
                     </div>
                 ))}
             </div>
