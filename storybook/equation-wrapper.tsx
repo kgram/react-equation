@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import { defaultVariables, defaultFunctions } from 'equation-resolver'
 
-import Equation from '../src/equation'
+import { EquationEvaluate } from '../src/EquationEvaluate'
 
 type Props = {
     value: string,
@@ -23,7 +24,7 @@ export const EquationWrapper = ({ value }: Props) => {
             </div>
             <div><pre className='equation-wrapper-raw'>{value}</pre></div>
             <div className='equation-wrapper' style={{ fontSize: isLargeSize ? '300%' : '100%' }}>
-                <Equation value={value} evaluate />
+                <EquationEvaluate value={value} variables={defaultVariables} functions={defaultFunctions} />
             </div>
         </div>
     )

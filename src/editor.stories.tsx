@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 
-import { resolve, createResolverFunction, VariableLookup, FunctionLookup, defaultVariables, defaultFunctions } from 'equation-resolver'
+import { resolve, createResolverFunction, VariableLookup, FunctionLookup } from 'equation-resolver'
 import { parse, EquationNodeVariable } from 'equation-parser'
 
-import Equation from './Equation'
-import EquationEvaluate from './EquationEvaluate'
+import { Equation } from './Equation'
+import { EquationEvaluate } from './EquationEvaluate'
 
 const comparisons = [
     'equals',
@@ -25,8 +25,8 @@ function setPersistantState(state: string) {
 }
 
 function Math({children = [], largeSize}: {children?: string[], largeSize: boolean}) {
-    const variables: VariableLookup = { ...defaultVariables }
-    const functions: FunctionLookup = { ...defaultFunctions }
+    const variables: VariableLookup = {}
+    const functions: FunctionLookup = {}
     const equations = children.map((input) => {
         const [inputEquation, inputUnit] = input.split(':')
 

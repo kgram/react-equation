@@ -1,21 +1,65 @@
-import React from 'react'
+import { useContext } from 'react'
+import classnames from 'classnames'
 
 import { parse } from 'equation-parser'
-import { format, VariableLookup, FunctionLookup } from 'equation-resolver'
+import { format, FormatOptions } from 'equation-resolver'
 
 import { render }  from './render'
+import { context }  from './context'
+import { RenderOptions }  from './RenderOptions'
 
-export type Props = {
+export type Props = FormatOptions & RenderOptions & {
     value: string,
-    variables?: VariableLookup,
-    functions?: FunctionLookup,
     unit?: string,
+
     style?: React.CSSProperties,
     className?: string,
 }
 
-export default function EquationEvaluate({ value, variables, functions, unit }: Props) {
-    const tree = format(parse(value), unit ? parse(unit) : null, { variables, functions })
+const unionArrays = <T extends any>(a: T[] | undefined, b: T[] | undefined): T[] | undefined => {
+    if (!a) {
+        return b
+    } else if (!b) {
+        return a
+    } else {
+        return [...a, ...b]
+    }
+}
 
-    return render(tree)
+export const EquationEvaluate = ({
+    value,
+    errorHandler,
+    className,
+    style,
+    unit,
+    variables: localVariables,
+    functions: localFunctions,
+    simplifiableUnits: localSimplifiableUnits,
+}: Props) => {
+    const {
+        errorHandler: errorHandlerGlobal,
+        className: classNameGlobal,
+        style: styleGlobal,
+
+        variables: globalVariables,
+        functions: globalFunctions,
+        simplifiableUnits: globalSimplifiableUnits,
+    } = useContext(context)
+
+    const equation = parse(value)
+    const unitEquation = unit ? parse(unit) : null
+    const tree = format(equation, unitEquation, {
+        variables: { ...globalVariables, ...localVariables },
+        functions: { ...globalFunctions, ...localFunctions},
+        simplifiableUnits: unionArrays(localSimplifiableUnits, globalSimplifiableUnits),
+    })
+
+    return render(
+        tree,
+        {
+            errorHandler: { ...errorHandlerGlobal, ...errorHandler },
+            className: classnames(classNameGlobal, className),
+            style: { ...styleGlobal, ...style },
+        },
+    )
 }

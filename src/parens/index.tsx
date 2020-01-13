@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Parens({ height, type = '()', flip = false }: { height: number, className?: string, type?: '()' | '[]' | '{}', flip?: boolean }) {
     return (
-        <svg width='0.4em' style={{ verticalAlign: 'top', transform: flip ? 'scale(-1, 1)' : null }} viewBox={`0 0 0.4 ${height}`}>
+        <svg width='0.4em' style={{ verticalAlign: 'top', transform: flip ? 'scale(-1, 1)' : undefined }} viewBox={`0 0 0.4 ${height}`}>
             <path d={pathBuilders[type](height)} />
         </svg>
     )

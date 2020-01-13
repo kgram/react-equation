@@ -4,10 +4,9 @@ import { EquationResolveError } from 'equation-resolver'
 
 import { Rendering } from './Rendering'
 import { RenderingPart } from './RenderingPart'
+import { RenderOptions } from './RenderOptions'
 
 import { throwUnknownType } from './throwUnknownType'
-
-import { errorMessages } from './errorMessages'
 
 import variable from './variable'
 import block from './block'
@@ -25,11 +24,13 @@ const styles= {
     equation: {
         display: 'inline-block',
         lineHeight: 1.4,
-        fontFamily: 'MathJax, Times New Roman, serif',
+        // fontFamily: 'MathJax, Times New Roman, serif',
     },
 }
 
-export const render = (node: EquationNode | EquationParserError | EquationResolveError) => {
+const defaultErrorHandler = (node: EquationParserError | EquationResolveError) => `Error: ${node.errorType}`
+
+export const render = (node: EquationNode | EquationParserError | EquationResolveError, { errorHandler = {} }: RenderOptions = {}) => {
     if (node.type === 'parser-error') {
         return (
             <span style={styles.equation}>
@@ -39,19 +40,26 @@ export const render = (node: EquationNode | EquationParserError | EquationResolv
                     {node.equation.substring(node.end + 1)}
                 </div>
                 <div>
-                    {(errorMessages[node.errorType] as any)(...node.values)}
+                    {(errorHandler[node.errorType] || defaultErrorHandler)(node as any)}
                 </div>
             </span>
         )
     }
-    if (node.type === 'resolve-error') {
+    if (node.type === 'resolve-error' && node.node) {
         // TODO: pretty error handling
         const { elements, height } = renderInternal(node.node)
         return (
             <span style={styles.equation}>
                 <span style={{ height: `${height}em`, display: 'inline-block' }}>{elements}</span>
                 <br />
-                <span>{node.errorType}</span>
+                {(errorHandler[node.errorType] || defaultErrorHandler)(node as any)}
+            </span>
+        )
+    }
+    if (node.type === 'resolve-error') {
+        return (
+            <span style={styles.equation}>
+                {(errorHandler[node.errorType] || defaultErrorHandler)(node as any)}
             </span>
         )
     }

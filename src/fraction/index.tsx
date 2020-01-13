@@ -18,14 +18,12 @@ const styles = {
         fontSize: `${fontFactor * 100}%`,
         display: 'block',
         textAlign: 'center' as const,
-        width: '100%',
         padding: '0 0.4em',
     },
 
     separator: {
         display: 'block',
         background: 'currentColor',
-        width: '100%',
         borderTop: `${separatorSize}em solid currentColor`,
     },
 }

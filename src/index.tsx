@@ -1,7 +1,5 @@
-import renderInternal from './render'
-
-import { EquationNode } from './types'
-
-export function render(tree: EquationNode) {
-    return renderInternal(tree)
-}
+export { render } from './render'
+export { EquationOptions } from './EquationOptions'
+export { Equation } from './Equation'
+export { EquationEvaluate } from './EquationEvaluate'
+export { defaultErrorHandler } from './errorHandler'

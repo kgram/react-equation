@@ -1,9 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
+import { defaultVariables, defaultFunctions } from 'equation-resolver'
 
-import { defaultVariables } from 'equation-resolver'
-
-import Equation from './equation'
+import { EquationEvaluate } from '../src/EquationEvaluate'
 
 storiesOf('variable lookup', module)
     .add('All variables', () => (
@@ -11,7 +10,7 @@ storiesOf('variable lookup', module)
             {Object.keys(defaultVariables).map((variable) => (
                 <div key={variable}>
                     <div className='equation-wrapper'>
-                        <Equation value={`1 ${variable}`} evaluate />
+                        <EquationEvaluate value={`1 ${variable}`} variables={defaultVariables} functions={defaultFunctions} />
                     </div>
                 </div>
             ))}
