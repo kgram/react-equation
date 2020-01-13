@@ -1,8 +1,10 @@
 {
     "compilerOptions": {
-		"strict": true,
+        "strict": true,
+        "strictNullChecks": true,
 		"noUnusedLocals": false,
-		"stripInternal": true,
+        "stripInternal": true,
+        "jsx": "react",
         "lib": [
             "dom",
         ],
