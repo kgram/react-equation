@@ -17,6 +17,10 @@ export default [
                 format: 'esm',
             },
         ],
+        external: [
+            ...Object.keys(pkg.dependencies || {}),
+            ...Object.keys(pkg.peerDependencies || {}),
+        ],
         plugins: [
             resolve({
                 extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
