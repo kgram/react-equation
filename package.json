@@ -5,7 +5,11 @@
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "typings": "dist/index.d.ts",
-  "repository": "git@github.com:kgram/react-equation.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kgram/react-equation.git"
+  },
+  "homepage": "https://github.com/kgram/react-equation",
   "author": "Kristoffer Gram <kristoffer.gram@gmail.com>",
   "license": "MIT",
   "scripts": {
