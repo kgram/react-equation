@@ -31,9 +31,9 @@ export const defaultErrorHandler: ErrorHandler = {
         : `${name} must have ${minArgs}-${maxArgs} arguments`,
     functionNumberOnly: ({ name }) => `Arguments of ${name} must be unitless numbers`,
 
-    functionSqrt1Negative: ({ name }) => `First argument of ${name} must be positive`,
+    functionSqrt1Positive: ({ name }) => `First argument of ${name} must be positive`,
     functionRoot1PositiveInteger: ({ name }) => `First argument of ${name} must be a positive integer`,
-    functionRoot2Negative: ({ name }) => `Second argument of ${name} must be positive`,
+    functionRoot2Positive: ({ name }) => `Second argument of ${name} must be positive`,
     functionSum1Variable: ({ name, variableType }) => `First argument of ${name} must be a variable, was ${variableType}`,
     functionSum2Integer: ({ name }) => `Second argument of ${name} must be an integer`,
     functionSum3Integer: ({ name }) => `Third argument of ${name} must be an integer`,
