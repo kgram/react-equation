@@ -21,8 +21,8 @@
   ],
   "dependencies": {
     "classnames": "^2.0.0",
-    "equation-parser": "^0.2.0",
-    "equation-resolver": "^0.2.1"
+    "equation-parser": "^0.3.0",
+    "equation-resolver": "^0.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.7.0",
