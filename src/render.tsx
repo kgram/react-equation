@@ -20,20 +20,20 @@ import specialAbs from './special/abs'
 import specialSqrt from './special/sqrt'
 import specialRoot from './special/root'
 
-const styles= {
-    equation: {
-        display: 'inline-block',
-        lineHeight: 1.4,
-        // fontFamily: 'MathJax, Times New Roman, serif',
-    },
-}
-
 const defaultErrorHandler = (node: EquationParserError | EquationResolveError) => `Error: ${node.errorType}`
 
-export const render = (node: EquationNode | EquationParserError | EquationResolveError, { errorHandler = {} }: RenderOptions = {}) => {
+export const render = (node: EquationNode | EquationParserError | EquationResolveError, { errorHandler = {}, className, style }: RenderOptions = {}) => {
+    const baseProps = {
+        className,
+        style: {
+            ...style,
+            display: 'inline-block',
+            lineHeight: 1.4,
+        },
+    }
     if (node.type === 'parser-error') {
         return (
-            <span style={styles.equation}>
+            <span {...baseProps}>
                 <div>
                     {node.equation.substring(0, node.start)}
                     <span style={{ color: 'red' }}>{node.equation.substring(node.start, node.end + 1)}</span>
@@ -49,7 +49,7 @@ export const render = (node: EquationNode | EquationParserError | EquationResolv
         // TODO: pretty error handling
         const { elements, height } = renderInternal(node.node)
         return (
-            <span style={styles.equation}>
+            <span {...baseProps}>
                 <span style={{ height: `${height}em`, display: 'inline-block' }}>{elements}</span>
                 <br />
                 {(errorHandler[node.errorType] || defaultErrorHandler)(node as any)}
@@ -58,7 +58,7 @@ export const render = (node: EquationNode | EquationParserError | EquationResolv
     }
     if (node.type === 'resolve-error') {
         return (
-            <span style={styles.equation}>
+            <span {...baseProps}>
                 {(errorHandler[node.errorType] || defaultErrorHandler)(node as any)}
             </span>
         )
@@ -67,7 +67,7 @@ export const render = (node: EquationNode | EquationParserError | EquationResolv
     const { elements, height } = renderInternal(node)
 
     return (
-        <span style={{ height: `${height}em`, ...styles.equation }}>{elements}</span>
+        <span {...baseProps} style={{ height: `${height}em`, ...baseProps.style }}>{elements}</span>
     )
 }
 
