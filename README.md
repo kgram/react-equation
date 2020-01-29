@@ -18,41 +18,28 @@ Start rendering equations
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Equation, EquationEvaluate, EquationOptions } from 'react-equation'
+import { Equation, EquationEvaluate, EquationOptions, defaultErrorHandler } from 'react-equation'
 import { defaultVariables, defaultFunctions } from 'equation-resolver'
 
 ReactDOM.render((
     <>
-        <div>
-            <Equation
-                value='5m + 1/2m * sin(π) + (22 m^2) / (2m)'
-            />
-        </div>
-        <div>
-            <EquationEvaluate
-                value='5m + 1/2m * sin(π) + (22 m^2) / (2m)'
-            />
-        </div>
-        <div>
-            <EquationEvaluate
-                value='5m + 1/2m * sin(π) + (22 m^2) / (2m)'
-                variables={defaultVariables}
-                functions={defaultFunctions}
-            />
-        </div>
         <EquationOptions
             variables={defaultVariables}
             functions={defaultFunctions}
+            errorHandler={defaultErrorHandler}
         >
-            <div>
-                <EquationEvaluate
-                    value='5m + 1/2m * sin(π) + (22 m^2) / (2m)'
-                />
-            </div>
+            <Equation
+                value='5m + 1/2m * sin(π) + (22 m^2) / (2m)'
+            />
+            <EquationEvaluate
+                value='5m + 1/2m * sin(π) + (22 m^2) / (2m)'
+            />
         </EquationOptions>
     </>
-), const rootElement = document.getElementById("root"));
+), document.getElementById("root"));
 ```
+
+More in-depth examples: https://codesandbox.io/s/react-equation-example-t0oe8
 
 ## Components
 All the included components are split up in the interest of allowing tree-shaking to reduce the bundle-size by avoiding either the parser, the resolver or both, depending on needs.
