@@ -1,11 +1,10 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 
-import { resolve, createResolverFunction, VariableLookup, FunctionLookup } from 'equation-resolver'
+import { resolve, createResolverFunction, VariableLookup, FunctionLookup, format, defaultVariables, defaultFunctions } from 'equation-resolver'
 import { parse, EquationNodeVariable } from 'equation-parser'
 
-import { Equation } from './Equation'
-import { EquationEvaluate } from './EquationEvaluate'
+import { EquationPreparsed } from './EquationPreparsed'
 
 const comparisons = [
     'equals',
@@ -25,8 +24,8 @@ function setPersistantState(state: string) {
 }
 
 function Math({children = [], largeSize}: {children?: string[], largeSize: boolean}) {
-    const variables: VariableLookup = {}
-    const functions: FunctionLookup = {}
+    const variables: VariableLookup = { ...defaultVariables }
+    const functions: FunctionLookup = { ...defaultFunctions }
     const equations = children.map((input) => {
         const [inputEquation, inputUnit] = input.split(':')
 
@@ -49,36 +48,23 @@ function Math({children = [], largeSize}: {children?: string[], largeSize: boole
             functions[name] = createResolverFunction(args.map((arg) => (arg as EquationNodeVariable).name), node.b, { variables, functions })
         }
 
-        return {
-            inputEquation,
-            inputUnit,
-            variables: { ...variables },
-            functions: { ...functions },
-            evaluate: !comparisons.includes(node.type),
-        }
+        const formatted = comparisons.includes(node.type)
+            ? node
+            : format(node, inputUnit ? parse(inputUnit) : null, { variables, functions })
+
+
+        return formatted
     })
 
     return (
         <div>
             <div style={{ fontSize: largeSize ? '300%' : '100%' }}>
-                {equations.map(({ inputEquation, inputUnit, variables, functions, evaluate }, idx) => (
+                {equations.map((node, idx) => (
                     <div key={idx}>
                         <div className='equation-wrapper'>
-                            {evaluate
-                                ? (
-                                    <EquationEvaluate
-                                        value={inputEquation}
-                                        variables={variables}
-                                        functions={functions}
-                                        unit={inputUnit}
-                                    />
-                                )
-                                : (
-                                    <Equation
-                                        value={inputEquation}
-                                    />
-                                )
-                            }
+                            <EquationPreparsed
+                                value={node}
+                            />
                         </div>
                     </div>
                 ))}
