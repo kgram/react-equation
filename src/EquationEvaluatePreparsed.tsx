@@ -1,7 +1,7 @@
-import { useContext } from 'react'
+import { forwardRef, memo, Ref, useContext, useImperativeHandle } from 'react'
 import classnames from 'classnames'
 import { EquationNode, EquationParserError } from 'equation-parser'
-import { format, FormatOptions } from 'equation-resolver'
+import { EquationResolveError, FormatOptions, formatPreresolved, resolve, ResultNode, ResultResolveError } from 'equation-resolver'
 
 import { render }  from './render'
 import { context }  from './context'
@@ -25,7 +25,18 @@ const unionArrays = <T extends any>(a: T[] | undefined, b: T[] | undefined): T[]
     }
 }
 
-export const EquationEvaluatePreparsed = ({
+type RefValue = {
+    /** Equation can be evaluated */
+    valid: boolean,
+    /** Evaluated result of the equation */
+    result: ResultNode | ResultResolveError,
+    /** Evaluated result of the unit passed */
+    unitResult: ResultNode | ResultResolveError | null,
+    /** Equation combined with result expressed as unit */
+    resultEquation: EquationNode | EquationParserError | EquationResolveError,
+}
+
+export const EquationEvaluatePreparsed = memo(forwardRef(({
     value,
     errorHandler,
     className,
@@ -34,7 +45,7 @@ export const EquationEvaluatePreparsed = ({
     variables: localVariables,
     functions: localFunctions,
     simplifiableUnits: localSimplifiableUnits,
-}: Props) => {
+}: Props, ref: Ref<RefValue>) => {
     const {
         errorHandler: errorHandlerGlobal,
         className: classNameGlobal,
@@ -45,18 +56,29 @@ export const EquationEvaluatePreparsed = ({
         simplifiableUnits: globalSimplifiableUnits,
     } = useContext(context)
 
-    const tree = format(value, unit, {
+    const formatOptions: FormatOptions = {
         variables: { ...globalVariables, ...localVariables },
         functions: { ...globalFunctions, ...localFunctions},
         simplifiableUnits: unionArrays(localSimplifiableUnits, globalSimplifiableUnits),
-    })
+    }
+
+    const result = resolve(value, formatOptions)
+    const unitResult = unit ? resolve(unit, formatOptions) : null
+    const resultEquation = formatPreresolved(value, unit, result, unitResult, formatOptions)
+
+    useImperativeHandle(ref, () => ({
+        valid: resultEquation.type !== 'resolve-error' && resultEquation.type !== 'parser-error',
+        result,
+        unitResult,
+        resultEquation,
+    }))
 
     return render(
-        tree,
+        resultEquation,
         {
             errorHandler: { ...errorHandlerGlobal, ...errorHandler },
             className: classnames(classNameGlobal, className),
             style: { ...styleGlobal, ...style },
         },
     )
-}
+}))

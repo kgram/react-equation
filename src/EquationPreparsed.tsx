@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { forwardRef, memo, Ref, useContext, useImperativeHandle } from 'react'
 import classnames from 'classnames'
 
 import { EquationNode, EquationParserError } from 'equation-parser'
@@ -13,12 +13,17 @@ export type Props = RenderOptions & {
     value: EquationNode | EquationParserError | EquationResolveError,
 }
 
-export const EquationPreparsed = ({ value, errorHandler, className, style }: Props) => {
+type RefValue = {
+}
+
+export const EquationPreparsed = memo(forwardRef(({ value, errorHandler, className, style }: Props, ref: Ref<RefValue>) => {
     const {
         errorHandler: errorHandlerGlobal,
         className: classNameGlobal,
         style: styleGlobal,
     } = useContext(context)
+
+    useImperativeHandle(ref, () => ({}))
 
     return render(
         value,
@@ -28,4 +33,4 @@ export const EquationPreparsed = ({ value, errorHandler, className, style }: Pro
             style: { ...styleGlobal, ...style },
         },
     )
-}
+}))
