@@ -1,11 +1,11 @@
-import { forwardRef, memo, Ref, useContext, useImperativeHandle } from 'react'
+import { forwardRef, memo, Ref, useImperativeHandle } from 'react'
 import classnames from 'classnames'
 
 import { EquationNode, EquationParserError, parse } from 'equation-parser'
 import { resolve, formatPreresolved, FormatOptions, ResultNode, ResultResolveError, EquationResolveError } from 'equation-resolver'
 
 import { render }  from './render'
-import { context }  from './context'
+import { useEquationOptions }  from './useEquationOptions'
 import { RenderOptions }  from './RenderOptions'
 
 export type Props = FormatOptions & RenderOptions & {
@@ -63,7 +63,7 @@ export const EquationEvaluate = memo(forwardRef(({
         functions: globalFunctions,
         simplifiableUnits: globalSimplifiableUnits,
         decimals: globalDecimals,
-    } = useContext(context)
+    } = useEquationOptions()
 
     const formatOptions: FormatOptions = {
         variables: { ...globalVariables, ...localVariables },

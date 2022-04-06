@@ -1,10 +1,10 @@
-import { forwardRef, memo, Ref, useContext, useImperativeHandle } from 'react'
+import { forwardRef, memo, Ref, useImperativeHandle } from 'react'
 import classnames from 'classnames'
 import { EquationNode, EquationParserError } from 'equation-parser'
 import { EquationResolveError, FormatOptions, formatPreresolved, resolve, ResultNode, ResultResolveError } from 'equation-resolver'
 
 import { render }  from './render'
-import { context }  from './context'
+import { useEquationOptions }  from './useEquationOptions'
 import { RenderOptions }  from './RenderOptions'
 
 export type Props = FormatOptions & RenderOptions & {
@@ -56,7 +56,7 @@ export const EquationEvaluatePreparsed = memo(forwardRef(({
         functions: globalFunctions,
         simplifiableUnits: globalSimplifiableUnits,
         decimals: globalDecimals,
-    } = useContext(context)
+    } = useEquationOptions()
 
     const formatOptions: FormatOptions = {
         variables: { ...globalVariables, ...localVariables },

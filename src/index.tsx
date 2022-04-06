@@ -1,5 +1,6 @@
 export { render } from './render'
 export { EquationOptions } from './EquationOptions'
+export { useEquationOptions } from './useEquationOptions'
 export { Equation } from './Equation'
 export { EquationEvaluate } from './EquationEvaluate'
 export { EquationPreparsed } from './EquationPreparsed'

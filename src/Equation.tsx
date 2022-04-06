@@ -1,4 +1,4 @@
-import { useContext, forwardRef, useImperativeHandle, Ref, memo } from 'react'
+import { forwardRef, useImperativeHandle, Ref, memo } from 'react'
 import classnames from 'classnames'
 
 import { EquationNode, EquationParserError, parse } from 'equation-parser'
@@ -6,7 +6,7 @@ import { EquationNode, EquationParserError, parse } from 'equation-parser'
 import { RenderOptions } from './RenderOptions'
 
 import { render }  from './render'
-import { context }  from './context'
+import { useEquationOptions }  from './useEquationOptions'
 
 export type Props = RenderOptions & {
     /** Equation as text */
@@ -25,7 +25,7 @@ export const Equation = memo(forwardRef(({ value, errorHandler, className, style
         errorHandler: errorHandlerGlobal,
         className: classNameGlobal,
         style: styleGlobal,
-    } = useContext(context)
+    } = useEquationOptions()
 
     const equation = parse(value)
 
