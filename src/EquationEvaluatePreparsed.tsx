@@ -45,6 +45,7 @@ export const EquationEvaluatePreparsed = memo(forwardRef(({
     variables: localVariables,
     functions: localFunctions,
     simplifiableUnits: localSimplifiableUnits,
+    decimals: localDecimals,
 }: Props, ref: Ref<RefValue>) => {
     const {
         errorHandler: errorHandlerGlobal,
@@ -54,12 +55,14 @@ export const EquationEvaluatePreparsed = memo(forwardRef(({
         variables: globalVariables,
         functions: globalFunctions,
         simplifiableUnits: globalSimplifiableUnits,
+        decimals: globalDecimals,
     } = useContext(context)
 
     const formatOptions: FormatOptions = {
         variables: { ...globalVariables, ...localVariables },
         functions: { ...globalFunctions, ...localFunctions},
         simplifiableUnits: unionArrays(localSimplifiableUnits, globalSimplifiableUnits),
+        decimals: localDecimals || globalDecimals,
     }
 
     const result = resolve(value, formatOptions)
