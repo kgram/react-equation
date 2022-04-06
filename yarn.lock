@@ -4006,10 +4006,10 @@ equation-parser@^0.3.1:
   resolved "https://registry.yarnpkg.com/equation-parser/-/equation-parser-0.3.1.tgz#4e3ea783c3dbbb251e053543533b8de0566efe1a"
   integrity sha512-lFSqabHXcR6ds0KtjxQnMssph+gvnP+u7zf2hzB0CVmzIYbTnJv1mAwy/spO74/TbUf2A3ng4Mu+f81oUqCq+w==
 
-equation-resolver@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/equation-resolver/-/equation-resolver-0.3.2.tgz#82e29f3faea19d8c858aa8048366d5bd9e71cb61"
-  integrity sha512-lfj1DnHHJoS4JlexYIcZWa0nUBQ3OyH5h1DnhnVReErYxzNN8ycuB7yaNUV6Qq+SzKWjJTjBK5f1NACFGfrx5w==
+equation-resolver@^1.0.0-rc.1:
+  version "1.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/equation-resolver/-/equation-resolver-1.0.0-rc.1.tgz#ed52e0456ee824f156e6457cc2848e36a161fdd6"
+  integrity sha512-vS49YDKo4/Yx3IXEJ1Cfq3KuBsOqqv22Bi9pLZ1x4pvWnwbs2WVBNZld95tax8E0DLH+C/aDmzHwUenuXh0QHA==
   dependencies:
     equation-parser "^0.3.1"
 
