@@ -5,6 +5,8 @@ import { resolve, createResolverFunction, VariableLookup, FunctionLookup, format
 import { parse, EquationNodeVariable } from 'equation-parser'
 
 import { EquationPreparsed } from './EquationPreparsed'
+import { useEquationOptions } from './useEquationOptions'
+import { EquationOptions } from './EquationOptions'
 
 const comparisons = [
     'equals',
@@ -26,6 +28,7 @@ function setPersistantState(state: string) {
 function Math({children = [], largeSize}: {children?: string[], largeSize: boolean}) {
     const variables: VariableLookup = { ...defaultVariables }
     const functions: FunctionLookup = { ...defaultFunctions }
+    const options = useEquationOptions()
     const equations = children.map((input) => {
         const [inputEquation, inputUnit] = input.split(':')
 
@@ -35,7 +38,7 @@ function Math({children = [], largeSize}: {children?: string[], largeSize: boole
             node.type === 'equals' &&
             node.a.type === 'variable'
         ) {
-            const value = resolve(node.b, { variables, functions })
+            const value = resolve(node.b, { ...options, variables, functions })
             if (value.type !== 'resolve-error') {
                 variables[node.a.name] = value
             }
@@ -50,7 +53,7 @@ function Math({children = [], largeSize}: {children?: string[], largeSize: boole
 
         const formatted = comparisons.includes(node.type)
             ? node
-            : format(node, inputUnit ? parse(inputUnit) : null, { variables, functions })
+            : format(node, inputUnit ? parse(inputUnit) : null, { ...options, variables, functions })
 
 
         return formatted
@@ -93,33 +96,37 @@ class Editor extends React.Component<{}, {value: string, largeSize: boolean}> {
     render() {
         const equations = this.state.value.split(/\n/g).map((s) => s.trim()).filter((s) => s)
         return (
-            <div>
-                <div className='size-control'>
-                    <label>
-                        <input
-                            type='checkbox'
-                            checked={this.state.largeSize}
-                            onChange={this.handleSizeChange}
-                        />
-                        3x font
-                    </label>
-                </div>
-                <div style={{display: 'flex', flexDirection: 'row'}}>
-                    <textarea
-                        className='equation-wrapper-raw'
-                        onChange={this.handleChange}
-                        value={this.state.value}
-                    />
-                    <div style={{ maxWidth: 400 }}>
-                        <p>Write equations in plain-text split into lines. Content is kept in localstorage.</p>
-                        <p>Below, the equation tree and stringified equation are shown.</p>
-                        <p>Common variables and units are available.</p>
-                        <p>Variables and functions can be assigned and used later.</p>
-                        <p>The output can be evaluated as a specific unit by writing the unit after a colon.</p>
+            <EquationOptions
+                decimals={{ type: 'max', significantFigures: 14 }}
+            >
+                <div>
+                    <div className='size-control'>
+                        <label>
+                            <input
+                                type='checkbox'
+                                checked={this.state.largeSize}
+                                onChange={this.handleSizeChange}
+                            />
+                            3x font
+                        </label>
                     </div>
+                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                        <textarea
+                            className='equation-wrapper-raw'
+                            onChange={this.handleChange}
+                            value={this.state.value}
+                        />
+                        <div style={{ maxWidth: 400 }}>
+                            <p>Write equations in plain-text split into lines. Content is kept in localstorage.</p>
+                            <p>Below, the equation tree and stringified equation are shown.</p>
+                            <p>Common variables and units are available.</p>
+                            <p>Variables and functions can be assigned and used later.</p>
+                            <p>The output can be evaluated as a specific unit by writing the unit after a colon.</p>
+                        </div>
+                    </div>
+                    <Math largeSize={this.state.largeSize}>{equations}</Math>
                 </div>
-                <Math largeSize={this.state.largeSize}>{equations}</Math>
-            </div>
+            </EquationOptions>
         )
     }
 }
