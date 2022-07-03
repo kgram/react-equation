@@ -6,8 +6,8 @@ module.exports = {
         ecmaVersion: 6,
         sourceType: 'module',
         ecmaFeatures: {
-            jsx: true
-        }
+            jsx: true,
+        },
     },
 
     extends: [
@@ -23,14 +23,14 @@ module.exports = {
         browser: true,
     },
     rules: {
-        'quotes': ['error', 'single', { "allowTemplateLiterals": true }],
+        'quotes': ['error', 'single', { 'allowTemplateLiterals': true }],
         'semi': ['error', 'never'],
-		'comma-dangle': ['error', {
-			'arrays': 'always-multiline',
-			'objects': 'always-multiline',
-			'imports': 'always-multiline',
-			'exports': 'always-multiline',
-			'functions': 'always-multiline',
+        'comma-dangle': ['error', {
+            'arrays': 'always-multiline',
+            'objects': 'always-multiline',
+            'imports': 'always-multiline',
+            'exports': 'always-multiline',
+            'functions': 'always-multiline',
         }],
 
         '@typescript-eslint/member-delimiter-style': ['error', {
@@ -71,5 +71,9 @@ module.exports = {
         '@typescript-eslint/prefer-interface': 'off',
         '@typescript-eslint/generic-type-naming': 'off',
         '@typescript-eslint/explicit-member-accessibility': 'off',
-    }
+        // Is triggered by <T extends any>, which is necessary for generics in .tsx files
+        '@typescript-eslint/no-unnecessary-type-constraint': 'off',
+        // This just causes noise, the problems highlighted aren't actually problems
+        '@typescript-eslint/ban-types': 'off',
+    },
 }

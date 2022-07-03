@@ -9,6 +9,7 @@
         "lib": [
             "dom",
         ],
+        "skipLibCheck": true,
     },
     "files": [
         "src/index.tsx",
