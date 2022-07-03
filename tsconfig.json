@@ -9,7 +9,7 @@
         "lib": [
             "dom",
         ],
-        "skipLibCheck": true,
+        "types": ["jest", "node", "react"],
     },
     "files": [
         "src/index.tsx",
