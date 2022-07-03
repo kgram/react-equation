@@ -7,6 +7,7 @@ import { parse, EquationNodeVariable } from 'equation-parser'
 import { EquationPreparsed } from './EquationPreparsed'
 import { useEquationOptions } from './useEquationOptions'
 import { EquationOptions } from './EquationOptions'
+import { defaultErrorHandler } from './errorHandler'
 
 const comparisons = [
     'equals',
@@ -97,6 +98,7 @@ class Editor extends React.Component<{}, {value: string, largeSize: boolean}> {
         const equations = this.state.value.split(/\n/g).map((s) => s.trim()).filter((s) => s)
         return (
             <EquationOptions
+                errorHandler={defaultErrorHandler}
                 decimals={{ type: 'max', significantFigures: 14 }}
             >
                 <div>
