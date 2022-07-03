@@ -1,7 +1,8 @@
 import { forwardRef, memo, Ref, useImperativeHandle } from 'react'
-import classnames from 'classnames'
 import { EquationNode, EquationParserError } from 'equation-parser'
 import { EquationResolveError, FormatOptions, formatPreresolved, resolve, ResultNode, ResultResolveError } from 'equation-resolver'
+
+import { joinClasses } from './utils/joinClasses'
 
 import { render }  from './render'
 import { useEquationOptions }  from './useEquationOptions'
@@ -80,7 +81,7 @@ export const EquationEvaluatePreparsed = memo(forwardRef(({
         resultEquation,
         {
             errorHandler: { ...errorHandlerGlobal, ...errorHandler },
-            className: classnames(classNameGlobal, className),
+            className: joinClasses(classNameGlobal, className),
             style: { ...styleGlobal, ...style },
         },
     )
