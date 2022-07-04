@@ -7,7 +7,7 @@ import { toRendering, pushTree, simplePart, renderInternal } from '../render'
 
 import Parens from '../parens'
 
-export default function func(node: EquationNodeFunction | { type: 'function-placeholder', args: EquationNode[], name?: undefined }): RenderingPart {
+export default function func(node: EquationNodeFunction | { type: 'function-placeholder', args: EquationNode[], name?: undefined }, errorNode: EquationNode | null): RenderingPart {
     // Use manual rendering to allow commas to be pushed between args
     // without having to resort to manual alignment
     const argParts: RenderingPart[] = []
@@ -15,11 +15,11 @@ export default function func(node: EquationNodeFunction | { type: 'function-plac
         if (i > 0) {
             argParts.push(simplePart(',', { paddingRight: '0.4em' }))
         }
-        pushTree(arg, argParts)
+        pushTree(arg, argParts, errorNode)
     })
 
     // Render name as variable or placeholder
-    const nameRendering = renderInternal(node.type === 'function' ? { type: 'variable', name: node.name } : { type: 'operand-placeholder' })
+    const nameRendering = renderInternal(node.type === 'function' ? { type: 'variable', name: node.name } : { type: 'operand-placeholder' }, errorNode)
     const argRendering = toRendering(argParts)
 
     return {

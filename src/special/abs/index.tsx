@@ -1,5 +1,5 @@
 import React from 'react'
-import { EquationNodeFunction } from 'equation-parser'
+import { EquationNode, EquationNodeFunction } from 'equation-parser'
 
 import { RenderingPart } from '../../RenderingPart'
 
@@ -19,8 +19,8 @@ const styles = {
     },
 } as const
 
-export default function abs({args: [expression]}: EquationNodeFunction): RenderingPart {
-    const content = renderInternal(expression || { type: 'operand-placeholder' })
+export default function abs({args: [expression]}: EquationNodeFunction, errorNode: EquationNode | null): RenderingPart {
+    const content = renderInternal(expression || { type: 'operand-placeholder' }, errorNode)
 
     return {
         type: 'span',

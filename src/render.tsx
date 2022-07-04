@@ -46,8 +46,7 @@ export const render = (node: EquationNode | EquationParserError | EquationResolv
         )
     }
     if (node.type === 'resolve-error' && node.node) {
-        // TODO: pretty error handling
-        const { elements, height } = renderInternal(node.node)
+        const { elements, height } = renderInternal(node.node, node.errorNode)
         return (
             <span {...baseProps}>
                 <span style={{ height: `${height}em`, display: 'inline-block' }}>{elements}</span>
@@ -64,19 +63,19 @@ export const render = (node: EquationNode | EquationParserError | EquationResolv
         )
     }
 
-    const { elements, height } = renderInternal(node)
+    const { elements, height } = renderInternal(node, null)
 
     return (
         <span {...baseProps} style={{ height: `${height}em`, ...baseProps.style }}>{elements}</span>
     )
 }
 
-export function renderInternal(tree: EquationNode, skipParentheses = false, ...initial: RenderingPart[]): Rendering {
+export function renderInternal(node: EquationNode, errorNode: EquationNode | null, skipParentheses = false, ...initial: RenderingPart[]): Rendering {
     let parts
-    if (skipParentheses && tree.type === 'block') {
-        parts = pushTree(tree.child, initial)
+    if (skipParentheses && node.type === 'block') {
+        parts = pushTree(node.child, initial, errorNode)
     } else {
-        parts = pushTree(tree, initial)
+        parts = pushTree(node, initial, errorNode)
     }
 
     return toRendering(parts)
@@ -133,7 +132,21 @@ const unaryOperatorLookup = {
     'operator-unary-placeholder': ['?'],
 } as const
 
-export function pushTree(node: EquationNode, current: RenderingPart[]) {
+export function pushTree(node: EquationNode, current: RenderingPart[], errorNode: EquationNode | null) {
+    if (node === errorNode) {
+        console.log('error on', node, errorNode)
+        const { aboveMiddle, belowMiddle, elements } = renderInternal(node, null, false)
+
+        current.push({
+            aboveMiddle,
+            belowMiddle,
+            type: 'span',
+            props: { style: { color: 'red' } },
+            children: elements,
+        })
+
+        return current
+    }
     switch (node.type) {
         // Operands
         case 'number':
@@ -153,7 +166,7 @@ export function pushTree(node: EquationNode, current: RenderingPart[]) {
         case 'operator-unary-placeholder': {
             const [symbol, style = { padding: '0 0.1em' }] = unaryOperatorLookup[node.type]
             current.push(simplePart(symbol, style))
-            pushTree(node.value, current)
+            pushTree(node.value, current, errorNode)
             break
         }
 
@@ -172,31 +185,31 @@ export function pushTree(node: EquationNode, current: RenderingPart[]) {
         case 'approximates':
         case 'operator-placeholder': {
             const [symbol, style = { padding: '0 0.3em' }] = binaryOperatorLookup[node.type]
-            pushTree(node.a, current)
+            pushTree(node.a, current, errorNode)
             current.push(simplePart(symbol, style))
-            pushTree(node.b, current)
+            pushTree(node.b, current, errorNode)
             break
         }
 
         case 'divide-fraction':
-            current.push(fraction(node))
+            current.push(fraction(node, errorNode))
             break
         case 'power':
-            current.push(power(node))
+            current.push(power(node, errorNode))
             break
 
         case 'block':
-            current.push(block(node))
+            current.push(block(node, errorNode))
             break
         case 'function':
-            pushFunction(node, current)
+            pushFunction(node, current, errorNode)
             break
         case 'function-placeholder':
-            current.push(func(node))
+            current.push(func(node, errorNode))
             break
 
         case 'matrix':
-            current.push(matrix(node))
+            current.push(matrix(node, errorNode))
             break
         default:
             throwUnknownType(node, (type) => `Equation render: cannot resolve type "${type}"`)
@@ -205,7 +218,7 @@ export function pushTree(node: EquationNode, current: RenderingPart[]) {
     return current
 }
 
-export function simplePart(value: string, style?: React.CSSProperties) {
+export function simplePart(value: string, style?: React.CSSProperties): RenderingPart {
     return {
         type: 'span',
         props: { style },
@@ -215,22 +228,22 @@ export function simplePart(value: string, style?: React.CSSProperties) {
     }
 }
 
-function pushFunction(tree: EquationNodeFunction, current: RenderingPart[]) {
+function pushFunction(tree: EquationNodeFunction, current: RenderingPart[], errorNode: EquationNode | null) {
     switch (tree.name) {
         case 'sum':
-            current.push(specialSum(tree))
+            current.push(specialSum(tree, errorNode))
             break
         case 'abs':
-            current.push(specialAbs(tree))
+            current.push(specialAbs(tree, errorNode))
             break
         case 'sqrt':
-            current.push(specialSqrt(tree))
+            current.push(specialSqrt(tree, errorNode))
             break
         case 'root':
-            current.push(specialRoot(tree))
+            current.push(specialRoot(tree, errorNode))
             break
         default:
-            current.push(func(tree))
+            current.push(func(tree, errorNode))
             break
     }
 }

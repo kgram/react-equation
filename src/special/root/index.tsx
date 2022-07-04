@@ -1,5 +1,5 @@
 import React from 'react'
-import { EquationNodeFunction } from 'equation-parser'
+import { EquationNode, EquationNodeFunction } from 'equation-parser'
 
 import { RenderingPart } from '../../RenderingPart'
 
@@ -24,10 +24,10 @@ const styles = {
     },
 } as const
 
-export default function root({args: [rootIndex, expression]}: EquationNodeFunction): RenderingPart {
-    const rootIndexContent = renderInternal(rootIndex || { type: 'operand-placeholder' })
+export default function root({args: [rootIndex, expression]}: EquationNodeFunction, errorNode: EquationNode | null): RenderingPart {
+    const rootIndexContent = renderInternal(rootIndex || { type: 'operand-placeholder' }, errorNode)
     // Pretend this is a sqrt to avoid repeat of logic
-    const sqrtContent = sqrt({ type: 'function', name: 'sqrt', args: [expression] })
+    const sqrtContent = sqrt({ type: 'function', name: 'sqrt', args: [expression] }, errorNode)
     const bottom = sqrtContent.belowMiddle - rootIndexOffset
     const offset = 1 - Math.atan(sqrtContent.aboveMiddle + sqrtContent.belowMiddle) * 0.6
     const rendering = toRendering([

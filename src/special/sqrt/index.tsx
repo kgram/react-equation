@@ -1,5 +1,5 @@
 import React from 'react'
-import { EquationNodeFunction } from 'equation-parser'
+import { EquationNode, EquationNodeFunction } from 'equation-parser'
 
 import { RenderingPart } from '../../RenderingPart'
 
@@ -18,6 +18,7 @@ const styles = {
 
     symbol: {
         verticalAlign: 'top',
+        fill: 'currentcolor',
     },
 
     line: {
@@ -29,8 +30,8 @@ const styles = {
     },
 } as const
 
-export default function sqrt({args: [expression]}: EquationNodeFunction): RenderingPart {
-    const content = renderInternal(expression || { type: 'operand-placeholder' })
+export default function sqrt({args: [expression]}: EquationNodeFunction, errorNode: EquationNode | null): RenderingPart {
+    const content = renderInternal(expression || { type: 'operand-placeholder' }, errorNode)
 
     return {
         type: 'span',

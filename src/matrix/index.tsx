@@ -1,5 +1,5 @@
 import React from 'react'
-import { EquationNodeMatrix } from 'equation-parser'
+import { EquationNode, EquationNodeMatrix } from 'equation-parser'
 
 import { RenderingPart } from '../RenderingPart'
 
@@ -33,8 +33,8 @@ const styles = {
     },
 } as const
 
-export default function matrix({ values, m }: EquationNodeMatrix): RenderingPart {
-    const content = values.map((row) => row.map((value) => renderInternal(value)))
+export default function matrix({ values, m }: EquationNodeMatrix, errorNode: EquationNode | null): RenderingPart {
+    const content = values.map((row) => row.map((value) => renderInternal(value, errorNode)))
 
     const cellHeight = sumOf(content, (row) => maxOf(row, ({height}) => height))
 

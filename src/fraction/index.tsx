@@ -1,5 +1,5 @@
 import React from 'react'
-import { EquationNodeDivideFraction } from 'equation-parser'
+import { EquationNode, EquationNodeDivideFraction } from 'equation-parser'
 
 import { RenderingPart } from '../RenderingPart'
 
@@ -28,9 +28,9 @@ const styles = {
     },
 }
 
-export default function fraction({ a, b }: EquationNodeDivideFraction): RenderingPart {
-    const top = renderInternal(a, true)
-    const bottom = renderInternal(b, true)
+export default function fraction({ a, b }: EquationNodeDivideFraction, errorNode: EquationNode | null): RenderingPart {
+    const top = renderInternal(a, errorNode, true)
+    const bottom = renderInternal(b, errorNode, true)
     return {
         type: 'span',
         props: { style: { ...styles.wrapper } },

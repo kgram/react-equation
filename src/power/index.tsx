@@ -1,5 +1,5 @@
 import React from 'react'
-import { EquationNodePower } from 'equation-parser'
+import { EquationNode, EquationNodePower } from 'equation-parser'
 
 import { RenderingPart } from '../RenderingPart'
 
@@ -16,9 +16,9 @@ const styles = {
     },
 }
 
-export default function power({ a, b }: EquationNodePower): RenderingPart {
-    const base = renderInternal(a, false)
-    const exponent = renderInternal(b, true)
+export default function power({ a, b }: EquationNodePower, errorNode: EquationNode | null): RenderingPart {
+    const base = renderInternal(a, errorNode, false)
+    const exponent = renderInternal(b, errorNode, true)
     const baseOffset = exponent.height * fontFactor - exponentOffset
     return {
         type: 'span',

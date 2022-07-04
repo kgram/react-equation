@@ -31,14 +31,14 @@ const styles = {
     },
 }
 
-export default function sum({args: [variable, start, end, expression]}: EquationNodeFunction) {
-    const top = renderInternal(end || { type: 'operand-placeholder' })
+export default function sum({args: [variable, start, end, expression]}: EquationNodeFunction, errorNode: EquationNode | null) {
+    const top = renderInternal(end || { type: 'operand-placeholder' }, errorNode)
     const bottom = renderInternal({
         type: 'equals',
         a: variable || { type: 'operand-placeholder' },
         b: start || { type: 'operand-placeholder' },
-    })
-    const rendering = renderInternal(wrapParenthesis(expression || { type: 'operand-placeholder' }), false, {
+    }, errorNode)
+    const rendering = renderInternal(wrapParenthesis(expression || { type: 'operand-placeholder' }), errorNode, false, {
         type: 'span',
         props: { style: styles.block },
         aboveMiddle: iconSize / 2 + top.height * fontFactor,

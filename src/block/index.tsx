@@ -1,5 +1,5 @@
 import React from 'react'
-import { EquationNodeBlock } from 'equation-parser'
+import { EquationNode, EquationNodeBlock } from 'equation-parser'
 
 import { RenderingPart } from '../RenderingPart'
 
@@ -7,8 +7,8 @@ import { renderInternal } from '../render'
 
 import Parens from '../parens'
 
-export default function block({ child }: EquationNodeBlock): RenderingPart {
-    const content = renderInternal(child)
+export default function block(node: EquationNodeBlock, errorNode: EquationNode | null): RenderingPart {
+    const content = renderInternal(node.child, errorNode)
 
     return {
         type: 'span',
