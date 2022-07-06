@@ -7,6 +7,7 @@ import { RenderingPart } from './RenderingPart'
 import { RenderOptions } from './RenderOptions'
 
 import { throwUnknownType } from './throwUnknownType'
+import { getError } from './errorHandler'
 
 import variable from './variable'
 import block from './block'
@@ -20,45 +21,29 @@ import specialAbs from './special/abs'
 import specialSqrt from './special/sqrt'
 import specialRoot from './special/root'
 
-const defaultErrorHandler = (node: EquationParserError | EquationResolveError) => `Error: ${node.errorType}`
+import { Wrapper } from './Wrapper'
 
 export const render = (node: EquationNode | EquationParserError | EquationResolveError, { errorHandler = {}, className, style }: RenderOptions = {}) => {
-    const baseProps = {
-        className,
-        style: {
-            ...style,
-            display: 'inline-block',
-            lineHeight: 1.4,
-        },
-    }
     if (node.type === 'parser-error') {
         return (
-            <span {...baseProps}>
-                <div>
+            <span>
+                <Wrapper className={className} style={style}>
                     {node.equation.substring(0, node.start)}
                     <span style={{ color: 'red' }}>{node.equation.substring(node.start, node.end + 1)}</span>
                     {node.equation.substring(node.end + 1)}
-                </div>
-                <div>
-                    {(errorHandler[node.errorType] || defaultErrorHandler)(node as any)}
-                </div>
-            </span>
-        )
-    }
-    if (node.type === 'resolve-error' && node.node) {
-        const { elements, height } = renderInternal(node.node, node.errorNode)
-        return (
-            <span {...baseProps}>
-                <span style={{ height: `${height}em`, display: 'inline-block' }}>{elements}</span>
+                </Wrapper>
                 <br />
-                {(errorHandler[node.errorType] || defaultErrorHandler)(node as any)}
+                {getError(node, errorHandler)}
             </span>
         )
     }
     if (node.type === 'resolve-error') {
+        const { elements, height } = renderInternal(node.node, node.errorNode)
         return (
-            <span {...baseProps}>
-                {(errorHandler[node.errorType] || defaultErrorHandler)(node as any)}
+            <span className={className} style={style}>
+                <Wrapper height={height}>{elements}</Wrapper>
+                <br />
+                {getError(node, errorHandler)}
             </span>
         )
     }
@@ -66,7 +51,9 @@ export const render = (node: EquationNode | EquationParserError | EquationResolv
     const { elements, height } = renderInternal(node, null)
 
     return (
-        <span {...baseProps} style={{ height: `${height}em`, ...baseProps.style }}>{elements}</span>
+        <Wrapper height={height} className={className} style={style}>
+            {elements}
+        </Wrapper>
     )
 }
 

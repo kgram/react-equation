@@ -8,20 +8,41 @@ export type ErrorHandler = {
     [Key in Combined['errorType']]?: (node: Extract<Combined, { errorType: Key}>) => ReactNode
 }
 
+export const getError = (node: Combined, handlers: ErrorHandler): ReactNode => {
+    const handler = handlers[node.errorType]
+
+    if (!handler) return `Error: ${node.errorType}`
+
+    return handler(node as any)
+}
+
 export const defaultErrorHandler: ErrorHandler = {
     // Parser errors
+    /** `2 3` */
     numberWhitespace: () => 'Cannot have spaces inside numbers',
+    /** `1.2.3` */
     invalidNumber: () => 'Invalid number',
+    /** `2+*3` */
     adjecentOperator: () => 'Two operators cannot be adjecent',
+    /** `2 & 3` */
     invalidChar: ({ character }) => `Invalid character '${character}'`,
+    /** `* 3` */
     invalidUnary: ({ symbol }) => `'${symbol}' cannot be a unary operator`,
+    /** Theoretical case, no known reproduction */
     multipleExpressions: () => 'An unexpected parsing error occured',
+    /** `[[1,2][1,2,3]]` */
     matrixMixedDimension: ({ lengthExpected, lengthReceived }) => `Matrix-row has length ${lengthReceived}, but should be ${lengthExpected}`,
+    /** `[[]]` */
     matrixEmpty: () => 'Matrix must contain at least one expression',
+    /** `[]` */
     vectorEmpty: () => 'Vector must contain at least one expression',
+    /** Closing an un-opened parenthesis, `2+3)` */
     expectedEnd: () => 'Expected end of equation',
+    /** `[2,3` */
     expectedSquareBracket: () => 'Missing closing square bracket',
+    /** `5 * (2 + 3` */
     expectedCloseParens: () => 'Missing closing parenthesis',
+    /** `2 + 3 +` */
     operatorLast: () => 'Equation cannot end on an operator',
 
     // Resolver errors
