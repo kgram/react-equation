@@ -8,6 +8,7 @@ import { RenderOptions } from './RenderOptions'
 
 import { throwUnknownType } from './throwUnknownType'
 import { getError } from './errorHandler'
+import { EquationRenderError } from './EquationRenderError'
 
 import variable from './variable'
 import block from './block'
@@ -23,7 +24,7 @@ import specialRoot from './special/root'
 
 import { Wrapper } from './Wrapper'
 
-export const render = (node: EquationNode | EquationParserError | EquationResolveError, { errorHandler = {}, className, style }: RenderOptions = {}) => {
+export const render = (node: EquationNode | EquationParserError | EquationResolveError | EquationRenderError, { errorHandler = {}, className, style }: RenderOptions = {}) => {
     if (node.type === 'parser-error') {
         return (
             <span>
@@ -39,6 +40,16 @@ export const render = (node: EquationNode | EquationParserError | EquationResolv
     }
     if (node.type === 'resolve-error') {
         const { elements, height } = renderInternal(node.node, node.errorNode)
+        return (
+            <span className={className} style={style}>
+                <Wrapper height={height}>{elements}</Wrapper>
+                <br />
+                {getError(node, errorHandler)}
+            </span>
+        )
+    }
+    if (node.type === 'render-error') {
+        const { elements, height } = renderInternal(node.node, null)
         return (
             <span className={className} style={style}>
                 <Wrapper height={height}>{elements}</Wrapper>

@@ -1,8 +1,11 @@
 import { ReactNode } from 'react'
 import { EquationParserError } from 'equation-parser'
-import { EquationResolveError } from 'equation-resolver'
+import { ResultResolveError } from 'equation-resolver'
+import React from 'react'
 
-type Combined = EquationParserError | EquationResolveError
+import { EquationRenderError } from './EquationRenderError'
+
+type Combined = EquationParserError | ResultResolveError | EquationRenderError
 
 export type ErrorHandler = {
     [Key in Combined['errorType']]?: (node: Extract<Combined, { errorType: Key}>) => ReactNode
@@ -84,4 +87,7 @@ export const defaultErrorHandler: ErrorHandler = {
     placeholder: () => `Cannot evaluate a placeholder`,
 
     invalidUnit: () => `Must be a valid unit`,
+
+    // Render errors
+    variableResolution: ({ name, errorMessage }) => <>Failed to evaluate {name}: {errorMessage}</>,
 }
