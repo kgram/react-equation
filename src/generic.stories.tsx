@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { storiesOf } from '@storybook/react'
 
 import { resolve, createResolverFunction, VariableLookup, FunctionLookup, format, defaultVariables, defaultFunctions } from 'equation-resolver'
 import { parse, EquationNodeVariable } from 'equation-parser'
@@ -80,7 +79,7 @@ function Math({children = [], largeSize}: {children?: string[], largeSize: boole
     )
 }
 
-class Editor extends React.Component<{}, {value: string, largeSize: boolean}> {
+class EditorComponent extends React.Component<{}, {value: string, largeSize: boolean}> {
     constructor(props: {}) {
         super(props)
         this.state = {
@@ -136,20 +135,25 @@ class Editor extends React.Component<{}, {value: string, largeSize: boolean}> {
     }
 }
 
-storiesOf('Misc', module)
-    .add('Editor', () => (
-        <Editor />
-    ))
-    .add('All variables', () => (
-        <div>
-            <p>These are all the variables contained in <code>defaultVariables</code> and their evaluation</p>
-            {Object.keys(defaultVariables).map((variable) => (
-                <div key={variable}>
-                    <div className='equation-wrapper'>
-                        <EquationEvaluate value={`1 ${variable}`} variables={defaultVariables} functions={defaultFunctions} simplifiableUnits={[]} />
-                    </div>
+export default {
+    title: 'Misc',
+    component: EditorComponent,
+}
+
+export const Editor = () => (
+    <EditorComponent />
+)
+
+export const AllVariables = () => (
+    <div>
+        <p>These are all the variables contained in <code>defaultVariables</code> and their evaluation</p>
+        {Object.keys(defaultVariables).map((variable) => (
+            <div key={variable}>
+                <div className='equation-wrapper'>
+                    <EquationEvaluate value={`1 ${variable}`} variables={defaultVariables} functions={defaultFunctions} simplifiableUnits={[]} />
                 </div>
-            ))}
-        </div>
-    ))
+            </div>
+        ))}
+    </div>
+)
 

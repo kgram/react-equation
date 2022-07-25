@@ -1,21 +1,28 @@
 import React from 'react'
-import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from '../StoryEquationWrapper'
 
-storiesOf('rendering/block', module)
-    .add('Simple', () => (
-        <EquationWrapper value='(10+3)*(2+5)' />
-    ))
-    .add('Implied mult. alignment', () => (
-        <EquationWrapper value='5 (2+5)' />
-    ))
-    .add('Tall above', () => (
-        <EquationWrapper value='(1/2/3/4)' />
-    ))
-    .add('Tall below', () => (
-        <EquationWrapper value='(1/(2/(3/(4))))' />
-    ))
-    .add('Nested', () => (
-        <EquationWrapper value='((((1))/((2))))' />
-    ))
+export default {
+    title: 'rendering/block',
+    component: EquationWrapper,
+}
+
+export const Simple = () => (
+    <EquationWrapper value='(10+3)*(2+5)' />
+)
+
+export const ImpliedMultAlignment = () => (
+    <EquationWrapper value='5 (2+5)' />
+)
+
+export const TallAbove = () => (
+    <EquationWrapper value='(1/2/3/4)' />
+)
+
+export const TallBelow = () => (
+    <EquationWrapper value='(1/(2/(3/(4))))' />
+)
+
+export const Nested = () => (
+    <EquationWrapper value='((((1))/((2))))' />
+)
