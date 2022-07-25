@@ -1,10 +1,11 @@
 import React from 'react'
-import { EquationNode, EquationNodeFunction } from 'equation-parser'
+import { EquationNode, EquationNodeFunction, EquationParserError } from 'equation-parser'
+import { EquationResolveError } from 'equation-resolver'
 
 import { Rendering } from '../types/Rendering'
 import { RenderingPart } from '../types/RenderingPart'
 import { RenderOptions } from '../types/RenderOptions'
-import { CombinedError } from '../types/ErrorHandler'
+import { EquationRenderError } from '../types/EquationRenderError'
 
 import { throwUnknownType } from '../utils/throwUnknownType'
 import { getError } from '../errorHandler'
@@ -23,7 +24,7 @@ import specialRoot from './special/root'
 
 import { Wrapper } from './Wrapper'
 
-export const render = (node: EquationNode | CombinedError, { errorHandler = {}, className, style }: RenderOptions = {}) => {
+export const render = (node: EquationNode | EquationParserError | EquationResolveError | EquationRenderError, { errorHandler = {}, className, style }: RenderOptions = {}) => {
     if (node.type === 'parser-error') {
         return (
             <span>
