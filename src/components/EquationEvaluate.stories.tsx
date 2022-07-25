@@ -21,6 +21,11 @@ storiesOf('components/EquationEvaluate', module)
             render={(ref) => <EquationEvaluate ref={ref} value='2+10q' />}
         />
     ))
+    .add('Ref, invalid variablesEvaluated', () => (
+        <RefLogger
+            render={(ref) => <EquationEvaluate ref={ref} value='2+10q' variablesEvaluated={{ q: '5r' }} />}
+        />
+    ))
     .add('variablesEvaluated, simple', () => (
         <>
             <div>

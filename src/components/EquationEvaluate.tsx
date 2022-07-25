@@ -110,7 +110,7 @@ export const EquationEvaluate = memo(forwardRef(({
         : formatPreresolved(equation, unitEquation, result, unitResult, formatOptions)
 
     useImperativeHandle(ref, () => ({
-        valid: resultEquation.type !== 'resolve-error' && resultEquation.type !== 'parser-error',
+        valid: resultEquation.type !== 'resolve-error' && resultEquation.type !== 'parser-error' && resultEquation.type !== 'render-error',
         equation,
         unitEquation,
         result,
