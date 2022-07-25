@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from '../../StoryEquationWrapper'
 
-storiesOf('special/sqrt', module)
+storiesOf('rendering/special/sqrt', module)
     .add('Simple', () => (
         <EquationWrapper value='sqrt(25)' />
     ))

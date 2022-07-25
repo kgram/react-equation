@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from '../StoryEquationWrapper'
 
-storiesOf('power', module)
+storiesOf('rendering/power', module)
     .add('Simple', () => (
         <EquationWrapper value='5^3' />
     ))

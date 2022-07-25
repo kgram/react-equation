@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from './StoryEquationWrapper'
 
-storiesOf('operator', module)
+storiesOf('rendering/operator', module)
     .add('Addition', () => (
         <EquationWrapper value='5236236+43435' />
     ))

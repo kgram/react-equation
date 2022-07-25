@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from '../../StoryEquationWrapper'
 
-storiesOf('special/abs', module)
+storiesOf('rendering/special/abs', module)
     .add('Simple', () => (
         <EquationWrapper value='abs(-32)' />
     ))

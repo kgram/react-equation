@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from '../StoryEquationWrapper'
 
-storiesOf('variable', module)
+storiesOf('rendering/variable', module)
     .add('Simple', () => (
         <EquationWrapper value='x' />
     ))

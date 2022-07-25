@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from '../StoryEquationWrapper'
 
-storiesOf('fraction', module)
+storiesOf('rendering/fraction', module)
     .add('Simple', () => (
         <EquationWrapper value='3/4' />
     ))

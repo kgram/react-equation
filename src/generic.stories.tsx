@@ -6,8 +6,9 @@ import { parse, EquationNodeVariable } from 'equation-parser'
 
 import {
     EquationPreparsed,
-    useEquationOptions,
+    EquationEvaluate,
     EquationOptions,
+    useEquationOptions,
     defaultErrorHandler,
 } from '.'
 
@@ -135,7 +136,20 @@ class Editor extends React.Component<{}, {value: string, largeSize: boolean}> {
     }
 }
 
-storiesOf('parser', module)
+storiesOf('Misc', module)
     .add('Editor', () => (
         <Editor />
     ))
+    .add('All variables', () => (
+        <div>
+            <p>These are all the variables contained in <code>defaultVariables</code> and their evaluation</p>
+            {Object.keys(defaultVariables).map((variable) => (
+                <div key={variable}>
+                    <div className='equation-wrapper'>
+                        <EquationEvaluate value={`1 ${variable}`} variables={defaultVariables} functions={defaultFunctions} simplifiableUnits={[]} />
+                    </div>
+                </div>
+            ))}
+        </div>
+    ))
+

@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from '../../StoryEquationWrapper'
 
-storiesOf('special/sum', module)
+storiesOf('rendering/special/sum', module)
     .add('Simple', () => (
         <EquationWrapper value='sum(n,1,5,n)' />
     ))

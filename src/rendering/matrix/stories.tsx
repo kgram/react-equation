@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from '../StoryEquationWrapper'
 
-storiesOf('matrix', module)
+storiesOf('rendering/matrix', module)
     .add('Vector', () => (
         <EquationWrapper value='[1,2,3,4]' />
     ))

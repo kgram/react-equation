@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from '../StoryEquationWrapper'
 
-storiesOf('block', module)
+storiesOf('rendering/block', module)
     .add('Simple', () => (
         <EquationWrapper value='(10+3)*(2+5)' />
     ))

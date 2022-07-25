@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from '../StoryEquationWrapper'
 
-storiesOf('func', module)
+storiesOf('rendering/func', module)
     .add('Simple', () => (
         <EquationWrapper value='sin(0.2)' />
     ))

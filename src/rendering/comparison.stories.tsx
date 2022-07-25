@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 
 import { EquationWrapper } from './StoryEquationWrapper'
 
-storiesOf('comparisons', module)
+storiesOf('rendering/comparisons', module)
     .add('Equals', () => (
         <EquationWrapper disableEvaluation value='7*17=119' />
     ))

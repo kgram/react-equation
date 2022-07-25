@@ -1,11 +1,27 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 
+import { RefLogger } from './StoryRefLogger'
 import { Equation } from './Equation'
 import { EquationEvaluate } from './EquationEvaluate'
 
-storiesOf('variables evaluated', module)
-    .add('Simple', () => (
+storiesOf('components/EquationEvaluate', module)
+    .add('Ref, valid', () => (
+        <RefLogger
+            render={(ref) => <EquationEvaluate ref={ref} value='2+2' />}
+        />
+    ))
+    .add('Ref, invalid equation', () => (
+        <RefLogger
+            render={(ref) => <EquationEvaluate ref={ref} value='2+(2' />}
+        />
+    ))
+    .add('Ref, invalid result', () => (
+        <RefLogger
+            render={(ref) => <EquationEvaluate ref={ref} value='2+10q' />}
+        />
+    ))
+    .add('variablesEvaluated, simple', () => (
         <>
             <div>
                 <Equation
@@ -22,7 +38,7 @@ storiesOf('variables evaluated', module)
             </div>
         </>
     ))
-    .add('Cascade', () => (
+    .add('variablesEvaluated, cascade', () => (
         <>
             <div>
                 <Equation
@@ -45,7 +61,7 @@ storiesOf('variables evaluated', module)
             </div>
         </>
     ))
-    .add('Errors', () => (
+    .add('variablesEvaluated, errors', () => (
         <>
             <div>
                 <Equation
