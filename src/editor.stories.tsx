@@ -4,10 +4,12 @@ import { storiesOf } from '@storybook/react'
 import { resolve, createResolverFunction, VariableLookup, FunctionLookup, format, defaultVariables, defaultFunctions } from 'equation-resolver'
 import { parse, EquationNodeVariable } from 'equation-parser'
 
-import { EquationPreparsed } from './EquationPreparsed'
-import { useEquationOptions } from './useEquationOptions'
-import { EquationOptions } from './EquationOptions'
-import { defaultErrorHandler } from './errorHandler'
+import {
+    EquationPreparsed,
+    useEquationOptions,
+    EquationOptions,
+    defaultErrorHandler,
+} from '.'
 
 const comparisons = [
     'equals',

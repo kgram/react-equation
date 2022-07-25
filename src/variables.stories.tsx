@@ -2,7 +2,7 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { defaultVariables, defaultFunctions } from 'equation-resolver'
 
-import { EquationEvaluate } from '../src/EquationEvaluate'
+import { EquationEvaluate } from '.'
 
 storiesOf('variable lookup', module)
     .add('All variables', () => (

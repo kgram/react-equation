@@ -1,17 +1,9 @@
 import { ReactNode } from 'react'
-import { EquationParserError } from 'equation-parser'
-import { ResultResolveError } from 'equation-resolver'
 import React from 'react'
 
-import { EquationRenderError } from './EquationRenderError'
+import { CombinedError, ErrorHandler } from './types/ErrorHandler'
 
-type Combined = EquationParserError | ResultResolveError | EquationRenderError
-
-export type ErrorHandler = {
-    [Key in Combined['errorType']]?: (node: Extract<Combined, { errorType: Key}>) => ReactNode
-}
-
-export const getError = (node: Combined, handlers: ErrorHandler): ReactNode => {
+export const getError = (node: CombinedError, handlers: ErrorHandler): ReactNode => {
     const handler = handlers[node.errorType]
 
     if (!handler) return `Error: ${node.errorType}`

@@ -1,8 +1,10 @@
-export { render } from './render'
-export { EquationOptions } from './EquationOptions'
-export { useEquationOptions } from './useEquationOptions'
-export { Equation } from './Equation'
-export { EquationEvaluate } from './EquationEvaluate'
-export { EquationPreparsed } from './EquationPreparsed'
-export { EquationEvaluatePreparsed } from './EquationEvaluatePreparsed'
+export { render } from './rendering'
+
+export { EquationOptions } from './components/EquationOptions'
+export { useEquationOptions } from './components/useEquationOptions'
+export { Equation } from './components/Equation'
+export { EquationEvaluate } from './components/EquationEvaluate'
+export { EquationPreparsed } from './components/EquationPreparsed'
+export { EquationEvaluatePreparsed } from './components/EquationEvaluatePreparsed'
+
 export { defaultErrorHandler } from './errorHandler'
