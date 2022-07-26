@@ -6,6 +6,7 @@ import { resolve, formatPreresolved, wrapError, FormatOptions, ResultNode, Resul
 import { EquationRenderError } from '../types/EquationRenderError'
 
 import { joinClasses } from '../utils/joinClasses'
+import { unionArrays } from '../utils/unionArrays'
 import { render }  from '../rendering'
 import { getError } from '../errorHandler'
 
@@ -22,16 +23,6 @@ export type Props = FormatOptions & RenderOptions & {
 
     style?: React.CSSProperties,
     className?: string,
-}
-
-const unionArrays = <T extends any>(a: T[] | undefined, b: T[] | undefined): T[] | undefined => {
-    if (!a) {
-        return b
-    } else if (!b) {
-        return a
-    } else {
-        return [...a, ...b]
-    }
 }
 
 type RefValue = {
