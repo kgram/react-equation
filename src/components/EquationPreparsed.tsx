@@ -4,6 +4,7 @@ import { EquationNode, EquationParserError } from 'equation-parser'
 import { EquationResolveError } from 'equation-resolver'
 
 import { RenderOptions } from '../types/RenderOptions'
+import { EquationRenderError } from '../types/EquationRenderError'
 
 import { joinClasses } from '../utils/joinClasses'
 import { render }  from '../rendering'
@@ -11,7 +12,7 @@ import { render }  from '../rendering'
 import { useEquationOptions }  from './useEquationOptions'
 
 export type Props = RenderOptions & {
-    value: EquationNode | EquationParserError | EquationResolveError,
+    value: EquationNode | EquationParserError | EquationResolveError | EquationRenderError,
 }
 
 type RefValue = {
