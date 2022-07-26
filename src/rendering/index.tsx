@@ -59,10 +59,10 @@ export const render = (node: EquationNode | EquationParserError | EquationResolv
         )
     }
 
-    const { elements, height } = renderInternal(node, null)
+    const { elements, height, aboveMiddle } = renderInternal(node, null)
 
     return (
-        <Wrapper height={height} className={className} style={style}>
+        <Wrapper height={height} aboveMiddle={aboveMiddle} className={className} style={style}>
             {elements}
         </Wrapper>
     )
