@@ -39,6 +39,8 @@ export const defaultErrorHandler: ErrorHandler = {
     expectedCloseParens: () => 'Missing closing parenthesis',
     /** `2 + 3 +` */
     operatorLast: () => 'Equation cannot end on an operator',
+    /** `()` */
+    emptyBlock: () => 'Parentheses must have content',
 
     // Resolver errors
     functionUnknown: ({ name }) => `Unknown function ${name}`,
