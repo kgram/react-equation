@@ -84,4 +84,6 @@ export const defaultErrorHandler: ErrorHandler = {
 
     // Render errors
     variableResolution: ({ name, errorMessage }) => <>Failed to evaluate {name}: {errorMessage}</>,
+    variableNaming: ({ name }) => `Invalid variable name '${name}'`,
+    functionSignature: ({ signature }) => `Invalid function signature '${signature}'`,
 }
