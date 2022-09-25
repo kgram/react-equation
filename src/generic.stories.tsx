@@ -1,24 +1,13 @@
 import * as React from 'react'
 
-import { resolve, createResolverFunction, VariableLookup, FunctionLookup, format, defaultVariables, defaultFunctions } from 'equation-resolver'
-import { parse, EquationNodeVariable } from 'equation-parser'
+import { defaultVariables, defaultFunctions } from 'equation-resolver'
 
 import {
-    EquationPreparsed,
+    EquationContext,
     EquationEvaluate,
     EquationOptions,
-    useEquationOptions,
     defaultErrorHandler,
 } from '.'
-
-const comparisons = [
-    'equals',
-    'less-than',
-    'greater-than',
-    'less-than-equals',
-    'greater-than-equals',
-    'approximates',
-]
 
 function getPersistantState(): string {
     return window.localStorage.persistantEquationState || ''
@@ -26,57 +15,6 @@ function getPersistantState(): string {
 
 function setPersistantState(state: string) {
     window.localStorage.persistantEquationState = state
-}
-
-function Math({children = [], largeSize}: {children?: string[], largeSize: boolean}) {
-    const variables: VariableLookup = { ...defaultVariables }
-    const functions: FunctionLookup = { ...defaultFunctions }
-    const options = useEquationOptions()
-    const equations = children.map((input) => {
-        const [inputEquation, inputUnit] = input.split(':')
-
-        const node = parse(inputEquation)
-
-        if (
-            node.type === 'equals' &&
-            node.a.type === 'variable'
-        ) {
-            const value = resolve(node.b, { ...options, variables, functions })
-            if (value.type !== 'resolve-error') {
-                variables[node.a.name] = value
-            }
-        } else if (
-            node.type === 'equals' &&
-            node.a.type === 'function' &&
-            node.a.args.every((arg) => arg.type === 'variable')
-        ) {
-            const { name, args } = node.a
-            functions[name] = createResolverFunction(args.map((arg) => (arg as EquationNodeVariable).name), node.b, { variables, functions })
-        }
-
-        const formatted = comparisons.includes(node.type)
-            ? node
-            : format(node, inputUnit ? parse(inputUnit) : null, { ...options, variables, functions })
-
-
-        return formatted
-    })
-
-    return (
-        <div>
-            <div style={{ fontSize: largeSize ? '300%' : '100%' }}>
-                {equations.map((node, idx) => (
-                    <div key={idx}>
-                        <div className='equation-wrapper'>
-                            <EquationPreparsed
-                                value={node}
-                            />
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    )
 }
 
 class EditorComponent extends React.Component<{}, {value: string, largeSize: boolean}> {
@@ -97,9 +35,12 @@ class EditorComponent extends React.Component<{}, {value: string, largeSize: boo
     }
 
     render() {
+        const { largeSize } = this.state
         const equations = this.state.value.split(/\n/g).map((s) => s.trim()).filter((s) => s)
         return (
             <EquationOptions
+                variables={defaultVariables}
+                functions={defaultFunctions}
                 errorHandler={defaultErrorHandler}
                 decimals={{ type: 'max', significantFigures: 14 }}
             >
@@ -128,7 +69,19 @@ class EditorComponent extends React.Component<{}, {value: string, largeSize: boo
                             <p>The output can be evaluated as a specific unit by writing the unit after a colon.</p>
                         </div>
                     </div>
-                    <Math largeSize={this.state.largeSize}>{equations}</Math>
+                    <EquationContext
+                        render={({ expression }) => (
+                            <div style={{ fontSize: largeSize ? '300%' : '100%' }}>
+                                {equations.map((equation, idx) => (
+                                    <div key={idx}>
+                                        <div className='equation-wrapper'>
+                                            {expression(equation)}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    />
                 </div>
             </EquationOptions>
         )
