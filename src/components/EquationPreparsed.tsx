@@ -11,7 +11,7 @@ import { render }  from '../rendering'
 
 import { useEquationOptions }  from './useEquationOptions'
 
-export type Props = RenderOptions & {
+type Props = RenderOptions & {
     value: EquationNode | EquationParserError | EquationResolveError | EquationRenderError,
 }
 

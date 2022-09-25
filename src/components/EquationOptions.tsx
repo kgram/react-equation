@@ -5,7 +5,7 @@ import { RenderOptions } from '../types/RenderOptions'
 
 import { context }  from './context'
 
-export type Props = FormatOptions & RenderOptions & {
+type Props = FormatOptions & RenderOptions & {
     children?: ReactNode,
 }
 

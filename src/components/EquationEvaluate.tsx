@@ -13,7 +13,7 @@ import { getError } from '../errorHandler'
 import { useEquationOptions }  from './useEquationOptions'
 import { RenderOptions }  from '../types/RenderOptions'
 
-export type Props = FormatOptions & RenderOptions & {
+type Props = FormatOptions & RenderOptions & {
     /** Equation as text */
     value: string,
     /** Optionally provide a unit to convert the result into */
