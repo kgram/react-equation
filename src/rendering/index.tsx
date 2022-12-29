@@ -132,7 +132,6 @@ const unaryOperatorLookup = {
 
 export function pushTree(node: EquationNode, current: RenderingPart[], errorNode: EquationNode | null) {
     if (node === errorNode) {
-        console.log('error on', node, errorNode)
         const { aboveMiddle, belowMiddle, elements } = renderInternal(node, null, false)
 
         current.push({
