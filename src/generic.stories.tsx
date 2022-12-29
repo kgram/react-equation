@@ -70,12 +70,12 @@ class EditorComponent extends React.Component<{}, {value: string, largeSize: boo
                         </div>
                     </div>
                     <EquationContext
-                        render={({ expression }) => (
+                        render={(renderEquation) => (
                             <div style={{ fontSize: largeSize ? '300%' : '100%' }}>
                                 {equations.map((equation, idx) => (
                                     <div key={idx}>
                                         <div className='equation-wrapper'>
-                                            {expression(equation)}
+                                            {renderEquation(equation)}
                                         </div>
                                     </div>
                                 ))}

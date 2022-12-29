@@ -1,6 +1,9 @@
 import React, { ReactNode } from 'react'
 
+import { EquationEvaluate } from '../EquationEvaluate'
+
 import { EquationContext } from '.'
+import { EquationOptions } from '../EquationOptions'
 
 export default {
     title: 'components/EquationContext',
@@ -13,88 +16,32 @@ const Wrapper = ({ children }: { children: ReactNode }) => (
 
 export const Equation = () => (
     <EquationContext
-        render={({ equation }) => (
+        render={(equation) => (
             <>
-                <p>This is an equation in context</p>
-                <p><Wrapper>{equation('1 + 2 + 3')}</Wrapper></p>
-                <p>Some text with <Wrapper>{equation('-x^2 + 1/(2/3)')}</Wrapper> and <Wrapper>{equation('1/2/3 + x^2')}</Wrapper> in the middle</p>
+                <p><Wrapper>{equation('a = 2')}</Wrapper> Renders a = 2 and defines a</p>
+                <p><Wrapper>{equation('b = 5a =')}</Wrapper> Renders b = 5a = 10 and defines b</p>
+                <p><Wrapper>{equation('c = 1/b = _ %')}</Wrapper> Renders c = 1/b = 10% and defines c</p>
+                <p><Wrapper>{equation('f(x) = x^2')}</Wrapper> Renders f(x) = x^2 and defines f(x)</p>
+                <p><Wrapper>{equation('2a + f(a) =')}</Wrapper> Renders 2a + f(a) = 8</p>
             </>
         )}
     />
 )
 
-export const EquationEvaluated = () => (
-    <EquationContext
-        render={({ evaluate }) => (
-            <>
-                <p>This is an evaluated equation in context</p>
-                <p><Wrapper>{evaluate('1 + 2 + 3')}</Wrapper></p>
-            </>
-        )}
-    />
-)
+export const GetOptions = () => (
+    <EquationContext render={(equation, getOptions) => (
+        <>
+            <p><Wrapper>{equation('2x =')}</Wrapper> Renders Unknown variable x</p>
+            <p><Wrapper><EquationEvaluate value='2x' /></Wrapper> Renders Unknown variable x</p>
 
-export const Variable = () => (
-    <EquationContext
-        render={({ variable }) => (
-            <>
-                <p>First we have a width</p>
-                <p><Wrapper>{variable('w', '210mm')}</Wrapper></p>
-                <p>Then we calculate the length</p>
-                <p><Wrapper>{variable('l', 'sqrt(2) * w', { showResult: true, unit: 'mm' })}</Wrapper></p>
-                <p>The area is <Wrapper>{variable('A', 'w * l', { showResult: true, unit: 'cm^2' })}</Wrapper></p>
-            </>
-        )}
-    />
-)
+            <p><Wrapper>{equation('x = 7')}</Wrapper> Renders x = 7</p>
+            <p><Wrapper>{equation('2x =')}</Wrapper> Renders 2x = 14</p>
+            <p><Wrapper><EquationEvaluate value='2x' /></Wrapper> Renders Unknown variable x, not part of the context</p>
 
-export const Function = () => (
-    <EquationContext
-        render={({ func, evaluate }) => (
-            <>
-                <p>Given</p>
-                <p><Wrapper>{func('f(x)', '(x - 1) / (x + 1)')}</Wrapper></p>
-                <p>and</p>
-                <p><Wrapper>{func('g(x)', 'sin(x^2 + 1)')}</Wrapper></p>
-                <p>calculate</p>
-                <p><Wrapper>{evaluate('f(2) + sum(n, 1, 3, g(n))')}</Wrapper></p>
-            </>
-        )}
-    />
-)
-
-export const Expression = () => (
-    <EquationContext
-        render={({ expression }) => (
-            <>
-                <p><Wrapper>{expression('a = 2')}</Wrapper> Renders a = 2 and defines a</p>
-                <p><Wrapper>{expression('b = 5a =')}</Wrapper> Renders b = 5a = 10 and defines b</p>
-                <p><Wrapper>{expression('c = 1/b = _ %')}</Wrapper> Renders c = 1/b = 10% and defines c</p>
-                <p><Wrapper>{expression('f(x) = x^2')}</Wrapper> Renders f(x) = x^2 and defines f(x)</p>
-                <p><Wrapper>{expression('2a + f(a) =')}</Wrapper> Renders 2a + f(a) = 8</p>
-                <p><Wrapper>{expression('15m^2')}</Wrapper> Renders 15m^2</p>
-            </>
-        )}
-    />
-)
-
-export const ErrorVariableNaming = () => (
-    <EquationContext
-        render={({ variable }) => (
-            <>
-                <Wrapper>{variable('1 + 2', '1 + 2 + 3')}</Wrapper>
-            </>
-        )}
-    />
-)
-
-export const ErrorFunctionSignature = () => (
-    <EquationContext
-        render={({ func }) => (
-            <>
-                <p><Wrapper>{func('f(2)', '1 + 2 + 3')}</Wrapper></p>
-                <p><Wrapper>{func('1 + 2', '1 + 2 + 3')}</Wrapper></p>
-            </>
-        )}
-    />
+            <p><Wrapper><EquationEvaluate value='2x' {...getOptions()} /></Wrapper> Renders 2x = 14</p>
+            <EquationOptions {...getOptions()}>
+                <p><Wrapper><EquationEvaluate value='2x' /></Wrapper> Renders 2x = 14</p>
+            </EquationOptions>
+        </>
+    )} />
 )
