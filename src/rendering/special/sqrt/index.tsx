@@ -40,7 +40,7 @@ export default function sqrt({args: [expression]}: EquationNodeFunction, errorNo
         belowMiddle: content.belowMiddle,
         children: <>
             <RootSymbol style={styles.symbol} height={content.height + padding} />
-            <div style={styles.line}/>
+            <span style={styles.line}/>
             {content.elements}
         </>,
     }

@@ -55,8 +55,8 @@ export default function matrix({ values, m }: EquationNodeMatrix, errorNode: Equ
                         return (
                             <tr key={rowIdx} style={{ height: `${rowHeight}em` }}>
                                 {row.map((cell, cellIdx) => (
-                                    <td key={cellIdx} style={styles.cell}>
-                                        <div style={{ position: 'relative', top: `${aboveMiddle - cell.aboveMiddle}em` }}>{cell.elements}</div>
+                                    <td key={cellIdx} style={{ ...styles.cell, paddingTop: `${aboveMiddle - cell.aboveMiddle}em` }}>
+                                        {cell.elements}
                                     </td>
                                 ))}
                             </tr>
