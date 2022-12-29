@@ -63,10 +63,9 @@ class EditorComponent extends React.Component<{}, {value: string, largeSize: boo
                         />
                         <div style={{ maxWidth: 400 }}>
                             <p>Write equations in plain-text split into lines. Content is kept in localstorage.</p>
-                            <p>Below, the equation tree and stringified equation are shown.</p>
                             <p>Common variables and units are available.</p>
                             <p>Variables and functions can be assigned and used later.</p>
-                            <p>The output can be evaluated as a specific unit by writing the unit after a colon.</p>
+                            <p>Evaluate by ending with equals.</p>
                         </div>
                     </div>
                     <EquationContext
