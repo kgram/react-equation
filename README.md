@@ -44,7 +44,13 @@ ReactDOM.render((
 ), document.getElementById("root"));
 ```
 
-## Rendering
+Some more example can be seen in this sandbox: https://codesandbox.io/s/react-equation-example-t0oe8
+
+A simple playground built around `EquationContext` can be found here: https://codesandbox.io/s/react-equation-playground-w5q2en
+
+## Introduction
+
+This package is intended to render text-equations For help with equation structure, see [`equation-parser`](https://github.com/kgram/equation-parser#general-format).
 
 ### Equations in context
 The most straight-forward way to render equations is to use the [`EquationContext`](#equationcontext) component. This component is made to render a series of interconnected equations and functions, evaluated in order, and will generally try to figure out what you want based on the form of the equation.
@@ -55,19 +61,28 @@ The `equation`-function provided to the `render`-prop allows you to render simpl
     * `5 * 2 =`
     * `22/7=_`
     * `0.2m * 0.7m = _ cm^2`
-* Assign a variable: By following a variable name with equals, value will be available as a variable in all subsequent calls to `equation`. This can be combined with the evaluate-rules above to show the value of the variable.
+* Assign a variable: By following a variable name with equals, the value will be available as a variable in all subsequent calls to `equation`. This can be combined with the evaluate-rules above to show the value of the variable.
     * `a = 5`
     * `b = 2a =`
     * `c = (100% + 2%)^3 = _ %`
 * Assign a function: Assigning a function-call where every argument is a variable-name will make it available as a function for subsequent calls to `equation`. The function can use variables and functions as defined when it itself is defined.
 
+If you need variables or functions defined without them being shown, you can simply call `equation` without using the return value.
+
 ### Direct rendered components
 If you don't need context, or need more control over the components or bundling, you can use components directly. A component will only include the parser and evaluator when necessary, enabling efficient tree-shaking in simple scenarios.
+
+### Variables and functions
+It is necessary to manually include variables and functions. This is to allow changing the names for localization purposes, and omitting unnecessary code for bundle optimization.
+
+The functions included can be found in [`equation-resolver`](https://github.com/kgram/equation-resolver#defaultfunctions). There is special rendering for `sqrt`, `root`, `abs` and `sum`.
+
+The variables are only listed [in the raw source](https://github.com/kgram/equation-resolver/blob/master/src/defaultVariables.ts), since there's quite a few of them. They should hopefully cover anything one could want to define, but if something is missing or wrong, please create an issue.
 
 ## Components
 All the included components are split up in the interest of allowing tree-shaking to reduce the bundle-size by avoiding either the parser, the resolver or both, depending on needs.
 
-All the components can (when applicable) have props `variables`, `functions`, `simplifyableUnits` (see section on variables/functions or [`equation-resolver`](https://github.com/kgram/equation-resolver)), `errorHandler` (see section on error handling), `className` and `style`. These props can also be passed along through the `EquationOptions` context-provider.
+All the components can (when applicable) have props `variables`, `functions`, `simplifyableUnits` (see [`equation-resolver`](https://github.com/kgram/equation-resolver)), `errorHandler` (see section on error handling), `className` and `style`. These props can also be passed along through the `EquationOptions` context-provider.
 
 ### `Equation`
 Parse the string provided as `value` and render it. No evaluation is done.
